@@ -72,6 +72,24 @@ public class ProdottoDAO implements GenericDAO<Prodotto, Integer> {
 		return prodotti;
 	}
 
+	public List<Prodotto> findUltimeNovita() throws SQLException {
+		List<Prodotto> prodotti = new ArrayList<>();
+		String query = "SELECT * FROM Prodotto WHERE attivo = TRUE ORDER BY id DESC LIMIT 4";
+		try (Connection con = ds.getConnection();
+				PreparedStatement ps = con.prepareStatement(query);
+				ResultSet rs = ps.executeQuery()) {
+			while (rs.next()) {
+				prodotti.add(new Prodotto(rs.getInt("id"), rs.getInt("categoria_id"), rs.getString("nome"),
+						rs.getString("descrizione"), rs.getDouble("prezzo"), rs.getInt("stock"),
+						rs.getBoolean("attivo")));
+			}
+		}
+		return prodotti;
+	}
+	
+	
+	
+	
 	@Override
 	public void update(Prodotto p) throws SQLException {
 		String query = "UPDATE Prodotto SET categoria_id=?, nome=?, descrizione=?, prezzo=?, stock=? WHERE id=?";
