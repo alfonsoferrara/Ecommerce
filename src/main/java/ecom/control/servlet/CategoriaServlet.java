@@ -60,7 +60,7 @@ public class CategoriaServlet extends HttpServlet {
 			request.setAttribute("catNome", catNome);
 			request.setAttribute("catDesc", catDesc);
 
-			request.getRequestDispatcher("/WEB-INF/views/catalogo.jsp").forward(request, response);
+			request.getRequestDispatcher("WEB-INF/views/catalogo.jsp").forward(request, response);
 
 		} catch (SQLException | NumberFormatException e) {
 			e.printStackTrace();
