@@ -66,7 +66,7 @@ public class ClienteDAO implements GenericDAO<Cliente, Integer> {
 
 	@Override
 	public Cliente findById(Integer id) throws SQLException {
-		// OIN per recuperare i dati da entrambe le tabelle
+		// JOIN per recuperare i dati da entrambe le tabelle
 		String query = "SELECT u.id, u.email, u.password, c.nome, c.cognome, c.telefono "
 				+ "FROM Cliente c JOIN Utente u ON c.utente_id = u.id WHERE c.utente_id = ?";
 		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
