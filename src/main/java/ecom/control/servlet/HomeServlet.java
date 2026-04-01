@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-// Mappiamo la servlet sulla root e su /home
 @WebServlet(name = "HomeServlet", urlPatterns = {"", "/home"})
 public class HomeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -31,7 +30,7 @@ public class HomeServlet extends HttpServlet {
         try {
             // restituisce solo gli ultimi 4 prodotti aggiunti
             List<Prodotto> vetrina = prodottoDAO.findUltimeNovita();
-            
+
             // Passo la lista alla JSP
             request.setAttribute("prodottiVetrina", vetrina);
             
