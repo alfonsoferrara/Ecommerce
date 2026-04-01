@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import javax.sql.DataSource;
+import org.mindrot.jbcrypt.BCrypt; //hash delle password
 
 public class ClienteDAO implements GenericDAO<Cliente, Integer> {
 	private DataSource ds;
@@ -20,6 +21,8 @@ public class ClienteDAO implements GenericDAO<Cliente, Integer> {
 
 	@Override
 	public void insert(Cliente c) throws SQLException {
+		String hashedPassword = BCrypt.hashpw(c.getPassword(), BCrypt.gensalt());
+
 		String queryUtente = "INSERT INTO Utente (email, password) VALUES (?, ?)";
 		String queryCliente = "INSERT INTO Cliente (utente_id, nome, cognome, telefono) VALUES (?, ?, ?, ?)";
 
@@ -32,7 +35,7 @@ public class ClienteDAO implements GenericDAO<Cliente, Integer> {
 			int utenteId = 0;
 			try (PreparedStatement psU = con.prepareStatement(queryUtente, Statement.RETURN_GENERATED_KEYS)) {
 				psU.setString(1, c.getEmail());
-				psU.setString(2, c.getPassword());
+				psU.setString(2, hashedPassword);
 				psU.executeUpdate();
 				try (ResultSet rs = psU.getGeneratedKeys()) {
 					if (rs.next())
@@ -99,17 +102,18 @@ public class ClienteDAO implements GenericDAO<Cliente, Integer> {
 
 	@Override
 	public void update(Cliente c) throws SQLException {
-		String queryUtente = "UPDATE Utente SET email=?, password=? WHERE id=?";
+		// Aggiorna solo i campi del cliente, NON la password
 		String queryCliente = "UPDATE Cliente SET nome=?, cognome=?, telefono=? WHERE utente_id=?";
+		String queryUtente = "UPDATE Utente SET email=? WHERE id=?";
 
 		try (Connection con = ds.getConnection()) {
 			con.setAutoCommit(false);
+
 			try (PreparedStatement psU = con.prepareStatement(queryUtente);
 					PreparedStatement psC = con.prepareStatement(queryCliente)) {
 
 				psU.setString(1, c.getEmail());
-				psU.setString(2, c.getPassword());
-				psU.setInt(3, c.getId());
+				psU.setInt(2, c.getId());
 				psU.executeUpdate();
 
 				psC.setString(1, c.getNome());
@@ -125,6 +129,18 @@ public class ClienteDAO implements GenericDAO<Cliente, Integer> {
 			} finally {
 				con.setAutoCommit(true);
 			}
+		}
+	}
+
+	// Metodo separato per cambiare password
+	public void changePassword(int userId, String newPassword) throws SQLException {
+		String hashedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+		String query = "UPDATE Utente SET password=? WHERE id=?";
+
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+			ps.setString(1, hashedPassword);
+			ps.setInt(2, userId);
+			ps.executeUpdate();
 		}
 	}
 

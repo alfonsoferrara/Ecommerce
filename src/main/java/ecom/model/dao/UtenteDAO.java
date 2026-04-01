@@ -1,6 +1,7 @@
 package ecom.model.dao;
 
 import ecom.model.bean.Utente;
+import org.mindrot.jbcrypt.BCrypt; //hash delle password
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,11 +16,12 @@ public class UtenteDAO implements GenericDAO<Utente, Integer> {
 
 	@Override
 	public void insert(Utente u) throws SQLException {
+		String hashedPassword = BCrypt.hashpw(u.getPassword(), BCrypt.gensalt());
 		String query = "INSERT INTO Utente (email, password) VALUES (?, ?)";
 		try (Connection con = ds.getConnection();
 				PreparedStatement ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 			ps.setString(1, u.getEmail());
-			ps.setString(2, u.getPassword());
+			ps.setString(2, hashedPassword);
 			ps.executeUpdate();
 			try (ResultSet rs = ps.getGeneratedKeys()) {
 				if (rs.next())
@@ -42,16 +44,26 @@ public class UtenteDAO implements GenericDAO<Utente, Integer> {
 	}
 
 	public Utente doLogin(String email, String password) throws SQLException {
-		String query = "SELECT * FROM Utente WHERE email = ? AND password = ?";
+		// Prima cerca l'utente per email
+		String query = "SELECT * FROM Utente WHERE email = ?";
 		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+
 			ps.setString(1, email);
-			ps.setString(2, password);
+
 			try (ResultSet rs = ps.executeQuery()) {
-				if (rs.next())
-					return new Utente(rs.getInt("id"), rs.getString("email"), rs.getString("password"));
+				if (rs.next()) {
+					// Recupera l'hash salvato nel database
+					String storedHash = rs.getString("password");
+
+					// Verifica la password in chiaro con l'hash salvato
+					if (BCrypt.checkpw(password, storedHash)) {
+						// Password corretta
+						return new Utente(rs.getInt("id"), rs.getString("email"), storedHash);
+					}
+				}
+				return null; // Utente non trovato o password errata
 			}
 		}
-		return null;
 	}
 
 	@Override
@@ -69,10 +81,11 @@ public class UtenteDAO implements GenericDAO<Utente, Integer> {
 
 	@Override
 	public void update(Utente u) throws SQLException {
+		String hashedPassword = BCrypt.hashpw(u.getPassword(), BCrypt.gensalt());
 		String query = "UPDATE Utente SET email=?, password=? WHERE id=?";
 		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
 			ps.setString(1, u.getEmail());
-			ps.setString(2, u.getPassword());
+			ps.setString(2, hashedPassword);
 			ps.setInt(3, u.getId());
 			ps.executeUpdate();
 		}

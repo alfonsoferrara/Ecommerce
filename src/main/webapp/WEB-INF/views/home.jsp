@@ -8,5 +8,6 @@
 </head>
 <body>
 <p>${prodottiVetrina[0].nome}</p>
+<button><a href="logout">LOGOUT</a></button>
 </body>
 </html>
