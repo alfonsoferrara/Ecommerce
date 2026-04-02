@@ -67,6 +67,67 @@ public class OrdineDAO implements GenericDAO<Ordine, Integer> {
 		return ordini;
 	}
 
+	/**
+	 * Trova tutti gli ordini di un cliente, ordinati dal più recente al più vecchio
+	 */
+	public List<Ordine> findByClienteId(int clienteId) throws SQLException {
+		List<Ordine> ordini = new ArrayList<>();
+		String query = "SELECT * FROM Ordine WHERE cliente_id = ? ORDER BY data DESC";
+
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+			ps.setInt(1, clienteId);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					ordini.add(new Ordine(rs.getInt("id"), rs.getInt("cliente_id"), rs.getInt("indirizzo_id"),
+							rs.getTimestamp("data"), rs.getDouble("totale"), rs.getString("stato"),
+							rs.getString("metodo_pagamento"), rs.getString("nota_cliente")));
+				}
+			}
+		}
+		return ordini;
+	}
+
+	/**
+	 * Trova gli ultimi N ordini di un cliente, ordinati dal più recente
+	 */
+	public List<Ordine> findLastByClienteId(int clienteId, int limit) throws SQLException {
+		List<Ordine> ordini = new ArrayList<>();
+		String query = "SELECT * FROM Ordine WHERE cliente_id = ? ORDER BY data DESC LIMIT ?";
+
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+			ps.setInt(1, clienteId);
+			ps.setInt(2, limit);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					ordini.add(new Ordine(rs.getInt("id"), rs.getInt("cliente_id"), rs.getInt("indirizzo_id"),
+							rs.getTimestamp("data"), rs.getDouble("totale"), rs.getString("stato"),
+							rs.getString("metodo_pagamento"), rs.getString("nota_cliente")));
+				}
+			}
+		}
+		return ordini;
+	}
+
+	/**
+	 * Conta quanti ordini ha un cliente
+	 */
+	public int countByClienteId(int clienteId) throws SQLException {
+		String query = "SELECT COUNT(*) FROM Ordine WHERE cliente_id = ?";
+
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+			ps.setInt(1, clienteId);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					return rs.getInt(1);
+				}
+			}
+		}
+		return 0;
+	}
+
 	@Override
 	public void update(Ordine o) throws SQLException {
 		String query = "UPDATE Ordine SET stato=?, metodo_pagamento=?, nota_cliente=? WHERE id=?";

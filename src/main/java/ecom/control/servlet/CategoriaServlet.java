@@ -21,6 +21,7 @@ public class CategoriaServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private ProdottoDAO prodottoDAO;
 	private CategoriaDAO categoriaDAO;
+	private int maxNumeroProdotti = 12; // per la paginazione
 
 	@Override
 	public void init() throws ServletException {
@@ -34,28 +35,26 @@ public class CategoriaServlet extends HttpServlet {
 			throws ServletException, IOException {
 		try {
 			String catParam = request.getParameter("id");
-			List<Prodotto> prodotti = prodottoDAO.findAll();
-
+			String catPagina = request.getParameter("pagina");
 			String catNome = "";
 			String catDesc = "";
-
-			// recupero nome e descrizione categoria
-			// filtro i prodotti della categoria tramite id
-			if (catParam != null && !catParam.isEmpty()) {
+			List<Prodotto> prodotti = null;
+			int totaleProdotti = 0;
+			
+			if (catParam != null && !catParam.isEmpty() && catPagina != null && !catPagina.isEmpty()) {
+				// filtro i prodotti della categoria tramite id
 				int catId = Integer.parseInt(catParam);
-				Categoria cat = categoriaDAO.findById(catId);
-				catNome = cat.getNome();
-				catDesc = cat.getDescrizione();
-
-				List<Prodotto> prodottiFiltrati = new ArrayList<>();
-				for (Prodotto p : prodotti) {
-					if (p.getCategoriaId() == catId) {
-						prodottiFiltrati.add(p);
-					}
-				}
-				prodotti = prodottiFiltrati;
+				int numPagina = Integer.parseInt(catPagina);
+				prodotti = prodottoDAO.findByCategoriaId(numPagina, maxNumeroProdotti, catId); //recupero prodotti della categoria
+				totaleProdotti = prodottoDAO.countProdottiByCategoriaId(catId);
+				
+				// recupero nome e descrizione categoria
+				Categoria categoria = categoriaDAO.findById(catId);
+				catNome = categoria.getNome();
+				catDesc = categoria.getDescrizione();
 			}
 
+			request.setAttribute("totaleProdotti", totaleProdotti); // per la paginazione
 			request.setAttribute("prodotti", prodotti);
 			request.setAttribute("catNome", catNome);
 			request.setAttribute("catDesc", catDesc);

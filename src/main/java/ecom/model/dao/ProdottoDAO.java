@@ -56,6 +56,27 @@ public class ProdottoDAO implements GenericDAO<Prodotto, Integer> {
 		return null;
 	}
 
+	public List<Prodotto> findByCategoriaId(int pagina, int pageSize, int categoria_id) throws SQLException {
+		List<Prodotto> prodotti = new ArrayList<>();
+		int offset = (pagina - 1) * pageSize;
+		String query = "SELECT * FROM Prodotto WHERE categoria_id = ? AND attivo = TRUE LIMIT ? OFFSET ?";
+
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+			ps.setInt(1, pagina);
+			ps.setInt(2, offset);
+			ps.setInt(3, categoria_id);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					prodotti.add(new Prodotto(rs.getInt("id"), rs.getInt("categoria_id"), rs.getString("nome"),
+							rs.getString("descrizione"), rs.getDouble("prezzo"), rs.getInt("stock"),
+							rs.getBoolean("attivo")));
+				}
+			}
+		}
+		return null;
+	}
+
 	@Override
 	public List<Prodotto> findAll() throws SQLException {
 		List<Prodotto> prodotti = new ArrayList<>();
@@ -72,12 +93,22 @@ public class ProdottoDAO implements GenericDAO<Prodotto, Integer> {
 		return prodotti;
 	}
 
-	public List<Prodotto> findUltimeNovita() throws SQLException {
+	// metodo per recuperare ultimi prodotti aggiunti, utile sia in home page che
+	// nella categoria
+	// ultime novità
+	public List<Prodotto> findUltimeNovita(int pagina, int pageSize) throws SQLException {
 		List<Prodotto> prodotti = new ArrayList<>();
-		String query = "SELECT * FROM Prodotto WHERE attivo = TRUE ORDER BY id DESC LIMIT 4";
-		try (Connection con = ds.getConnection();
-				PreparedStatement ps = con.prepareStatement(query);
-				ResultSet rs = ps.executeQuery()) {
+
+		int offset = (pagina - 1) * pageSize;
+
+		String query = "SELECT * FROM Prodotto WHERE attivo = TRUE ORDER BY id DESC LIMIT ? OFFSET ?";
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query);) {
+
+			ps.setInt(1, pageSize);
+			ps.setInt(2, offset);
+
+			ResultSet rs = ps.executeQuery();
+
 			while (rs.next()) {
 				prodotti.add(new Prodotto(rs.getInt("id"), rs.getInt("categoria_id"), rs.getString("nome"),
 						rs.getString("descrizione"), rs.getDouble("prezzo"), rs.getInt("stock"),
@@ -86,10 +117,7 @@ public class ProdottoDAO implements GenericDAO<Prodotto, Integer> {
 		}
 		return prodotti;
 	}
-	
-	
-	
-	
+
 	@Override
 	public void update(Prodotto p) throws SQLException {
 		String query = "UPDATE Prodotto SET categoria_id=?, nome=?, descrizione=?, prezzo=?, stock=? WHERE id=?";
@@ -113,5 +141,23 @@ public class ProdottoDAO implements GenericDAO<Prodotto, Integer> {
 			ps.setInt(1, id);
 			ps.executeUpdate();
 		}
+	}
+
+	// conteggio prodotti per gestire la paginazione
+	public int countProdottiByCategoriaId(int categoria_id) {
+		String sql = "SELECT COUNT(*) FROM prodotto WHERE categoria_id = ?";
+
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(sql);) {
+			ps.setInt(1,categoria_id);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return 0;
 	}
 }
