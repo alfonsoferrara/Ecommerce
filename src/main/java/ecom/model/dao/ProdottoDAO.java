@@ -56,25 +56,45 @@ public class ProdottoDAO implements GenericDAO<Prodotto, Integer> {
 		return null;
 	}
 
-	public List<Prodotto> findByCategoriaId(int pagina, int pageSize, int categoria_id) throws SQLException {
+	//metodo per ordinare i prodotti nella pagina categoria
+	public List<Prodotto> findByCategoriaId_OrderBy(int pagina, int pageSize, int categoria_id, String order)
+			throws SQLException {
 		List<Prodotto> prodotti = new ArrayList<>();
 		int offset = (pagina - 1) * pageSize;
-		String query = "SELECT * FROM Prodotto WHERE categoria_id = ? AND attivo = TRUE LIMIT ? OFFSET ?";
+
+		// Converto la stringa ordine in clausola SQL sicura
+		String orderByClause;
+		switch (order) {
+		case "prezzo_asc":
+			orderByClause = "prezzo ASC";
+			break;
+		case "prezzo_desc":
+			orderByClause = "prezzo DESC";
+			break;
+		case "recenti":
+		default:
+			orderByClause = "id DESC";
+			break;
+		}
+
+		String query = "SELECT * FROM Prodotto WHERE categoria_id = ? AND attivo = TRUE ORDER BY " + orderByClause
+				+ " LIMIT ? OFFSET ?";
 
 		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
-			ps.setInt(1, pagina);
-			ps.setInt(2, offset);
-			ps.setInt(3, categoria_id);
 
-			try (ResultSet rs = ps.executeQuery()) {
-				if (rs.next()) {
-					prodotti.add(new Prodotto(rs.getInt("id"), rs.getInt("categoria_id"), rs.getString("nome"),
-							rs.getString("descrizione"), rs.getDouble("prezzo"), rs.getInt("stock"),
-							rs.getBoolean("attivo")));
-				}
+			ps.setInt(1, categoria_id);
+			ps.setInt(2, pageSize);
+			ps.setInt(3, offset);
+
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				prodotti.add(new Prodotto(rs.getInt("id"), rs.getInt("categoria_id"), rs.getString("nome"),
+						rs.getString("descrizione"), rs.getDouble("prezzo"), rs.getInt("stock"),
+						rs.getBoolean("attivo")));
 			}
 		}
-		return null;
+		return prodotti;
 	}
 
 	@Override
@@ -94,8 +114,7 @@ public class ProdottoDAO implements GenericDAO<Prodotto, Integer> {
 	}
 
 	// metodo per recuperare ultimi prodotti aggiunti, utile sia in home page che
-	// nella categoria
-	// ultime novità
+	// nella categoria ultime novità
 	public List<Prodotto> findUltimeNovita(int pagina, int pageSize) throws SQLException {
 		List<Prodotto> prodotti = new ArrayList<>();
 
@@ -148,7 +167,7 @@ public class ProdottoDAO implements GenericDAO<Prodotto, Integer> {
 		String sql = "SELECT COUNT(*) FROM prodotto WHERE categoria_id = ?";
 
 		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(sql);) {
-			ps.setInt(1,categoria_id);
+			ps.setInt(1, categoria_id);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
 				return rs.getInt(1);

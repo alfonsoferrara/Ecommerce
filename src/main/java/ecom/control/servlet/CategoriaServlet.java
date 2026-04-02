@@ -12,7 +12,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/categoria")
@@ -36,22 +35,36 @@ public class CategoriaServlet extends HttpServlet {
 		try {
 			String catParam = request.getParameter("id");
 			String catPagina = request.getParameter("pagina");
+
+			// ORDINAMENTO DEI PRODOTTI
+			String ordine = request.getParameter("ordine");
+			if(ordine == null || ordine.isEmpty()) {
+				ordine = "recenti";
+			}
+
 			String catNome = "";
 			String catDesc = "";
 			List<Prodotto> prodotti = null;
 			int totaleProdotti = 0;
-			
-			if (catParam != null && !catParam.isEmpty() && catPagina != null && !catPagina.isEmpty()) {
-				// filtro i prodotti della categoria tramite id
+
+			if (catParam != null && !catParam.isEmpty()) {
 				int catId = Integer.parseInt(catParam);
-				int numPagina = Integer.parseInt(catPagina);
-				prodotti = prodottoDAO.findByCategoriaId(numPagina, maxNumeroProdotti, catId); //recupero prodotti della categoria
-				totaleProdotti = prodottoDAO.countProdottiByCategoriaId(catId);
-				
+
 				// recupero nome e descrizione categoria
 				Categoria categoria = categoriaDAO.findById(catId);
 				catNome = categoria.getNome();
 				catDesc = categoria.getDescrizione();
+
+				if (catPagina != null && !catPagina.isEmpty()) {
+					// se viene specificata una pagina allora la uso
+					int numPagina = Integer.parseInt(catPagina);
+					prodotti = prodottoDAO.findByCategoriaId_OrderBy(numPagina, maxNumeroProdotti, catId, ordine);
+				} else {
+					// altrimenti recupero dalla prima pagina
+					prodotti = prodottoDAO.findByCategoriaId_OrderBy(1, maxNumeroProdotti, catId, ordine);
+				}
+
+				totaleProdotti = prodottoDAO.countProdottiByCategoriaId(catId);
 			}
 
 			request.setAttribute("totaleProdotti", totaleProdotti); // per la paginazione
@@ -61,9 +74,10 @@ public class CategoriaServlet extends HttpServlet {
 
 			request.getRequestDispatcher("WEB-INF/views/catalogo.jsp").forward(request, response);
 
-		} catch (SQLException | NumberFormatException e) {
+		} catch (SQLException | NumberFormatException | NullPointerException e) {
 			e.printStackTrace();
-			response.sendError(HttpServletResponse.SC_NOT_FOUND, "Errore nel caricamento del catalogo");
+			response.sendError(HttpServletResponse.SC_NOT_FOUND,
+					"Errore nel caricamento del catalogo, controlla l'indirizzo inserito!");
 		}
 	}
 }

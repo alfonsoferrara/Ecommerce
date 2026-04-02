@@ -3,7 +3,10 @@ package ecom.model.dao;
 import ecom.model.bean.CaratteristicheProdotto;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.sql.DataSource;
 
 public class CaratteristicheProdottoDAO implements GenericDAO<CaratteristicheProdotto, Integer> {
@@ -41,6 +44,29 @@ public class CaratteristicheProdottoDAO implements GenericDAO<CaratteristichePro
 			}
 		}
 		return list;
+	}
+
+	// metodo che mi permette di avere stringhe del tipo Colore: nero filtrando per
+	// id prodotto
+	public Map<String, String> getCaratteristicheMapByProdottoId(int prodottoId) throws SQLException {
+		Map<String, String> caratteristiche = new HashMap<>();
+		String query = "SELECT a.nome, c.valoreAttr FROM Attributo a "
+				+ "INNER JOIN Caratteristiche_Prodotto c ON a.id = c.attributo_id " + "WHERE c.prodotto_id = ?";
+
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+
+			ps.setInt(1, prodottoId);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					String nomeAttributo = rs.getString("nome");
+					String valore = rs.getString("valoreAttr");
+					caratteristiche.put(nomeAttributo, valore);
+				}
+			}
+		}
+
+		return caratteristiche;
 	}
 
 	@Override

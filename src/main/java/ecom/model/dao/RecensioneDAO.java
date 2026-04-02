@@ -15,13 +15,14 @@ public class RecensioneDAO implements GenericDAO<Recensione, Integer> {
 
 	@Override
 	public void insert(Recensione r) throws SQLException {
-		String query = "INSERT INTO Recensione (prodotto_id, cliente_id, valutazione, commento) VALUES (?, ?, ?, ?)";
+		String query = "INSERT INTO Recensione (prodotto_id, cliente_id, valutazione, titolo, commento) VALUES (?, ?, ?, ?)";
 		try (Connection con = ds.getConnection();
 				PreparedStatement ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 			ps.setInt(1, r.getProdottoId());
 			ps.setInt(2, r.getClienteId());
 			ps.setInt(3, r.getValutazione());
-			ps.setString(4, r.getCommento());
+			ps.setString(4, r.getTitolo());
+			ps.setString(5, r.getCommento());
 			ps.executeUpdate();
 
 			try (ResultSet rs = ps.getGeneratedKeys()) {
@@ -39,7 +40,8 @@ public class RecensioneDAO implements GenericDAO<Recensione, Integer> {
 			try (ResultSet rs = ps.executeQuery()) {
 				while (rs.next()) {
 					list.add(new Recensione(rs.getInt("id"), rs.getInt("prodotto_id"), rs.getInt("cliente_id"),
-							rs.getInt("valutazione"), rs.getString("commento"), rs.getTimestamp("data")));
+							rs.getInt("valutazione"), rs.getString("titolo"), rs.getString("commento"),
+							rs.getTimestamp("data")));
 				}
 			}
 		}
@@ -54,7 +56,8 @@ public class RecensioneDAO implements GenericDAO<Recensione, Integer> {
 			try (ResultSet rs = ps.executeQuery()) {
 				if (rs.next()) {
 					return new Recensione(rs.getInt("id"), rs.getInt("prodotto_id"), rs.getInt("cliente_id"),
-							rs.getInt("valutazione"), rs.getString("commento"), rs.getTimestamp("data"));
+							rs.getInt("valutazione"), rs.getString("titolo"), rs.getString("commento"),
+							rs.getTimestamp("data"));
 				}
 			}
 		}
@@ -70,7 +73,7 @@ public class RecensioneDAO implements GenericDAO<Recensione, Integer> {
 				ResultSet rs = ps.executeQuery()) {
 			while (rs.next()) {
 				list.add(new Recensione(rs.getInt("id"), rs.getInt("prodotto_id"), rs.getInt("cliente_id"),
-						rs.getInt("valutazione"), rs.getString("commento"), rs.getTimestamp("data")));
+						rs.getInt("valutazione"), rs.getString("titolo"), rs.getString("commento"), rs.getTimestamp("data")));
 			}
 		}
 		return list;
@@ -79,12 +82,14 @@ public class RecensioneDAO implements GenericDAO<Recensione, Integer> {
 	@Override
 	public void update(Recensione r) throws SQLException {
 		// si aggiora solo la valutazione e il commento.
-		// data, cliente_id e prodotto_id rimangono invariati dato che non ha senso che cambino.
-		String query = "UPDATE Recensione SET valutazione = ?, commento = ? WHERE id = ?";
+		// data, cliente_id e prodotto_id rimangono invariati dato che non ha senso che
+		// cambino.
+		String query = "UPDATE Recensione SET valutazione = ?, titolo = ?, commento = ? WHERE id = ?";
 		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
 			ps.setInt(1, r.getValutazione());
 			ps.setString(2, r.getCommento());
-			ps.setInt(3, r.getId());
+			ps.setString(3, r.getTitolo());
+			ps.setInt(4, r.getId());
 			ps.executeUpdate();
 		}
 	}

@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet("/prodotto")
 public class ProdottoServlet extends HttpServlet {
@@ -53,7 +54,7 @@ public class ProdottoServlet extends HttpServlet {
 
 			// Recupero Dati Relazionati
 			List<Immagine> immagini = immagineDAO.findByProdottoId(idProdotto);
-			List<CaratteristicheProdotto> specifiche = caratteristicheDAO.findByProdottoId(idProdotto);
+			Map<String, String> specifiche = caratteristicheDAO.getCaratteristicheMapByProdottoId(idProdotto);
 			List<Recensione> recensioni = recensioneDAO.findByProdotto(idProdotto);
 
 			// Salvo tutto nella request
@@ -68,7 +69,7 @@ public class ProdottoServlet extends HttpServlet {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Errore DB");
-		} catch (NumberFormatException e) {
+		} catch (NumberFormatException | NullPointerException e) {
 			// Se l'utente scrive /prodotto?id=testo
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, "Prodotto non trovato");
 		}

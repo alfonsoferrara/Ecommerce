@@ -8,17 +8,20 @@ public class Recensione implements Serializable {
 	private int prodottoId;
 	private int clienteId;
 	private int valutazione; // TINYINT mappato come int
+	private String titolo;
 	private String commento;
 	private Timestamp data;
 
 	public Recensione() {
 	}
 
-	public Recensione(int id, int prodottoId, int clienteId, int valutazione, String commento, Timestamp data) {
+	public Recensione(int id, int prodottoId, int clienteId, int valutazione, String titolo, String commento,
+			Timestamp data) {
 		this.id = id;
 		this.prodottoId = prodottoId;
 		this.clienteId = clienteId;
 		this.valutazione = valutazione;
+		this.titolo = titolo;
 		this.commento = commento;
 		this.data = data;
 	}
@@ -53,6 +56,14 @@ public class Recensione implements Serializable {
 
 	public void setValutazione(int valutazione) {
 		this.valutazione = valutazione;
+	}
+
+	public String getTitolo() {
+		return titolo;
+	}
+
+	public void setTitolo(String titolo) {
+		this.titolo = titolo;
 	}
 
 	public String getCommento() {
