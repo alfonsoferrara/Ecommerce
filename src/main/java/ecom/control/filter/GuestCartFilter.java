@@ -38,29 +38,29 @@ public class GuestCartFilter implements Filter {
             return;
         }
 
-        boolean hasCart = false;
+        String cartId = null;
         Cookie[] cookies = req.getCookies();
 
         if (cookies != null) {
             for (Cookie c : cookies) {
                 if ("cart_id".equals(c.getName())) {
-                    hasCart = true;
+                    cartId = c.getValue();
                     break;
                 }
             }
         }
 
         // Se l'utente non ha il cookie del carrello, lo creo
-        if (!hasCart) {
-            String newCartId = UUID.randomUUID().toString();
+        if (cartId == null) {
+            cartId = UUID.randomUUID().toString();
             
             try {
                 // Inserisco un carrello "Ospite" (cliente_id = null) nel Database
-                Carrello nuovoCarrello = new Carrello(newCartId, null, null);
+                Carrello nuovoCarrello = new Carrello(cartId, null, null);
                 carrelloDAO.insert(nuovoCarrello);
 
                 // Creo il Cookie da inviare al browser
-                Cookie cartCookie = new Cookie("cart_id", newCartId);
+                Cookie cartCookie = new Cookie("cart_id", cartId);
                 cartCookie.setPath("/"); // Valido su tutto il sito
                 cartCookie.setMaxAge(60 * 60 * 24 * 30); // Scade in 30 giorni
                 res.addCookie(cartCookie);
@@ -71,7 +71,10 @@ public class GuestCartFilter implements Filter {
                 // il carrello semplicemente non funzionerà per questo click
             }
         }
-
+        
+        // Salvo l'ID direttamente nella request. Così le Servlet non dovranno
+        // più scansionare i cookie, ma troveranno il dato già pronto
+        req.setAttribute("cartId", cartId);
         chain.doFilter(request, response);
     }
 }

@@ -48,4 +48,12 @@ public class VoceCarrelloDAO {
 			ps.executeUpdate();
 		}
 	}
+
+	public void deleteAllByCarrello(String cartId) throws SQLException {
+		String query = "DELETE FROM Voce_Carrello WHERE carrello_id = ?";
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+			ps.setString(1, cartId);
+			ps.executeUpdate();
+		}
+	}
 }

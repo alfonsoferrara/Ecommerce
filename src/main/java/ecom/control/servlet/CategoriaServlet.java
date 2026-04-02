@@ -64,7 +64,7 @@ public class CategoriaServlet extends HttpServlet {
 
 		} catch (SQLException | NumberFormatException e) {
 			e.printStackTrace();
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Errore nel caricamento del catalogo");
+			response.sendError(HttpServletResponse.SC_NOT_FOUND, "Errore nel caricamento del catalogo");
 		}
 	}
 }
