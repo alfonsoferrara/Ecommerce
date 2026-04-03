@@ -84,6 +84,7 @@ CREATE TABLE Recensione (
     prodotto_id INT NOT NULL,
     cliente_id INT NOT NULL,
     valutazione TINYINT CHECK (valutazione BETWEEN 1 AND 5), /*Un INT standard occupa 4 byte. Un TINYINT occupa solo 1 byte.*/
+    titolo TEXT,
     commento TEXT,
     data TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_recensione_prodotto FOREIGN KEY (prodotto_id) 

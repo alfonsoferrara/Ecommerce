@@ -15,12 +15,12 @@ public class VoceCarrelloDAO {
 
 	public void insert(VoceCarrello v) throws SQLException {
 		String query = "INSERT INTO Voce_Carrello (carrello_id, prodotto_id, quantita) VALUES (?, ?, ?) "
-				+ "ON DUPLICATE KEY UPDATE quantita = quantita + ?";
+				+ "ON DUPLICATE KEY UPDATE quantita = ?";
 		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
 			ps.setString(1, v.getCarrelloId());
 			ps.setInt(2, v.getProdottoId());
 			ps.setInt(3, v.getQuantita());
-			ps.setInt(4, v.getQuantita()); // Se esiste già, somma la quantità
+			ps.setInt(4, v.getQuantita()); // aggiorno quantità
 			ps.executeUpdate();
 		}
 	}

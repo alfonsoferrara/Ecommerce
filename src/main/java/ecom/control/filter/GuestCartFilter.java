@@ -61,7 +61,7 @@ public class GuestCartFilter implements Filter {
 
                 // Creo il Cookie da inviare al browser
                 Cookie cartCookie = new Cookie("cart_id", cartId);
-                cartCookie.setPath("/"); // Valido su tutto il sito
+                cartCookie.setPath(req.getContextPath() + "/"); // Valido su tutto il sito
                 cartCookie.setMaxAge(60 * 60 * 24 * 30); // Scade in 30 giorni
                 res.addCookie(cartCookie);
 

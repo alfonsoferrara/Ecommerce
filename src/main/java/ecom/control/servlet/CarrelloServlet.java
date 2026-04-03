@@ -47,7 +47,7 @@ public class CarrelloServlet extends HttpServlet {
 						subtotale += (p.getPrezzo() * voce.getQuantita());
 					}
 				}
-				
+
 				// LOGICA SPEDIZIONE
 				double sogliaSpedizioneGratuita = 50.00;
 				double costoSpedizioneFisso = 5.90;
@@ -91,6 +91,18 @@ public class CarrelloServlet extends HttpServlet {
 		}
 
 		String action = request.getParameter("action");
+
+		// Gestione CLEAR (non richiede prodottoId)
+		if ("clear".equals(action)) {
+			try {
+				voceDAO.deleteAllByCarrello(cartId);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			response.sendRedirect(request.getContextPath() + "/carrello");
+			return;
+		}
+
 		String prodottoIdStr = request.getParameter("prodottoId");
 
 		if (prodottoIdStr == null || prodottoIdStr.isEmpty()) {
@@ -100,11 +112,9 @@ public class CarrelloServlet extends HttpServlet {
 
 		try {
 
-			if ("clear".equals(action)) {
-				voceDAO.deleteAllByCarrello(cartId);
-			}
-
 			int prodottoId = Integer.parseInt(prodottoIdStr);
+			Prodotto prodotto = prodottoDAO.findById(prodottoId);
+			int stockProdotto = prodotto.getStock();
 
 			if ("add".equals(action)) {
 				int qta = 1;
@@ -113,9 +123,14 @@ public class CarrelloServlet extends HttpServlet {
 					qta = Integer.parseInt(qtaStr);
 				}
 
-				VoceCarrello voce = new VoceCarrello(cartId, prodottoId, qta);
-				voceDAO.insert(voce);
-
+				if (qta > stockProdotto) {
+					request.setAttribute("erroreAggiunta",
+							"Quantità non disponibile in magazzino. Massimo disponibile: " + stockProdotto);
+					request.setAttribute("erroreAggiuntaProdottoId", prodottoId);
+				} else {
+					VoceCarrello voce = new VoceCarrello(cartId, prodottoId, qta);
+					voceDAO.insert(voce);
+				}
 			} else if ("remove".equals(action)) {
 				voceDAO.deleteProdotto(cartId, prodottoId);
 			}
