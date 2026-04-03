@@ -56,7 +56,7 @@ public class RegistrazioneServlet extends HttpServlet {
 			request.getRequestDispatcher("/WEB-INF/views/registrazione.jsp").forward(request, response);
 			return;
 		}
-		
+
 		// Bean Cliente
 		Cliente nuovoCliente = new Cliente();
 		nuovoCliente.setNome(nome);
@@ -70,6 +70,7 @@ public class RegistrazioneServlet extends HttpServlet {
 			clienteDAO.insert(nuovoCliente);
 
 			request.getSession().setAttribute("messaggio", "Registrazione completata! Ora puoi accedere.");
+
 			response.sendRedirect(request.getContextPath() + "/login");
 
 		} catch (SQLException e) {

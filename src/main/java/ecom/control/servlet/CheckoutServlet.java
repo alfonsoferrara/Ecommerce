@@ -47,12 +47,29 @@ public class CheckoutServlet extends HttpServlet {
 				return;
 			}
 
+			// CALCOLO TOTALI PER IL RIEPILOGO
+			double subtotale = 0.0;
+			for (VoceCarrello v : voci) {
+				Prodotto p = prodottoDAO.findById(v.getProdottoId());
+				if (p != null) {
+					subtotale += p.getPrezzo() * v.getQuantita();
+				}
+			}
+
+			double speseSpedizione = (subtotale > 0 && subtotale < 50.00) ? 5.90 : 0.0;
+			double totaleFinale = subtotale + speseSpedizione;
+
+			// IMPOSTA GLI ATTRIBUTI PER LA JSP
+			request.setAttribute("subtotale", subtotale);
+			request.setAttribute("speseSpedizione", speseSpedizione);
+			request.setAttribute("totaleFinale", totaleFinale);
+
 			// Carica indirizzi del cliente
 			List<Indirizzo> indirizzi = indirizzoDAO.findByClienteId(cliente.getId());
 			request.setAttribute("indirizzi", indirizzi);
-			
-			//Metodi di pagamento possibili
-			String[] metodiDiPagamento = {"Carta di credito/Debito", "Contrassegno", "PayPal", "Klarna"};
+
+			// Metodi di pagamento possibili
+			String[] metodiDiPagamento = { "Carta di credito/Debito", "Contrassegno", "PayPal", "Klarna" };
 			request.setAttribute("metodiDiPagamento", metodiDiPagamento);
 
 			request.getRequestDispatcher("/WEB-INF/views/checkout.jsp").forward(request, response);
@@ -83,7 +100,7 @@ public class CheckoutServlet extends HttpServlet {
 			}
 
 			List<VoceCarrello> voci = voceDAO.findByCarrello(cartId);
-			if (voci.isEmpty()) {
+			if (voci == null || voci.isEmpty()) {
 				response.sendRedirect(request.getContextPath() + "/carrello");
 				return;
 			}
@@ -97,8 +114,7 @@ public class CheckoutServlet extends HttpServlet {
 			// --- GESTIONE INDIRIZZO ---
 			int indirizzoId;
 
-			// Se l'utente ha scelto "esistente" o non ci sono opzioni (solo nuovo)
-			if ("esistente".equals(opzioneIndirizzo) || (opzioneIndirizzo == null && !voci.isEmpty())) {
+			if ("esistente".equals(opzioneIndirizzo)) {
 				// Caso 1: Usa indirizzo esistente
 				String indirizzoIdStr = request.getParameter("indirizzoId");
 				if (indirizzoIdStr == null || indirizzoIdStr.trim().isEmpty()) {
@@ -139,8 +155,7 @@ public class CheckoutServlet extends HttpServlet {
 				indirizzoId = nuovoIndirizzo.getId();
 			}
 
-			// --- CREAZIONE ORDINE ---
-			// Calcolo totale
+			// --- CALCOLO TOTALI ---
 			double subtotale = 0.0;
 			for (VoceCarrello v : voci) {
 				Prodotto p = prodottoDAO.findById(v.getProdottoId());
@@ -152,17 +167,17 @@ public class CheckoutServlet extends HttpServlet {
 			double speseSpedizione = (subtotale > 0 && subtotale < 50.00) ? 5.90 : 0.0;
 			double totaleFinale = subtotale + speseSpedizione;
 
-			//Costo aggiuntivo per contrassegno
-			if(metodoPagamento.equals("Contrassegno")) {
+			// Costo aggiuntivo per contrassegno
+			if ("Contrassegno".equals(metodoPagamento)) {
 				totaleFinale += 5.00;
 			}
-			
-			// Crea ordine
+
+			// --- CREAZIONE ORDINE ---
 			Ordine nuovoOrdine = new Ordine(0, cliente.getId(), indirizzoId, new Timestamp(System.currentTimeMillis()),
 					totaleFinale, "IN_ELABORAZIONE", metodoPagamento, notaCliente);
 			ordineDAO.insert(nuovoOrdine);
 
-			// Dettagli ordine e aggiornamento stock
+			// --- DETTAGLI ORDINE E AGGIORNAMENTO STOCK ---
 			for (VoceCarrello v : voci) {
 				Prodotto p = prodottoDAO.findById(v.getProdottoId());
 				if (p != null) {
@@ -170,18 +185,25 @@ public class CheckoutServlet extends HttpServlet {
 							p.getPrezzo());
 					dettagliDAO.insert(dettaglio);
 
-					// Svuota carrello
-					voceDAO.deleteProdotto(cartId, p.getId());
-
 					// Aggiorna stock
 					int nuovoStock = p.getStock() - v.getQuantita();
 					p.setStock(Math.max(nuovoStock, 0));
 					prodottoDAO.update(p);
+
+					// Svuota carrello (elimina la voce)
+					voceDAO.deleteProdotto(cartId, p.getId());
 				}
 			}
 
 			request.getSession().setAttribute("messaggio",
 					"Ordine #" + nuovoOrdine.getId() + " effettuato con successo!");
+
+			// Per cancellare cache ed evitare che un utente possa effettuare di nuovo lo
+			// stesso ordine
+			response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+			response.setHeader("Pragma", "no-cache");
+			response.setDateHeader("Expires", 0);
+
 			response.sendRedirect(request.getContextPath() + "/user/ordini");
 
 		} catch (SQLException | NumberFormatException e) {
@@ -214,6 +236,6 @@ public class CheckoutServlet extends HttpServlet {
 		if (!cap.matches("^[0-9]{5}$")) {
 			return "Il CAP deve essere composto da 5 cifre numeriche.";
 		}
-		return null; // tutto ok
+		return null;
 	}
 }

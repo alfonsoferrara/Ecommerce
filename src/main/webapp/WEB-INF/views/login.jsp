@@ -16,5 +16,7 @@
 	</fieldset>
 	<input type="submit" value="Accedi">
 </form>
+
+<a href="registrazione" style="text-decoration:underline">Non hai un account? Registrati!</a>
 </body>
 </html>
