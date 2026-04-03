@@ -98,4 +98,17 @@ public class IndirizzoDAO implements GenericDAO<Indirizzo, Integer> {
 			ps.executeUpdate();
 		}
 	}
+
+	public boolean isUsedInOrders(int indirizzoId) throws SQLException {
+		String query = "SELECT COUNT(*) FROM Ordine WHERE indirizzo_id = ?";
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+			ps.setInt(1, indirizzoId);
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					return rs.getInt(1) > 0;
+				}
+			}
+		}
+		return false;
+	}
 }

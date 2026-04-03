@@ -66,7 +66,10 @@ public class CategoriaServlet extends HttpServlet {
 
 				totaleProdotti = prodottoDAO.countProdottiByCategoriaId(catId);
 			}
+			
+			int totalePagine = (int) Math.ceil((double) totaleProdotti / maxNumeroProdotti);
 
+			request.setAttribute("totalePagine", totalePagine);
 			request.setAttribute("totaleProdotti", totaleProdotti); // per la paginazione
 			request.setAttribute("prodotti", prodotti);
 			request.setAttribute("catNome", catNome);

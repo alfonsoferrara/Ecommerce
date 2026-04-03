@@ -69,13 +69,17 @@ public class OrdineDAO implements GenericDAO<Ordine, Integer> {
 
 	/**
 	 * Trova tutti gli ordini di un cliente, ordinati dal più recente al più vecchio
+	 * con logica di paginazione
 	 */
-	public List<Ordine> findByClienteId(int clienteId) throws SQLException {
+	public List<Ordine> findByClienteId(int clienteId, int pagina, int pageSize) throws SQLException {
 		List<Ordine> ordini = new ArrayList<>();
-		String query = "SELECT * FROM Ordine WHERE cliente_id = ? ORDER BY data DESC";
+		String query = "SELECT * FROM Ordine WHERE cliente_id = ? ORDER BY data DESC LIMIT ? OFFSET ?";
+		int offset = (pagina - 1) * pageSize;
 
 		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
 			ps.setInt(1, clienteId);
+			ps.setInt(2, pageSize);
+			ps.setInt(3, offset);
 
 			try (ResultSet rs = ps.executeQuery()) {
 				while (rs.next()) {
