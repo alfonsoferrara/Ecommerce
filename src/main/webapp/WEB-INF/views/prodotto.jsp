@@ -36,11 +36,5 @@
 	<a href="${pageContext.request.contextPath}/carrello">Vai al
 		carrello</a>
 
-	<c:forEach var="recensione" items="${recensioni}">
-		<p>${recensione.valutazione}
-			Stelle <strong>${recensione.titolo}:</strong>
-		</p>
-		<p>${recensione.commento}</p>
-	</c:forEach>
 </body>
 </html>

@@ -136,7 +136,7 @@ public class ProdottoDAO implements GenericDAO<Prodotto, Integer> {
 		}
 		return prodotti;
 	}
-
+	
 	@Override
 	public void update(Prodotto p) throws SQLException {
 		String query = "UPDATE Prodotto SET categoria_id=?, nome=?, descrizione=?, prezzo=?, stock=? WHERE id=?";

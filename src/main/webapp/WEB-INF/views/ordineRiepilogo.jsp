@@ -150,7 +150,7 @@ th {
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach var="entry" items="${dettagliMap}">
+				<c:forEach var="entry" items="${dettagli}">
 					<c:set var="dettaglio" value="${entry.key}" />
 					<c:set var="prodotto" value="${entry.value}" />
 					<c:set var="totaleProdotto"

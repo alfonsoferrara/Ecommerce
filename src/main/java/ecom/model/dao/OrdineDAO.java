@@ -3,7 +3,9 @@ package ecom.model.dao;
 import ecom.model.bean.Ordine;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -152,4 +154,5 @@ public class OrdineDAO implements GenericDAO<Ordine, Integer> {
 			ps.executeUpdate();
 		}
 	}
+
 }

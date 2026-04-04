@@ -1,6 +1,7 @@
 package ecom.control.servlet;
 
 import ecom.model.bean.*;
+
 import ecom.model.dao.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -55,17 +56,17 @@ public class ProdottoServlet extends HttpServlet {
 			// Recupero Dati Relazionati
 			List<Immagine> immagini = immagineDAO.findByProdottoId(idProdotto);
 			Map<String, String> specifiche = caratteristicheDAO.getCaratteristicheMapByProdottoId(idProdotto);
-			List<Recensione> recensioni = recensioneDAO.findByProdotto(idProdotto);
+			// List<Recensione> recensioni = recensioneDAO.findByProdotto(idProdotto);
 
 			// Salvo tutto nella request
 			request.setAttribute("prodotto", prodotto);
 			request.setAttribute("immagini", immagini);
 			request.setAttribute("specifiche", specifiche);
-			request.setAttribute("recensioni", recensioni);
-			
+			// request.setAttribute("recensioni", recensioni);
+
 			// Inoltro alla view
 			request.getRequestDispatcher("WEB-INF/views/prodotto.jsp").forward(request, response);
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Errore DB");

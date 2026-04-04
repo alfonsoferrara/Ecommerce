@@ -95,7 +95,7 @@ public class CarrelloServlet extends HttpServlet {
 		}
 
 		String action = request.getParameter("action");
-
+		
 		// Gestione CLEAR (non richiede prodottoId)
 		if ("clear".equals(action)) {
 			try {

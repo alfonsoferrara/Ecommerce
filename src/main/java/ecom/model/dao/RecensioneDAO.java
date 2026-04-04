@@ -64,6 +64,21 @@ public class RecensioneDAO implements GenericDAO<Recensione, Integer> {
 		return null;
 	}
 
+	public List<Recensione> findByClienteId(int id) throws SQLException {
+		List<Recensione> list = new ArrayList<>();
+		String query = "SELECT * FROM Recensione WHERE cliente_id = ?";
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query);) {
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				list.add(new Recensione(rs.getInt("id"), rs.getInt("prodotto_id"), rs.getInt("cliente_id"),
+						rs.getInt("valutazione"), rs.getString("titolo"), rs.getString("commento"),
+						rs.getTimestamp("data")));
+			}
+		}
+		return list;
+	}
+
 	@Override
 	public List<Recensione> findAll() throws SQLException {
 		List<Recensione> list = new ArrayList<>();
@@ -73,7 +88,8 @@ public class RecensioneDAO implements GenericDAO<Recensione, Integer> {
 				ResultSet rs = ps.executeQuery()) {
 			while (rs.next()) {
 				list.add(new Recensione(rs.getInt("id"), rs.getInt("prodotto_id"), rs.getInt("cliente_id"),
-						rs.getInt("valutazione"), rs.getString("titolo"), rs.getString("commento"), rs.getTimestamp("data")));
+						rs.getInt("valutazione"), rs.getString("titolo"), rs.getString("commento"),
+						rs.getTimestamp("data")));
 			}
 		}
 		return list;

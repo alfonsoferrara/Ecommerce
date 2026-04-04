@@ -1,8 +1,10 @@
 package ecom.control.servlet;
 
 import ecom.model.bean.Categoria;
+import ecom.model.bean.Immagine;
 import ecom.model.bean.Prodotto;
 import ecom.model.dao.CategoriaDAO;
+import ecom.model.dao.ImmagineDAO;
 import ecom.model.dao.ProdottoDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -12,7 +14,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet("/categoria")
 public class CategoriaServlet extends HttpServlet {
@@ -21,12 +25,14 @@ public class CategoriaServlet extends HttpServlet {
 	private ProdottoDAO prodottoDAO;
 	private CategoriaDAO categoriaDAO;
 	private int maxNumeroProdotti = 12; // per la paginazione
+	private ImmagineDAO immagineDAO;
 
 	@Override
 	public void init() throws ServletException {
 		DataSource ds = (DataSource) getServletContext().getAttribute("DataSource");
 		this.prodottoDAO = new ProdottoDAO(ds);
 		this.categoriaDAO = new CategoriaDAO(ds);
+		this.immagineDAO = new ImmagineDAO(ds);
 	}
 
 	@Override
@@ -38,7 +44,7 @@ public class CategoriaServlet extends HttpServlet {
 
 			// ORDINAMENTO DEI PRODOTTI
 			String ordine = request.getParameter("ordine");
-			if(ordine == null || ordine.isEmpty()) {
+			if (ordine == null || ordine.isEmpty()) {
 				ordine = "recenti";
 			}
 
@@ -65,8 +71,22 @@ public class CategoriaServlet extends HttpServlet {
 				}
 
 				totaleProdotti = prodottoDAO.countProdottiByCategoriaId(catId);
+
+				// RECUPERA LE IMMAGINI PRINCIPALI PER OGNI PRODOTTO
+				Map<Integer, String> immaginiPrincipali = new HashMap<>();
+				for (Prodotto prodotto : prodotti) {
+					Immagine imgPrincipale = immagineDAO.findPrincipalByProdottoId(prodotto.getId());
+					if (imgPrincipale != null) {
+						immaginiPrincipali.put(prodotto.getId(), imgPrincipale.getUrl());
+					} else {
+						// Immagine di default se non esiste
+						immaginiPrincipali.put(prodotto.getId(), "/images/default.jpg");
+					}
+				}
+
+				request.setAttribute("immaginiPrincipali", immaginiPrincipali);
 			}
-			
+
 			int totalePagine = (int) Math.ceil((double) totaleProdotti / maxNumeroProdotti);
 
 			request.setAttribute("totalePagine", totalePagine);
@@ -77,7 +97,9 @@ public class CategoriaServlet extends HttpServlet {
 
 			request.getRequestDispatcher("WEB-INF/views/catalogo.jsp").forward(request, response);
 
-		} catch (SQLException | NumberFormatException | NullPointerException e) {
+		} catch (SQLException | NumberFormatException |
+
+				NullPointerException e) {
 			e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_NOT_FOUND,
 					"Errore nel caricamento del catalogo, controlla l'indirizzo inserito!");

@@ -57,6 +57,20 @@ public class ImmagineDAO implements GenericDAO<Immagine, Integer> {
 		return imgs;
 	}
 
+	public Immagine findPrincipalByProdottoId(int prodottoId) throws SQLException {
+		String query = "SELECT * FROM Immagine WHERE prodotto_id = ? and is_principal = ?";
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+			ps.setInt(1, prodottoId);
+			ps.setInt(2, 1);
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next())
+					return new Immagine(rs.getInt("id"), rs.getInt("prodotto_id"), rs.getString("url"),
+							rs.getBoolean("is_principal"));
+			}
+		}
+		return null;
+	}
+
 	@Override
 	public List<Immagine> findAll() throws SQLException {
 		List<Immagine> imgs = new ArrayList<>();
