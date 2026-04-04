@@ -1,0 +1,181 @@
+:root {
+    --primary-color: #111111;
+    --primary-hover: #333333;
+    --text-color: #222222;
+    --bg-color: #f4f6f8;
+    --card-bg: #ffffff;
+    --border-color: #eaeaea;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.orders-wrapper {
+    max-width: 1100px;
+    margin: 40px auto;
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.orders-header {
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+}
+
+.orders-header h1 {
+    color: var(--primary-color);
+    font-size: 28px;
+    margin: 0;
+}
+
+/* --- Tabella Ordini --- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: middle;
+}
+
+th {
+    background-color: #fafafa;
+    color: #666;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 13px;
+}
+
+/* Effetto hover sulla riga gestito dal JS */
+.clickable-row {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.clickable-row:hover {
+    background-color: #f9f9f9;
+}
+
+.price {
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+/* --- Badge Stato Ordine --- */
+.status {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.status-IN_ELABORAZIONE { background-color: #fff3cd; color: #856404; }
+.status-SPEDITO { background-color: #d4edda; color: #155724; }
+.status-CONSEGNATO { background-color: #cce5ff; color: #004085; }
+.status-CANCELLATO { background-color: #f8d7da; color: #721c24; }
+
+/* --- Bottoni e Link --- */
+.btn {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: var(--primary-hover);
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 20px;
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+.empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+}
+
+.empty p {
+    font-size: 18px;
+    margin-bottom: 25px;
+}
+
+/* --- Paginazione (Tema Nero) --- */
+.info-pagina {
+    text-align: left;
+    margin-bottom: 20px;
+    color: #666;
+    font-size: 14px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.pagination a, .pagination span {
+    display: inline-block;
+    padding: 8px 14px;
+    text-decoration: none;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: var(--text-color);
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.pagination a:hover {
+    background-color: #f4f4f4;
+    border-color: #999;
+}
+
+.pagination .active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.pagination .disabled {
+    color: #aaa;
+    border-color: #eee;
+    background-color: #fafafa;
+    cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+    th:nth-child(2), td:nth-child(2), 
+    th:nth-child(5), td:nth-child(5) {
+        display: none; /* Nasconde Data e Metodo su schermi piccoli */
+    }
+}

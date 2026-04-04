@@ -53,7 +53,7 @@ public class IndirizzoServlet extends HttpServlet {
         if(referer != null && referer.contains("checkout")) {
             response.sendRedirect(request.getContextPath() + "/checkout");
         } else {
-            response.sendRedirect(request.getContextPath() + "/user/profilo");
+            response.sendRedirect(request.getContextPath() + "/user/indirizzi");
         }
     }
 }

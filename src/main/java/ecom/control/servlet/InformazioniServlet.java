@@ -83,7 +83,7 @@ public class InformazioniServlet extends HttpServlet {
 
             clienteDAO.update(cliente);
             session.setAttribute("messaggio", "Profilo aggiornato con successo!");
-            response.sendRedirect(request.getContextPath() + "/user/profilo");
+            response.sendRedirect(request.getContextPath() + "/user/informazioni");
 
         } catch (SQLException e) {
             e.printStackTrace();
