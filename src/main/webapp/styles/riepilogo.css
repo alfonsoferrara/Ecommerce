@@ -1,0 +1,190 @@
+:root {
+    --primary-color: #111111;
+    --primary-hover: #333333;
+    --text-color: #222222;
+    --bg-color: #f4f6f8;
+    --card-bg: #ffffff;
+    --border-color: #eaeaea;
+    --success-color: #28a745;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.riepilogo-wrapper {
+    max-width: 900px;
+    margin: 40px auto;
+    background: var(--card-bg);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+/* --- Intestazione Successo --- */
+.success-header {
+    text-align: center;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+.success-header h1 {
+    color: var(--success-color);
+    font-size: 32px;
+    margin: 0 0 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.thank-you-text {
+    font-size: 18px;
+    color: #666;
+    margin: 0;
+}
+
+/* --- Sezioni --- */
+.section-title {
+    color: var(--primary-color);
+    font-size: 20px;
+    margin-top: 40px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.info-box {
+    background-color: #fafafa;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 20px;
+}
+
+.info-box p {
+    margin: 10px 0;
+    font-size: 15px;
+}
+
+.info-box strong {
+    color: var(--primary-color);
+    display: inline-block;
+    width: 180px;
+}
+
+.order-number {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--primary-color);
+    background: var(--border-color);
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+/* --- Tabella Prodotti --- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+th {
+    background-color: #fafafa;
+    color: #666;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 13px;
+}
+
+.price {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* --- Riepilogo Totali --- */
+.totals-box {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 20px 25px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.total-line {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+    font-size: 15px;
+}
+
+.totals-box hr {
+    border: 0;
+    height: 1px;
+    background-color: rgba(255,255,255,0.2);
+    margin: 15px 0;
+}
+
+.total-final {
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* --- Bottoni --- */
+.actions {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+
+.btn:hover { background-color: var(--primary-hover); }
+
+.btn-outline {
+    background-color: transparent;
+    color: var(--text-color);
+    border: 1px solid #ccc;
+}
+.btn-outline:hover { background-color: #f4f4f4; }
+
+/* Regole per la stampa (Nasconde i bottoni e l'header/footer quando l'utente stampa) */
+@media print {
+    body { background-color: white; }
+    .riepilogo-wrapper { box-shadow: none; margin: 0; padding: 0; }
+    .actions, header, footer { display: none !important; }
+}
+
+@media (max-width: 600px) {
+    .actions { flex-direction: column; }
+    .actions .btn { width: 100%; justify-content: center; }
+    .totals-box { max-width: 100%; margin-left: 0; }
+    .info-box strong { width: auto; display: block; margin-bottom: 4px; }
+}

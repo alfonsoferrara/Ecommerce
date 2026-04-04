@@ -56,7 +56,20 @@ public class RegistrazioneServlet extends HttpServlet {
 			request.getRequestDispatcher("/WEB-INF/views/registrazione.jsp").forward(request, response);
 			return;
 		}
-
+		
+		//conta numero cifre nella password
+		int nCifre = 0;
+		for(int i = 0; i < password.length(); i++) {
+			if(Character.isDigit(password.charAt(i))) {
+				nCifre++;
+			}
+		}
+		if (password.length() < 6 || nCifre < 1) {
+			request.setAttribute("errore", "Formato password non valido.");
+			request.getRequestDispatcher("/WEB-INF/views/registrazione.jsp").forward(request, response);
+			return;
+		}
+		
 		// Bean Cliente
 		Cliente nuovoCliente = new Cliente();
 		nuovoCliente.setNome(nome);

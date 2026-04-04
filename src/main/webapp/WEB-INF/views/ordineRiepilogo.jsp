@@ -2,124 +2,39 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c"%>
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>Ordine Confermato - Il Mio Ecommerce</title>
-<style>
-body {
-	font-family: Arial, sans-serif;
-	margin: 20px;
-	background-color: #f5f5f5;
-}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ordine Confermato - CarryCrew</title>
+<link rel="icon" type="image/png" sizes="16x16"
+	href="${pageContext.request.contextPath}/images/favicon-16x16.png">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-.container {
-	max-width: 900px;
-	margin: 0 auto;
-	background: white;
-	padding: 30px;
-	border-radius: 10px;
-	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-h1 {
-	color: #28a745;
-	border-bottom: 2px solid #28a745;
-	padding-bottom: 10px;
-}
-
-h2 {
-	color: #333;
-	margin-top: 30px;
-}
-
-.order-info {
-	background-color: #f8f9fa;
-	padding: 15px;
-	border-radius: 5px;
-	margin: 20px 0;
-}
-
-.order-number {
-	font-size: 24px;
-	font-weight: bold;
-	color: #ff6b6b;
-}
-
-table {
-	width: 100%;
-	border-collapse: collapse;
-	margin: 20px 0;
-}
-
-th, td {
-	padding: 12px;
-	text-align: left;
-	border-bottom: 1px solid #ddd;
-}
-
-th {
-	background-color: #f8f9fa;
-}
-
-.total-line {
-	display: flex;
-	justify-content: space-between;
-	margin: 10px 0;
-}
-
-.total-final {
-	font-size: 24px;
-	font-weight: bold;
-	color: #ff6b6b;
-	margin-top: 15px;
-	padding-top: 15px;
-	border-top: 2px solid #ddd;
-}
-
-.btn {
-	display: inline-block;
-	padding: 12px 25px;
-	background-color: #ff6b6b;
-	color: white;
-	text-decoration: none;
-	border-radius: 5px;
-	margin-top: 20px;
-	margin-right: 10px;
-}
-
-.btn-secondary {
-	background-color: #6c757d;
-}
-
-.address-box {
-	background-color: #f8f9fa;
-	padding: 15px;
-	border-radius: 5px;
-	margin: 10px 0;
-}
-
-.thank-you {
-	font-size: 18px;
-	margin: 20px 0;
-}
-
-.price {
-	color: #ff6b6b;
-	font-weight: bold;
-}
-</style>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/styles/style.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/styles/riepilogo.css">
 </head>
 <body>
-	<div class="container">
-		<h1>✅ Ordine Confermato!</h1>
 
-		<div class="thank-you">
-			<p>Grazie per aver acquistato da noi! Il tuo ordine è stato
-				ricevuto e sarà elaborato a breve.</p>
+	<jsp:include page="fragments/header.jsp" />
+
+	<main class="riepilogo-wrapper">
+
+		<div class="success-header">
+			<h1>
+				<i class="fas fa-check-circle"></i> Ordine Confermato!
+			</h1>
+			<p class="thank-you-text">Grazie per il tuo acquisto. Abbiamo
+				ricevuto il tuo ordine e lo stiamo elaborando.</p>
 		</div>
 
-		<div class="order-info">
+		<h2 class="section-title">
+			<i class="fas fa-info-circle"></i> Informazioni Ordine
+		</h2>
+		<div class="info-box">
 			<p>
 				<strong>Numero Ordine:</strong> <span class="order-number">#${ordine.id}</span>
 			</p>
@@ -127,26 +42,38 @@ th {
 				<strong>Data Ordine:</strong> ${ordine.data}
 			</p>
 			<p>
-				<strong>Stato:</strong> ${ordine.stato}
+				<strong>Stato Attuale:</strong> ${ordine.stato}
 			</p>
 			<p>
 				<strong>Metodo di Pagamento:</strong> ${ordine.metodoPagamento}
 			</p>
 			<c:if test="${not empty ordine.notaCliente}">
 				<p>
-					<strong>Note:</strong> ${ordine.notaCliente}
+					<strong>Note fornite:</strong> ${ordine.notaCliente}
 				</p>
 			</c:if>
 		</div>
 
-		<h2>📦 Prodotti Ordinati</h2>
+		<h2 class="section-title">
+			<i class="fas fa-map-marker-alt"></i> Indirizzo di Spedizione
+		</h2>
+		<div class="info-box">
+			<p style="margin: 0; font-size: 16px;">
+				${indirizzo.via} ${indirizzo.civico}<br> ${indirizzo.cap} -
+				${indirizzo.citta} (${indirizzo.provincia})
+			</p>
+		</div>
+
+		<h2 class="section-title">
+			<i class="fas fa-box-open"></i> Prodotti Ordinati
+		</h2>
 		<table>
 			<thead>
 				<tr>
 					<th>Prodotto</th>
 					<th>Prezzo Unitario</th>
 					<th>Quantità</th>
-					<th>Totale</th>
+					<th style="text-align: right;">Totale</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -159,49 +86,48 @@ th {
 						<td><strong>${prodotto.nome}</strong></td>
 						<td class="price">€ ${String.format("%.2f", dettaglio.prezzoUnitario)}</td>
 						<td>${dettaglio.quantita}</td>
-						<td class="price">€ ${String.format("%.2f", totaleProdotto)}</td>
+						<td class="price" style="text-align: right;">€
+							${String.format("%.2f", totaleProdotto)}</td>
 					</tr>
 				</c:forEach>
 			</tbody>
 		</table>
 
-		<h2>📍 Indirizzo di Spedizione</h2>
-		<div class="address-box">
-			<p>
-				<strong>${indirizzo.via} ${indirizzo.civico}</strong>
-			</p>
-			<p>
-				<strong>${indirizzo.citta} (${indirizzo.provincia}) -
-					${indirizzo.cap}</strong>
-			</p>
-		</div>
-
-		<h2>💰 Riepilogo Pagamento</h2>
-		<div class="order-info">
+		<div class="totals-box">
 			<div class="total-line">
-				<span>Subtotale prodotti:</span> <span>€
-					${String.format("%.2f", subtotale)}</span>
+				<span>Subtotale:</span> <span>€ ${String.format("%.2f", subtotale)}</span>
 			</div>
 			<div class="total-line">
 				<span>Spedizione:</span> <span>€ ${String.format("%.2f", speseSpedizione)}</span>
 			</div>
 			<c:if test="${costoContrassegno > 0}">
 				<div class="total-line">
-					<span>Costo contrassegno:</span> <span>€
-						${String.format("%.2f", costoContrassegno)}</span>
+					<span>Contrassegno:</span> <span>€ ${String.format("%.2f", costoContrassegno)}</span>
 				</div>
 			</c:if>
+			<hr>
 			<div class="total-line total-final">
-				<span><strong>TOTALE PAGATO:</strong></span> <span><strong>€
-						${String.format("%.2f", ordine.totale)}</strong></span>
+				<span>Totale Pagato:</span> <span>€ ${String.format("%.2f", ordine.totale)}</span>
 			</div>
 		</div>
 
-		<div style="text-align: center;">
-			<a href="${pageContext.request.contextPath}/home" class="btn">Continua
-				lo shopping</a> <a href="${pageContext.request.contextPath}/user/ordini"
-				class="btn btn-secondary">I miei ordini</a>
+		<div class="actions">
+			<a href="${pageContext.request.contextPath}/home" class="btn"> <i
+				class="fas fa-shopping-bag"></i> Continua lo shopping
+			</a> <a href="${pageContext.request.contextPath}/user/ordini"
+				class="btn btn-outline"> <i class="fas fa-list"></i> I miei
+				ordini
+			</a>
+			<button id="btn-stampa-ricevuta" class="btn btn-outline">
+				<i class="fas fa-print"></i> Stampa
+			</button>
 		</div>
-	</div>
+
+	</main>
+
+	<jsp:include page="fragments/footer.jsp" />
+
+	<script src="${pageContext.request.contextPath}/scripts/riepilogo.js"></script>
+
 </body>
 </html>

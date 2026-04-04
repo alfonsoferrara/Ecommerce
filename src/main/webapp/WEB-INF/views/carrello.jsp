@@ -45,9 +45,7 @@
 						<i class="fas fa-box-open"></i>
 						<p>Il tuo carrello è attualmente vuoto.</p>
 						<a href="${pageContext.request.contextPath}/home" class="btn"
-							style="max-width: 300px;"> <i class="fas fa-arrow-left"></i>
-							Torna allo Shopping
-						</a>
+							style="max-width: 300px;"> Torna allo Shopping </a>
 					</div>
 				</div>
 			</c:when>
