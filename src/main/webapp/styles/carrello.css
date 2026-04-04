@@ -1,0 +1,192 @@
+/* --- Stili Base e Reset --- */
+	:root {
+		--primary-color: rgb(0, 0, 0);
+		--primary-hover: #ff5252;
+		--text-color: #333;
+		--bg-color: #f4f6f8;
+		--card-bg: #ffffff;
+		--border-color: #eaeaea;
+	}
+
+	body {
+		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+		margin: 0;
+		background-color: var(--bg-color);
+		color: var(--text-color);
+	}
+
+	.cart-wrapper {
+		max-width: 1200px;
+		margin: 40px auto;
+		padding: 0 20px;
+	}
+
+	.cart-header {
+		margin-bottom: 30px;
+		color: var(--text-color);
+	}
+
+	.cart-header h1 {
+		font-size: 28px;
+		margin: 0;
+	}
+
+	/* --- Layout a due colonne --- */
+	.cart-container {
+		display: flex;
+		gap: 30px;
+		align-items: flex-start;
+	}
+
+	.cart-items-section {
+		flex: 2;
+		background: var(--card-bg);
+		border-radius: 10px;
+		box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+		padding: 20px;
+	}
+
+	.cart-summary-section {
+		flex: 1;
+		background: var(--card-bg);
+		border-radius: 10px;
+		box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+		padding: 25px;
+		position: sticky;
+		top: 20px;
+	}
+
+	/* --- Tabella Carrello --- */
+	table {
+		width: 100%;
+		border-collapse: collapse;
+	}
+
+	th, td {
+		padding: 15px;
+		text-align: left;
+		border-bottom: 1px solid var(--border-color);
+		vertical-align: middle;
+	}
+
+	th {
+		background-color: #fafafa;
+		color: #666;
+		font-weight: 600;
+		text-transform: uppercase;
+		font-size: 13px;
+	}
+
+	.product-name {
+		font-weight: 600;
+		font-size: 16px;
+	}
+
+	.price {
+		font-weight: 600;
+		color: var(--text-color);
+	}
+
+	.quantity-input {
+		width: 70px;
+		padding: 8px;
+		border: 1px solid #ccc;
+		border-radius: 5px;
+		text-align: center;
+		font-size: 15px;
+	}
+
+	/* --- Box Riepilogo --- */
+	.summary-title {
+		font-size: 20px;
+		border-bottom: 1px solid var(--border-color);
+		padding-bottom: 15px;
+		margin-top: 0;
+		margin-bottom: 20px;
+	}
+
+	.summary-row {
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: 15px;
+		font-size: 16px;
+	}
+
+	.summary-total {
+		font-size: 22px;
+		font-weight: bold;
+		color: var(--primary-color);
+		border-top: 2px solid var(--border-color);
+		padding-top: 15px;
+		margin-top: 10px;
+	}
+
+	/* --- Bottoni --- */
+	.btn {
+		display: inline-block;
+		padding: 12px 20px;
+		background-color: var(--primary-color);
+		color: white;
+		text-decoration: none;
+		border-radius: 5px;
+		border: none;
+		cursor: pointer;
+		font-size: 16px;
+		font-weight: 600;
+		text-align: center;
+		transition: background-color 0.3s;
+		width: 100%;
+		box-sizing: border-box;
+	}
+
+	.btn:hover { background-color: var(--primary-hover); }
+
+	.btn-outline {
+		background-color: transparent;
+		color: var(--text-color);
+		border: 1px solid #ccc;
+		margin-top: 10px;
+	}
+	.btn-outline:hover { background-color: #f4f4f4; }
+
+	.btn-danger-icon {
+		background: none;
+		border: none;
+		color: #dc3545;
+		cursor: pointer;
+		font-size: 18px;
+		transition: color 0.3s;
+	}
+	.btn-danger-icon:hover { color: #a71d2a; }
+
+	/* --- Messaggi e Errori --- */
+	.empty-cart {
+		text-align: center;
+		padding: 60px 20px;
+	}
+	.empty-cart i { font-size: 60px; color: #ccc; margin-bottom: 20px; }
+	.empty-cart p { font-size: 18px; color: #666; margin-bottom: 30px; }
+
+	.alert-error {
+		background-color: #f8d7da;
+		color: #721c24;
+		padding: 15px;
+		border-radius: 8px;
+		margin-bottom: 20px;
+		border-left: 5px solid #dc3545;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+
+	/* Evidenzia la riga del prodotto in errore */
+	.row-error {
+		background-color: #fff3f4;
+	}
+
+	/* --- Responsive --- */
+	@media (max-width: 768px) {
+		.cart-container { flex-direction: column; }
+		.cart-items-section, .cart-summary-section { width: 100%; }
+		th:nth-child(2), td:nth-child(2) { display: none; } /* Nasconde colonna prezzo singolo su mobile */
+	}

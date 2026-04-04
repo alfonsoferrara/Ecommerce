@@ -41,6 +41,20 @@ public class LoginServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		HttpSession session = request.getSession(false);
+
+		// SE L'UTENTE È GIÀ LOGGATO, REINDIRIZZA AL PROFILO
+		if (session != null && session.getAttribute("utenteLoggato") != null) {
+			String ruolo = (String) session.getAttribute("ruolo");
+			if ("admin".equals(ruolo)) {
+				response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+			} else if ("cliente".equals(ruolo)) {
+				response.sendRedirect(request.getContextPath() + "/user/profilo");
+			} else {
+				response.sendRedirect(request.getContextPath() + "/home");
+			}
+			return;
+		}
 		request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
 	}
 

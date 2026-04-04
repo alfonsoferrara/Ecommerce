@@ -95,7 +95,7 @@ public class CarrelloServlet extends HttpServlet {
 		}
 
 		String action = request.getParameter("action");
-		
+
 		// Gestione CLEAR (non richiede prodottoId)
 		if ("clear".equals(action)) {
 			try {
@@ -120,26 +120,58 @@ public class CarrelloServlet extends HttpServlet {
 			Prodotto prodotto = prodottoDAO.findById(prodottoId);
 			int stockProdotto = prodotto.getStock();
 
-			if ("add".equals(action)) {
-				int qta = 1;
+			if ("add".equals(action) || "update".equals(action)) {
+				int qtaInput = 1;
 				String qtaStr = request.getParameter("quantita");
 				if (qtaStr != null && !qtaStr.isEmpty()) {
-					qta = Integer.parseInt(qtaStr);
+					qtaInput = Integer.parseInt(qtaStr);
 				}
 
-				if (qta > stockProdotto) {
-					request.setAttribute("erroreAggiunta",
-							"Quantità non disponibile in magazzino. Massimo disponibile: " + stockProdotto);
-					request.setAttribute("erroreAggiuntaProdottoId", prodottoId);
+				// Cerchiamo se il prodotto è già nel carrello
+				List<VoceCarrello> vociEsistenti = voceDAO.findByCarrello(cartId);
+				VoceCarrello voceGiaPresente = null;
+				for (VoceCarrello v : vociEsistenti) {
+					if (v.getProdottoId() == prodottoId) {
+						voceGiaPresente = v;
+						break;
+					}
+				}
+
+				int nuovaQtaFinale;
+				if ("update".equals(action)) {
+					// Caso Carrello: l'input è la quantità totale finale
+					nuovaQtaFinale = qtaInput;
 				} else {
-					VoceCarrello voce = new VoceCarrello(cartId, prodottoId, qta);
-					voceDAO.insert(voce);
+					// Caso Pagina Prodotto (add): sommiamo all'esistente
+					int qtaPrecedente = (voceGiaPresente != null) ? voceGiaPresente.getQuantita() : 0;
+					nuovaQtaFinale = qtaPrecedente + qtaInput;
+				}
+
+				// Controllo disponibilità magazzino
+				if (nuovaQtaFinale > stockProdotto) {
+					request.getSession().setAttribute("erroreAggiunta",
+							"Quantità non disponibile. Massimo disponibile: " + stockProdotto);
+					request.getSession().setAttribute("erroreAggiuntaProdottoId", prodottoId);
+				} else {
+					if (voceGiaPresente != null) {
+						voceGiaPresente.setQuantita(nuovaQtaFinale);
+						voceDAO.insert(voceGiaPresente);
+					} else {
+						VoceCarrello nuovaVoce = new VoceCarrello(cartId, prodottoId, nuovaQtaFinale);
+						voceDAO.insert(nuovaVoce);
+					}
 				}
 			} else if ("remove".equals(action)) {
 				voceDAO.deleteProdotto(cartId, prodottoId);
 			}
 
-			response.sendRedirect(request.getContextPath() + "/carrello");
+			// Gestione Redirect al Referer
+			String referer = request.getHeader("Referer");
+			if (referer != null && !referer.contains("/carrello")) {
+				response.sendRedirect(referer);
+			} else {
+				response.sendRedirect(request.getContextPath() + "/carrello");
+			}
 
 		} catch (SQLException | NumberFormatException e) {
 			e.printStackTrace();

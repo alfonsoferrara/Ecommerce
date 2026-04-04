@@ -1,30 +1,15 @@
-// Mobile Menu Toggle
-document.addEventListener('DOMContentLoaded', function() {
-    const menuToggle = document.getElementById('menuToggle');
-    const mainNav = document.getElementById('mainNav');
-    
-    if (menuToggle && mainNav) {
-        menuToggle.addEventListener('click', function() {
-            mainNav.classList.toggle('active');
+document.addEventListener("DOMContentLoaded", function() {
+    console.log("Script main.js caricato correttamente!");
+
+    const hamburger = document.querySelector(".hamburger");
+    const navMenu = document.querySelector(".nav-menu");
+
+    if (hamburger && navMenu) {
+        hamburger.addEventListener("click", function() {
+            navMenu.classList.toggle("active");
+            console.log("Click rilevato! Classe 'active' attivata/disattivata.");
         });
-    }
-    
-    // Aggiorna anno corrente nel footer
-    const currentYearSpan = document.getElementById('currentYear');
-    if (currentYearSpan) {
-        currentYearSpan.textContent = new Date().getFullYear();
+    } else {
+        console.error("ERRORE: Impossibile trovare la classe .hamburger o .nav-menu nel DOM.");
     }
 });
-
-// Aggiorna conteggio carrello
-function updateCartCount(count) {
-    const cartCountSpan = document.getElementById('cartCount');
-    if (cartCountSpan) {
-        cartCountSpan.textContent = count;
-        if (count > 0) {
-            cartCountSpan.style.display = 'inline-block';
-        } else {
-            cartCountSpan.style.display = 'none';
-        }
-    }
-}

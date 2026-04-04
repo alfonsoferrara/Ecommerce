@@ -1,52 +1,56 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<footer class="footer">
-    <div class="footer-container">
-        <!-- Sezione 1: Customer Reassurance -->
-        <div class="reassurance">
-            <div class="reassurance-item">
-                <div class="reassurance-icon">
-                    <i class="fas fa-headset"></i>
-                </div>
-                <div class="reassurance-title">ASSISTENZA CLIENTI</div>
-                <div class="reassurance-text">Disponibile 7/7 dalle 9:00 alle 20:00</div>
-            </div>
-            <div class="reassurance-item">
-                <div class="reassurance-icon">
-                    <i class="fas fa-gem"></i>
-                </div>
-                <div class="reassurance-title">TOP QUALITÀ</div>
-                <div class="reassurance-text">Prodotti selezionati con cura</div>
-            </div>
-            <div class="reassurance-item">
-                <div class="reassurance-icon">
-                    <i class="fas fa-undo-alt"></i>
-                </div>
-                <div class="reassurance-title">RESO GRATUITO</div>
-                <div class="reassurance-text">Hai 14 giorni per ripensarci</div>
-            </div>
+<footer>
+    <div class="reassurance-section">
+        <div class="reassurance-block">
+            <i class="fas fa-headset"></i>
+            <h4>Assistenza Clienti 24/7</h4>
+            <p>Siamo qui per aiutarti in qualsiasi momento.</p>
         </div>
-        
-        <!-- Sezione 2: Link utili -->
-        <div class="footer-links">
-            <a href="${pageContext.request.contextPath}/chi-siamo">Chi siamo</a>
-            <a href="${pageContext.request.contextPath}/contattaci">Contattaci</a>
-            <a href="${pageContext.request.contextPath}/info-spedizioni">Info spedizioni</a>
-            <a href="${pageContext.request.contextPath}/privacy-policy">Privacy Policy</a>
-            <a href="${pageContext.request.contextPath}/termini-condizioni">Termini e condizioni</a>
+        <div class="reassurance-block">
+            <i class="fas fa-star"></i>
+            <h4>Top Qualità</h4>
+            <p>Materiali selezionati e garantiti.</p>
         </div>
-        
-        <!-- Sezione 3: Copyright -->
-        <div class="copyright">
-            <p>
-                &copy; <span id="currentYear">2026</span> SHOP. - Tutti i diritti riservati<br>
-                P.IVA 01234567890
-            </p>
+        <div class="reassurance-block">
+            <i class="fas fa-box-open"></i>
+            <h4>Reso Gratuito</h4>
+            <p>Hai 30 giorni per restituire il tuo ordine.</p>
         </div>
+    </div>
+
+    <div class="footer-links-section">
+        <div class="link-column">
+            <h5>L'Azienda</h5>
+            <a href="#">Chi siamo</a>
+            <a href="#">Lavora con noi</a>
+            <a href="#">Sostenibilità</a>
+        </div>
+        <div class="link-column">
+            <h5>Supporto</h5>
+            <a href="#">Contattaci</a>
+            <a href="#">FAQ</a>
+            <a href="#">Info Spedizioni</a>
+        </div>
+        <div class="link-column">
+            <h5>Note Legali</h5>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Termini & Condizioni</a>
+            <a href="#">Cookie Policy</a>
+        </div>
+    </div>
+
+    <div class="copyright-section">
+        <% 
+            // Generazione dinamica dell'anno corrente
+            int currentYear = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR); 
+        %>
+        &copy; <%= currentYear %> CarryCrew S.r.l. - Tutti i diritti riservati. <br>
+        P.IVA: 12345678901 - Via Roma 1, 00100 Roma (RM) - info@carrycrew.it
     </div>
 </footer>
 
-<script>
-    // Aggiorna anno corrente
-    document.getElementById('currentYear').textContent = new Date().getFullYear();
-</script>
+<script src="${pageContext.request.contextPath}/scripts/main.js"></script>
+
+</body>
+</html>

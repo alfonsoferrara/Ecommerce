@@ -1,4 +1,4 @@
-/* RESET & BASE */
+/* ================= Base & Reset ================= */
 * {
     margin: 0;
     padding: 0;
@@ -6,302 +6,201 @@
 }
 
 body {
-    font-family: 'Poppins', 'Segoe UI', 'Montserrat', sans-serif;
-    font-weight: 600;
-    background-color: #f8f8f8;
-    color: #1a1a1a;
-    line-height: 1.5;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f4f4f4; /* Colore di sfondo del body*/
+    color: #333;
+    line-height: 1.6;
 }
 
-/* TIPOGRAFIA BOLD */
-h1, h2, h3, h4, h5, h6, .bold-text, .menu-link, .btn {
-	text-align: center;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-}
-
-.container {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-/* HEADER */
-.top-bar {
-    background-color: #1a1a1a;
-    color: #fff;
-    text-align: center;
-    padding: 10px 0;
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-}
-
-.main-header {
-    background-color: #fff;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
-
-.header-content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 15px 20px;
-    max-width: 1280px;
-    margin: 0 auto;
-    gap: 20px;
-}
-
-/* LOGO */
-.logo {
-    flex-shrink: 0;
-}
-.logo a {
-    font-size: 28px;
-    font-weight: 800;
+a {
     text-decoration: none;
-    color: #1a1a1a;
-    letter-spacing: -1px;
-}
-.logo span {
-    color: #ff6b6b;
+    color: inherit;
+    transition: color 0.3s ease;
 }
 
-/* MENU CENTRALE */
-.main-nav {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-}
-.nav-menu {
-    display: flex;
-    gap: 30px;
+ul {
     list-style: none;
 }
-.nav-menu a {
-    text-decoration: none;
-    color: #1a1a1a;
-    font-weight: 600;
-    font-size: 15px;
-    transition: color 0.3s;
-}
-.nav-menu a:hover {
-    color: #ff6b6b;
+
+/* ================= HEADER ================= */
+header {
+    background-color: #000;
+    color: #fff;
+    width: 100%;
 }
 
-/* ICONE UTENTE/CARRELLO */
-.user-actions {
-    display: flex;
-    gap: 20px;
-    flex-shrink: 0;
-}
-.user-actions a {
-    text-decoration: none;
-    color: #1a1a1a;
-    font-size: 22px;
-    transition: color 0.3s;
-    position: relative;
-}
-.user-actions a:hover {
-    color: #ff6b6b;
-}
-.cart-count {
-    position: absolute;
-    top: -8px;
-    right: -12px;
-    background-color: #ff6b6b;
-    color: white;
-    font-size: 11px;
-    font-weight: bold;
-    padding: 2px 6px;
-    border-radius: 50%;
-    min-width: 18px;
-    text-align: center;
-}
-
-/* MOBILE MENU TOGGLE */
-.menu-toggle {
-    display: none;
-    background: none;
-    border: none;
-    font-size: 28px;
-    cursor: pointer;
-    color: #1a1a1a;
-}
-
-/* FOOTER */
-.footer {
-	position: fixed;
+/* Sezione 1: Top Bar Messaggio */
+.top-bar {
     background-color: #1a1a1a;
-    color: #ccc;
-    margin-top: 60px;
+    text-align: center;
+    padding: 10px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
-.footer-container {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 50px 20px 30px;
-}
-
-/* REASSURANCE SECTION */
-.reassurance {
+/* Sezione 2: Main Header */
+.main-header {
     display: flex;
     justify-content: space-between;
-    gap: 30px;
-    padding-bottom: 40px;
-    border-bottom: 1px solid #333;
-    margin-bottom: 40px;
-    flex-wrap: wrap;
-}
-.reassurance-item {
-    flex: 1;
-    text-align: center;
-    min-width: 180px;
-}
-.reassurance-icon {
-    font-size: 36px;
-    margin-bottom: 10px;
-}
-.reassurance-title {
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 5px;
-}
-.reassurance-text {
-    font-size: 13px;
-    color: #aaa;
-    font-weight: 500;
+    align-items: center;
+    padding: 20px 5%;
 }
 
-/* FOOTER LINKS */
-.footer-links {
+.logo {
+    font-size: 1.8rem;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.nav-menu ul {
     display: flex;
-    justify-content: center;
-    gap: 40px;
-    flex-wrap: wrap;
-    margin-bottom: 40px;
-}
-.footer-links a {
-    color: #ccc;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 500;
-    transition: color 0.3s;
-}
-.footer-links a:hover {
-    color: #ff6b6b;
+    gap: 30px;
 }
 
-/* COPYRIGHT */
-.copyright {
-    text-align: center;
-    padding-top: 30px;
-    border-top: 1px solid #333;
-    font-size: 12px;
-    color: #888;
-    font-weight: 500;
-}
-
-/* BUTTONS */
-.btn {
-    display: inline-block;
-    padding: 12px 24px;
-    background-color: #1a1a1a;
-    color: white;
-    text-decoration: none;
-    border-radius: 30px;
+.nav-menu a {
     font-weight: 700;
-    font-size: 14px;
-    transition: all 0.3s;
-    border: none;
+    font-size: 1.1rem;
+}
+
+.nav-menu a:hover {
+    color: #b3b3b3;
+}
+
+.header-icons {
+    display: flex;
+    gap: 20px;
+    font-size: 1.4rem;
+}
+
+.header-icons i {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.header-icons i:hover {
+    transform: scale(1.1);
+}
+
+.hamburger {
+    display: none;
+    font-size: 1.5rem;
     cursor: pointer;
 }
-.btn-primary {
-    background-color: #ff6b6b;
-}
-.btn-primary:hover {
-    background-color: #ff5252;
-}
-.btn-outline {
-    background-color: transparent;
-    border: 2px solid #1a1a1a;
-    color: #1a1a1a;
-}
-.btn-outline:hover {
-    background-color: #1a1a1a;
-    color: white;
+
+/* ================= FOOTER ================= */
+footer {
+    background-color: #000;
+    color: #fff;
+    width: 100%;
 }
 
-/* RESPONSIVE */
+/* Sezione 1: Customer Reassurance */
+.reassurance-section {
+    display: flex;
+    justify-content: space-around;
+    padding: 40px 5%;
+    background-color: #111;
+    border-bottom: 1px solid #333;
+}
+
+.reassurance-block {
+    text-align: center;
+    flex: 1;
+    padding: 0 15px;
+}
+
+.reassurance-block i {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    color: #fff;
+}
+
+.reassurance-block h4 {
+    font-weight: 800;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+/* Sezione 2: Link Utili */
+.footer-links-section {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    padding: 50px 5%;
+}
+
+.footer-links-section .link-column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.link-column h5 {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.link-column a {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #ccc;
+}
+
+.link-column a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+/* Sezione 3: Copyright */
+.copyright-section {
+    background-color: #050505;
+    text-align: center;
+    padding: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #888;
+}
+
+/* ================= RESPONSIVE ================= */
 @media (max-width: 768px) {
-    .menu-toggle {
-        display: block;
-    }
-    
-    .main-nav {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background-color: #fff;
-        box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-        padding: 20px;
-    }
-    
-    .main-nav.active {
-        display: block;
-    }
-    
-    .nav-menu {
-        flex-direction: column;
-        align-items: center;
-        gap: 15px;
-    }
-    
-    .header-content {
+    .main-header {
         flex-wrap: wrap;
     }
     
-    .user-actions {
-        order: 2;
+    .nav-menu {
+        display: none; /* Nascosto di default su mobile, attivato via JS */
+        width: 100%;
+        order: 3;
+        margin-top: 20px;
     }
     
-    .reassurance {
-        flex-direction: column;
-        align-items: center;
-        gap: 25px;
+    .nav-menu.active {
+        display: block;
     }
     
-    .reassurance-item {
-        max-width: 250px;
-    }
-    
-    .footer-links {
+    .nav-menu ul {
         flex-direction: column;
         align-items: center;
         gap: 15px;
     }
-}
+    
+    .hamburger {
+        display: block;
+    }
 
-@media (max-width: 480px) {
-    .top-bar {
-        font-size: 11px;
-        padding: 8px 0;
+    .reassurance-section {
+        flex-direction: column;
+        gap: 40px;
     }
-    
-    .logo a {
-        font-size: 22px;
-    }
-    
-    .user-actions {
-        gap: 15px;
-    }
-    
-    .container {
-        padding: 0 15px;
+
+    .footer-links-section {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 40px;
     }
 }
