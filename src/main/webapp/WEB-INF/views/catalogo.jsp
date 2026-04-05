@@ -51,6 +51,7 @@
 						</c:if>
 					</div>
 
+					<!-- param.ordine viene dai parametri della query string nell'URL -->
 					<form action="${pageContext.request.contextPath}/categoria"
 						method="GET" id="sortForm">
 						<input type="hidden" name="id" value="${param.id}"> <input
