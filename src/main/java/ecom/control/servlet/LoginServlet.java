@@ -23,7 +23,6 @@ public class LoginServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	private UtenteDAO utenteDAO;
-	private AdminDAO adminDAO;
 	private ClienteDAO clienteDAO;
 	private CarrelloDAO carrelloDAO;
 	private VoceCarrelloDAO voceCarrelloDAO;
@@ -32,7 +31,6 @@ public class LoginServlet extends HttpServlet {
 	public void init() throws ServletException {
 		DataSource ds = (DataSource) getServletContext().getAttribute("DataSource");
 		this.utenteDAO = new UtenteDAO(ds);
-		this.adminDAO = new AdminDAO(ds);
 		this.clienteDAO = new ClienteDAO(ds);
 		this.carrelloDAO = new CarrelloDAO(ds);
 		this.voceCarrelloDAO = new VoceCarrelloDAO(ds);
@@ -46,9 +44,7 @@ public class LoginServlet extends HttpServlet {
 		// SE L'UTENTE È GIÀ LOGGATO, REINDIRIZZA AL PROFILO
 		if (session != null && session.getAttribute("utenteLoggato") != null) {
 			String ruolo = (String) session.getAttribute("ruolo");
-			if ("admin".equals(ruolo)) {
-				response.sendRedirect(request.getContextPath() + "/admin/dashboard");
-			} else if ("cliente".equals(ruolo)) {
+			if ("cliente".equals(ruolo)) {
 				response.sendRedirect(request.getContextPath() + "/user/profilo");
 			} else {
 				response.sendRedirect(request.getContextPath() + "/home");
@@ -89,16 +85,6 @@ public class LoginServlet extends HttpServlet {
 				// Recupero l'ID del carrello ospite (prima del login)
 				String cartIdOspite = (String) request.getAttribute("cartId");
 
-				// Controllo se è admin
-				Admin admin = adminDAO.findById(utente.getId());
-				if (admin != null) {
-					session.setAttribute("utenteLoggato", admin);
-					session.setAttribute("ruolo", "admin");
-					response.sendRedirect(request.getContextPath() + "/admin/dashboard");
-					return;
-				}
-
-				// Se non è Admin, è un Cliente
 				Cliente cliente = clienteDAO.findById(utente.getId());
 				if (cliente != null) {
 					session.setAttribute("utenteLoggato", cliente);

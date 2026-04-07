@@ -1,0 +1,107 @@
+.about-page-container {
+	max-width: 1400px;
+	margin: 60px auto;
+	padding: 0 5%;
+}
+
+/* --- Hero Section Chi Siamo --- */
+.about-hero {
+	text-align: center;
+	margin-bottom: 60px;
+}
+
+.about-hero h1 {
+	font-size: 3.5rem;
+	font-weight: 900;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	color: #000;
+	margin-bottom: 20px;
+}
+
+.about-hero p {
+	font-size: 1.2rem;
+	color: #444;
+	max-width: 800px;
+	margin: 0 auto;
+	line-height: 1.8;
+	font-weight: 500;
+}
+
+/* --- Sezione Contenuto e Mappa --- */
+.about-content-section {
+	display: flex;
+	gap: 60px;
+	align-items: center;
+	margin-top: 60px;
+	border-top: 4px solid #000;
+	padding-top: 60px;
+}
+
+.about-text-block {
+	flex: 1;
+}
+
+.about-text-block h2 {
+	font-size: 2rem;
+	font-weight: 800;
+	text-transform: uppercase;
+	margin-bottom: 25px;
+	color: #000;
+}
+
+.about-text-block p {
+	font-size: 1.1rem;
+	line-height: 1.8;
+	color: #555;
+	margin-bottom: 20px;
+}
+
+.contact-details {
+	margin-top: 30px;
+	background-color: #000;
+	color: #fff;
+	padding: 20px;
+	border-radius: 4px;
+}
+
+.contact-details p {
+	color: #ccc;
+	margin-bottom: 10px;
+	font-size: 1rem;
+}
+
+.contact-details i {
+	margin-right: 10px;
+	color: #fff;
+}
+
+/* --- Mappa Interattiva --- */
+.about-map-block {
+	flex: 1;
+	width: 100%;
+}
+
+.about-map-block iframe {
+	width: 100%;
+	height: 450px;
+	border-radius: 8px;
+	/* Trasforma la mappa a colori in bianco e nero per matchare il tema */
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+	transition: filter 0.3s ease;
+}
+
+/* (Opzionale) Al passaggio del mouse la mappa torna a colori */
+.about-map-block iframe:hover {
+	filter: grayscale(0%);
+}
+
+/* ================= RESPONSIVE ================= */
+@media ( max-width : 992px) {
+	.about-content-section {
+		flex-direction: column;
+	}
+	.about-hero h1 {
+		font-size: 2.5rem;
+	}
+}

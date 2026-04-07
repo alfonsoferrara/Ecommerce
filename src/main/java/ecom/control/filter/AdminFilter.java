@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
-// filtro l'intera area di amministrazione
 @WebFilter("/admin/*")
 public class AdminFilter implements Filter {
 
@@ -18,6 +17,16 @@ public class AdminFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
         
+        String requestURI = req.getRequestURI();
+        String loginURI = req.getContextPath() + "/admin/login";
+
+        // Se la richiesta è per la pagina di login, lascio passare
+        if (requestURI.equals(loginURI)) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+        // CONTROLLO SESSIONE per tutte le altre pagine (es. /admin/dashboard)
         HttpSession session = req.getSession(false);
 
         boolean isLoggedIn = (session != null && session.getAttribute("utenteLoggato") != null);
@@ -26,9 +35,9 @@ public class AdminFilter implements Filter {
         if (isLoggedIn && isAdmin) {
             // L'utente è un amministratore confermato
             chain.doFilter(request, response);
-        } else {
-            // Accesso Negato: Restituisce un errore HTTP 403 (Forbidden)
-            res.sendError(HttpServletResponse.SC_FORBIDDEN, "Area riservata agli amministratori.");
+        } else {            
+            // Accesso Negato, reindirizzo al login
+            res.sendRedirect(loginURI);
         }
     }
 }
