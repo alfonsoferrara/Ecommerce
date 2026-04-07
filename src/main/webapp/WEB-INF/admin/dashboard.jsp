@@ -18,8 +18,10 @@
 
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/styles/admin-dashboard.css">
-	<link rel="stylesheet"
+<link rel="stylesheet"
 	href="${pageContext.request.contextPath}/styles/admin-sidebar.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/styles/admin-topbar.css">
 </head>
 <body>
 
@@ -27,16 +29,7 @@
 
 	<main class="admin-main-content">
 
-		<header class="admin-topbar">
-			<div class="topbar-title">
-				<h1>Panoramica</h1>
-			</div>
-			<div class="topbar-actions">
-				<a href="${pageContext.request.contextPath}/admin/logout"
-					class="btn-logout"> <i class="fas fa-sign-out-alt"></i> Esci
-				</a>
-			</div>
-		</header>
+		<jsp:include page="/WEB-INF/admin/fragments/admin-topbar.jsp" />
 
 		<div class="dashboard-content">
 

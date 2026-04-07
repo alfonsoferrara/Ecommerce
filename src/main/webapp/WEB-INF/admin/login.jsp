@@ -45,10 +45,13 @@
 			</div>
 
 			<div class="form-group">
-				<label for="password">Password</label> <input type="password"
-					id="password" name="password"
-					placeholder="Inserisci la tua password"
-					autocomplete="current-password">
+				<label for="password">Password</label>
+				<div class="password-wrapper">
+					<input type="password" id="password" name="password"
+						placeholder="Inserisci la tua password"
+						autocomplete="current-password"> <i class="fas fa-eye"
+						id="togglePassword" title="Mostra/Nascondi password"></i>
+				</div>
 			</div>
 
 			<button type="submit" class="btn-login">Accedi al pannello</button>

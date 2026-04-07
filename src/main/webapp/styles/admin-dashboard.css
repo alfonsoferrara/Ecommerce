@@ -20,43 +20,6 @@ body {
     flex-direction: column;
 }
 
-/* --- Top Bar --- */
-.admin-topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 40px;
-    background-color: #0a0a0a;
-    border-bottom: 1px solid #222;
-}
-
-.topbar-title h1 {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: #fff;
-}
-
-.btn-logout {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background-color: transparent;
-    color: #ff4d4d;
-    border: 1px solid #ff4d4d;
-    padding: 8px 16px;
-    border-radius: 4px;
-    font-weight: 700;
-    text-transform: uppercase;
-    text-decoration: none;
-    font-size: 0.85rem;
-    transition: all 0.3s ease;
-}
-
-.btn-logout:hover {
-    background-color: #ff4d4d;
-    color: #fff;
-}
-
 /* --- Content Sections --- */
 .dashboard-content {
     padding: 40px;
@@ -111,12 +74,10 @@ body {
 }
 
 .admin-table tbody tr:hover {
-	/*PASSAGGIO MOUSE*/
     background-color: #111;
 }
 
 .admin-table tbody tr:last-child td {
-	/*evita un bordo in eccesso in fondo alla tabella*/
     border-bottom: none;
 }
 

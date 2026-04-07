@@ -36,7 +36,7 @@ public class AdminDashboardServlet extends HttpServlet {
 
 		try {
 			// recupero ultimi 10 ordini
-			List<Ordine> ordini = ordineDAO.findLast10();
+			List<Ordine> ordini = ordineDAO.findLastXOrders(1, 10);
 			//mostra i 10 prodotti terminati dal piu recente
 			List<ProdottoConUltimoAcquisto> prodotti = prodottoDAO.find10Terminati();
 			

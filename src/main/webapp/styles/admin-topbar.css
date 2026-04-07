@@ -1,0 +1,60 @@
+.admin-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: #0a0a0a;
+    border-bottom: 1px solid #222;
+}
+
+.topbar-title h1 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #fff;
+}
+
+.topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.btn-logout {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background-color: transparent;
+    color: #ff4d4d;
+    border: 1px solid #ff4d4d;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+}
+
+.btn-logout:hover {
+    background-color: #ff4d4d;
+    color: #fff;
+}
+
+/* Responsive Topbar */
+@media (max-width: 768px) {
+    .admin-topbar {
+        padding: 15px 20px;
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+    
+    .topbar-title h1 {
+        font-size: 1.2rem;
+    }
+    
+    .btn-logout {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+    }
+}
