@@ -1,6 +1,8 @@
 package ecom.model.dao;
 
 import ecom.model.bean.Prodotto;
+import ecom.model.bean.ProdottoConUltimoAcquisto;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.Connection;
@@ -8,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 
 import javax.sql.DataSource;
 
@@ -56,7 +59,7 @@ public class ProdottoDAO implements GenericDAO<Prodotto, Integer> {
 		return null;
 	}
 
-	//metodo per ordinare i prodotti nella pagina categoria
+	// metodo per ordinare i prodotti nella pagina categoria
 	public List<Prodotto> findByCategoriaId_OrderBy(int pagina, int pageSize, int categoria_id, String order)
 			throws SQLException {
 		List<Prodotto> prodotti = new ArrayList<>();
@@ -136,7 +139,38 @@ public class ProdottoDAO implements GenericDAO<Prodotto, Integer> {
 		}
 		return prodotti;
 	}
-	
+
+	/**
+	 * Trova gli ultimi 10 prodotti terminati, dal piu recente (Pagina dashboard
+	 * admin)
+	 */
+	public List<ProdottoConUltimoAcquisto> find10Terminati() throws SQLException {
+		int limit = 10;
+		List<ProdottoConUltimoAcquisto> prodotti = new ArrayList<>();
+		String query = "SELECT p.id AS prodotto_id, p.nome, p.stock, p.categoria_id, p.descrizione, p.prezzo, p.attivo, MAX(o.data) AS ultimo_acquisto "
+				+ "FROM dettagli_ordine d " + "JOIN ordine o ON d.ordine_id = o.id "
+				+ "JOIN prodotto p ON d.prodotto_id = p.id " + "WHERE p.stock = 0 "
+				+ "GROUP BY p.id, p.nome, p.stock, p.categoria_id, p.descrizione, p.prezzo, p.attivo "
+				+ "ORDER BY ultimo_acquisto DESC " + "LIMIT ?";
+
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+			ps.setInt(1, limit);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					Prodotto prodotto = new Prodotto(rs.getInt("prodotto_id"), rs.getInt("categoria_id"),
+							rs.getString("nome"), rs.getString("descrizione"), rs.getDouble("prezzo"),
+							rs.getInt("stock"), rs.getBoolean("attivo"));
+
+					LocalDate ultimoAcquisto = rs.getDate("ultimo_acquisto").toLocalDate();
+
+					prodotti.add(new ProdottoConUltimoAcquisto(prodotto, ultimoAcquisto));
+				}
+			}
+		}
+		return prodotti;
+	}
+
 	@Override
 	public void update(Prodotto p) throws SQLException {
 		String query = "UPDATE Prodotto SET categoria_id=?, nome=?, descrizione=?, prezzo=?, stock=? WHERE id=?";

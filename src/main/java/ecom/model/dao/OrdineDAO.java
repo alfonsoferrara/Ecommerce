@@ -3,9 +3,7 @@ package ecom.model.dao;
 import ecom.model.bean.Ordine;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -132,6 +130,29 @@ public class OrdineDAO implements GenericDAO<Ordine, Integer> {
 			}
 		}
 		return 0;
+	}
+
+	/**
+	 * Trova gli ultimi 10 ordini effettuati, ordinati dal più recente (Pagina
+	 * dashboard admin)
+	 */
+	public List<Ordine> findLast10() throws SQLException {
+		int limit = 10;
+		List<Ordine> ordini = new ArrayList<>();
+		String query = "SELECT * FROM Ordine ORDER BY data DESC LIMIT ?";
+
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+			ps.setInt(1, limit);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					ordini.add(new Ordine(rs.getInt("id"), rs.getInt("cliente_id"), rs.getInt("indirizzo_id"),
+							rs.getTimestamp("data"), rs.getDouble("totale"), rs.getString("stato"),
+							rs.getString("metodo_pagamento"), rs.getString("nota_cliente")));
+				}
+			}
+		}
+		return ordini;
 	}
 
 	@Override
