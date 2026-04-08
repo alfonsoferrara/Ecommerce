@@ -13,19 +13,23 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import ecom.model.bean.Cliente;
 import ecom.model.bean.Ordine;
+import ecom.model.dao.ClienteDAO;
 import ecom.model.dao.OrdineDAO;
 
 @WebServlet("/admin/ordini")
 public class AdminOrdiniServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private OrdineDAO ordineDAO;
+	private ClienteDAO clienteDAO;
 	private int pageSize = 12;
 
 	@Override
 	public void init() throws ServletException {
 		DataSource ds = (DataSource) getServletContext().getAttribute("DataSource");
 		this.ordineDAO = new OrdineDAO(ds);
+		this.clienteDAO = new ClienteDAO(ds);
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -45,6 +49,8 @@ public class AdminOrdiniServlet extends HttpServlet {
 		}
 
 		List<Ordine> ordini = null;
+		ArrayList<String> nomiClienti = new ArrayList<String>();
+		
 		int totaleOrdini = 0; // per paginazione
 
 		try {
@@ -92,12 +98,21 @@ public class AdminOrdiniServlet extends HttpServlet {
 				totaleOrdini = ordineDAO.countOrdini();
 			}
 
+			//recupero nomi clienti
+			for(Ordine ordine: ordini) {
+				int idCliente = ordine.getClienteId();
+				Cliente cliente = clienteDAO.findById(idCliente);
+				String nomeCognomeCliente = cliente.getNome() + " " + cliente.getCognome();
+				nomiClienti.add(nomeCognomeCliente);
+			}
+			
 			int totalPages = (int) Math.ceil((double) totaleOrdini / pageSize);
 
 			request.setAttribute("totalPages", totalPages);
 			request.setAttribute("currentPage", pag);
 			request.setAttribute("pageSize", pageSize);
 			request.setAttribute("ordini", ordini);
+			request.setAttribute("nomiClienti", nomiClienti);
 			request.getRequestDispatcher("/WEB-INF/admin/ordini.jsp").forward(request, response);
 
 		} catch (SQLException | NumberFormatException | NullPointerException e) {

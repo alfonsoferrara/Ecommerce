@@ -41,6 +41,23 @@ public class CategoriaDAO implements GenericDAO<Categoria, Integer> {
 		return null;
 	}
 
+	public Categoria findByNome(String nome) throws SQLException {
+		String query = "SELECT * FROM categoria WHERE nome = ?";
+		try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
+			ps.setString(1, nome);
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					Categoria categoria = new Categoria();
+					categoria.setId(rs.getInt("id"));
+					categoria.setNome(rs.getString("nome"));
+					categoria.setDescrizione(rs.getString("descrizione"));
+					return categoria;
+				}
+			}
+		}
+		return null;
+	}
+
 	@Override
 	public List<Categoria> findAll() throws SQLException {
 		List<Categoria> list = new ArrayList<>();

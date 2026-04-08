@@ -100,6 +100,108 @@ public class ProdottoDAO implements GenericDAO<Prodotto, Integer> {
 		return prodotti;
 	}
 
+	/**
+	 * Trova tutti i prodotti, ordinati dal più recente in base allo stato con
+	 * logica di paginazione
+	 */
+	public List<Prodotto> findByStatus(int stato, int pagina, int pageSize) throws SQLException {
+		List<Prodotto> prodotti = new ArrayList<>();
+		String query = "SELECT * FROM Prodotto WHERE attivo = ? ORDER BY id DESC LIMIT ? OFFSET ?";
+		int offset = (pagina - 1) * pageSize;
+
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+			ps.setInt(1, stato);
+			ps.setInt(2, pageSize);
+			ps.setInt(3, offset);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					prodotti.add(new Prodotto(rs.getInt("id"), rs.getInt("categoria_id"),
+							rs.getString("nome"), rs.getString("descrizione"), rs.getDouble("prezzo"),
+							rs.getInt("stock"), rs.getBoolean("attivo")));
+				}
+			}
+		}
+		return prodotti;
+	}
+
+	
+	/**
+	 * Trova tutti i prodotti, ordinati dal più recente in base ad un range di stock con
+	 * logica di paginazione
+	 */
+	public List<Prodotto> findByStockRange(int min, int max, int pagina, int pageSize) throws SQLException {
+		List<Prodotto> prodotti = new ArrayList<>();
+		String query = "SELECT * FROM Prodotto WHERE attivo = TRUE and stock >= ? and stock <= ? ORDER BY id DESC LIMIT ? OFFSET ?";
+		int offset = (pagina - 1) * pageSize;
+
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+			ps.setInt(1, min);
+			ps.setInt(2, max);
+			ps.setInt(3, pageSize);
+			ps.setInt(4, offset);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					prodotti.add(new Prodotto(rs.getInt("id"), rs.getInt("categoria_id"),
+							rs.getString("nome"), rs.getString("descrizione"), rs.getDouble("prezzo"),
+							rs.getInt("stock"), rs.getBoolean("attivo")));
+				}
+			}
+		}
+		return prodotti;
+	}
+	
+	/**
+	 * Trova tutti i prodotti, ordinati dal più recente in base ad un range di stock minimo con
+	 * logica di paginazione
+	 */
+	public List<Prodotto> findByStockMinimo(int min, int pagina, int pageSize) throws SQLException {
+		List<Prodotto> prodotti = new ArrayList<>();
+		String query = "SELECT * FROM Prodotto WHERE attivo = TRUE and stock >= ? ORDER BY id DESC LIMIT ? OFFSET ?";
+		int offset = (pagina - 1) * pageSize;
+
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+			ps.setInt(1, min);
+			ps.setInt(2, pageSize);
+			ps.setInt(3, offset);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					prodotti.add(new Prodotto(rs.getInt("id"), rs.getInt("categoria_id"),
+							rs.getString("nome"), rs.getString("descrizione"), rs.getDouble("prezzo"),
+							rs.getInt("stock"), rs.getBoolean("attivo")));
+				}
+			}
+		}
+		return prodotti;
+	}
+	
+	/**
+	 * Trova tutti i prodotti, ordinati dal più recente in base ad un range di stock massimo con
+	 * logica di paginazione
+	 */
+	public List<Prodotto> findByStockMassimo(int max, int pagina, int pageSize) throws SQLException {
+		List<Prodotto> prodotti = new ArrayList<>();
+		String query = "SELECT * FROM Prodotto WHERE attivo = TRUE and stock <= ? ORDER BY id DESC LIMIT ? OFFSET ?";
+		int offset = (pagina - 1) * pageSize;
+
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+			ps.setInt(1, max);
+			ps.setInt(2, pageSize);
+			ps.setInt(3, offset);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					prodotti.add(new Prodotto(rs.getInt("id"), rs.getInt("categoria_id"),
+							rs.getString("nome"), rs.getString("descrizione"), rs.getDouble("prezzo"),
+							rs.getInt("stock"), rs.getBoolean("attivo")));
+				}
+			}
+		}
+		return prodotti;
+	}
+	
 	@Override
 	public List<Prodotto> findAll() throws SQLException {
 		List<Prodotto> prodotti = new ArrayList<>();
@@ -117,8 +219,9 @@ public class ProdottoDAO implements GenericDAO<Prodotto, Integer> {
 	}
 
 	// metodo per recuperare ultimi prodotti aggiunti, utile sia in home page che
-	// nella categoria ultime novità
-	public List<Prodotto> findUltimeNovita(int pagina, int pageSize) throws SQLException {
+	// nella pagina
+	// prodotti di admin
+	public List<Prodotto> findRecenti(int pagina, int pageSize) throws SQLException {
 		List<Prodotto> prodotti = new ArrayList<>();
 
 		int offset = (pagina - 1) * pageSize;
@@ -196,12 +299,102 @@ public class ProdottoDAO implements GenericDAO<Prodotto, Integer> {
 		}
 	}
 
-	// conteggio prodotti per gestire la paginazione
+	// conteggio prodotti per gestire la paginazione in categoria
 	public int countProdottiByCategoriaId(int categoria_id) {
 		String sql = "SELECT COUNT(*) FROM prodotto WHERE categoria_id = ?";
 
 		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(sql);) {
 			ps.setInt(1, categoria_id);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return 0;
+	}
+
+	// conteggio prodotti recenti per gestire la paginazione
+	public int countProdotti() {
+		String sql = "SELECT COUNT(*) FROM prodotto";
+
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(sql);) {
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return 0;
+	}
+	
+	// conteggio prodotti per stato per gestire la paginazione
+	public int countProdottiByStatus(int stato) {
+		String sql = "SELECT COUNT(*) FROM prodotto WHERE attivo = ?";
+
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(sql);) {
+			ps.setInt(1, stato);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return 0;
+	}
+	
+	// conteggio prodotti per range di stock per gestire la paginazione
+	public int countProdottiByStockRange(int min, int max) {
+		String sql = "SELECT COUNT(*) FROM prodotto WHERE attivo = TRUE and stock >= ? and stock <= ?";
+
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(sql);) {
+			ps.setInt(1, min);
+			ps.setInt(2, max);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return 0;
+	}
+	
+	// conteggio prodotti per range di stock minimo per gestire la paginazione
+	public int countProdottiByStockMin(int min) {
+		String sql = "SELECT COUNT(*) FROM prodotto WHERE attivo = TRUE and stock >= ?";
+
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(sql);) {
+			ps.setInt(1, min);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return 0;
+	}
+	
+	// conteggio prodotti per range di stock massimo per gestire la paginazione
+	public int countProdottiByStockMax(int max) {
+		String sql = "SELECT COUNT(*) FROM prodotto WHERE attivo = TRUE and stock <= ?";
+
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(sql);) {
+			ps.setInt(1, max);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
 				return rs.getInt(1);

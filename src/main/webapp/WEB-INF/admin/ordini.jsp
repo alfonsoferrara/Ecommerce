@@ -121,6 +121,10 @@
 					<div class="filter-group">
 						<button type="submit" class="btn-filter">Applica Filtro</button>
 					</div>
+					<div class="filter-group">
+						<button type="button" class="btn-filter"
+							onclick="window.location.href='${pageContext.request.contextPath}/admin/ordini'">Resetta</button>
+					</div>
 				</form>
 			</div>
 
@@ -131,7 +135,7 @@
 						<thead>
 							<tr>
 								<th>ID Ordine</th>
-								<th>ID Cliente</th>
+								<th>Nome Cliente</th>
 								<th>Data</th>
 								<th>Metodo Pagamento</th>
 								<th>Stato</th>
@@ -140,10 +144,13 @@
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach items="${ordini}" var="ordine">
+							<c:forEach items="${ordini}" var="ordine" varStatus="loop">
 								<tr>
 									<td><strong>#${ordine.id}</strong></td>
-									<td>${ordine.clienteId}</td>
+									<td>
+										<%-- Prende il nome dalla lista nomiClienti usando l'indice corrente --%>
+										${nomiClienti[loop.index]}
+									</td>
 									<td><fmt:formatDate value="${ordine.data}"
 											pattern="dd/MM/yyyy HH:mm" /></td>
 									<td>${ordine.metodoPagamento}</td>

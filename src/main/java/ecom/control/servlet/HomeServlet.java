@@ -35,7 +35,7 @@ public class HomeServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             // restituisce solo gli ultimi 4 prodotti aggiunti
-            List<Prodotto> vetrina = prodottoDAO.findUltimeNovita(1,4);
+            List<Prodotto> vetrina = prodottoDAO.findRecenti(1,4);
 
             // Passo la lista alla JSP
             request.setAttribute("prodottiVetrina", vetrina);
