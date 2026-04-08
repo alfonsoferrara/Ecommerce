@@ -135,6 +135,7 @@
 								<th>Data</th>
 								<th>Metodo Pagamento</th>
 								<th>Stato</th>
+								<th>Totale</th>
 								<th>Azioni</th>
 							</tr>
 						</thead>
@@ -158,8 +159,10 @@
 												<span class="status-badge status-elaborazione">${ordine.stato}</span>
 											</c:otherwise>
 										</c:choose></td>
+									<td><fmt:formatNumber value="${ordine.totale}"
+											type="currency" currencySymbol="€" maxFractionDigits="2" /></td>
 									<td><a
-										href="${pageContext.request.contextPath}/admin/ordine?id=${ordine.id}"
+										href="${pageContext.request.contextPath}/admin/dettagliOrdine?id=${ordine.id}"
 										class="btn-action">Vedi Dettagli</a></td>
 								</tr>
 							</c:forEach>

@@ -1,0 +1,180 @@
+/* --- Layout a due colonne per Anagrafica --- */
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.info-box {
+    background-color: #0a0a0a;
+    border: 1px solid #222;
+    border-radius: 6px;
+    padding: 25px;
+}
+
+.info-box h3 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #fff;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #222;
+    padding-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.info-row {
+    display: flex;
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+}
+
+.info-row strong {
+    color: #888;
+    width: 120px;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.info-row span {
+    color: #ddd;
+    flex: 1;
+}
+
+/* --- Box Riepilogo e Stato --- */
+.summary-status-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 40px;
+    margin-top: 40px;
+    background-color: #0a0a0a;
+    border: 1px solid #222;
+    border-radius: 6px;
+    padding: 25px;
+}
+
+.payment-summary {
+    flex: 1;
+}
+
+.payment-summary h4 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #fff;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+}
+
+.payment-method-badge {
+    display: inline-block;
+    background-color: #111;
+    border: 1px solid #333;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.status-update-form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.status-update-form h4 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.status-controls {
+    display: flex;
+    gap: 15px;
+}
+
+.status-select {
+    flex: 1;
+    padding: 12px;
+    background-color: #000;
+    border: 1px solid #333;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.btn-update {
+    background-color: #fff;
+    color: #000;
+    border: none;
+    padding: 12px 25px;
+    font-weight: 800;
+    border-radius: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background-color 0.3s;
+}
+
+.btn-update:hover {
+    background-color: #ccc;
+}
+
+/* --- Messaggio di Successo --- */
+.alert-success {
+    background-color: rgba(46, 204, 113, 0.1);
+    border-left: 4px solid #2ecc71;
+    color: #2ecc71;
+    padding: 15px;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+/* --- Totali Tabella --- */
+.table-totals td {
+    border-top: none !important;
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+}
+
+.table-totals.grand-total td {
+    border-top: 2px solid #333 !important;
+    padding-top: 15px !important;
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: #fff;
+}
+
+/* --- Box Note Cliente --- */
+.customer-note-box {
+    grid-column: 1 / -1; /* Fa occupare al box tutta la larghezza */
+    background-color: rgba(241, 196, 15, 0.05); /* Leggerissimo sfondo giallo */
+    border-color: #f1c40f; /* Bordo giallo per farla risaltare */
+}
+
+.customer-note-box h3 {
+    color: #f1c40f;
+    border-bottom-color: rgba(241, 196, 15, 0.2);
+}
+
+.customer-note-box p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #eee;
+    font-style: italic;
+    padding: 5px 0;
+}
+
+@media (max-width: 992px) {
+    .info-grid, .summary-status-section {
+        flex-direction: column;
+        display: flex;
+    }
+}

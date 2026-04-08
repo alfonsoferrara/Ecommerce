@@ -70,7 +70,10 @@
 									<td><fmt:formatNumber value="${ordine.totale}"
 											type="currency" currencySymbol="€" maxFractionDigits="2" /></td>
 								</tr>
-								<c:set var="sommaTotale" value="${sommaTotale + ordine.totale}" />
+								<!-- Somma solo se lo stato NON è ANNULLATO -->
+								<c:if test="${ordine.stato != 'ANNULLATO'}">
+									<c:set var="sommaTotale" value="${sommaTotale + ordine.totale}" />
+								</c:if>
 							</c:forEach>
 
 							<c:if test="${not empty ordini}">

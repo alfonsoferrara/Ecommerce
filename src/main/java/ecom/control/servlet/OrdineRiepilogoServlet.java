@@ -78,11 +78,6 @@ public class OrdineRiepilogoServlet extends HttpServlet {
 			// Recupera l'indirizzo di spedizione
 			Indirizzo indirizzo = indirizzoDAO.findById(ordine.getIndirizzoId());
 
-			// Calcola subtotale (senza spedizione)
-			for (DettagliOrdine dettaglio : dettagli) {
-				subtotale += dettaglio.getPrezzoUnitario() * dettaglio.getQuantita();
-			}
-
 			// Spese di spedizione
 			double speseSpedizione = (subtotale > 0 && subtotale < 50.00) ? 5.90 : 0.0;
 

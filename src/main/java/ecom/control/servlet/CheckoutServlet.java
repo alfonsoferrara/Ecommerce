@@ -174,7 +174,7 @@ public class CheckoutServlet extends HttpServlet {
 
 			// --- CREAZIONE ORDINE ---
 			Ordine nuovoOrdine = new Ordine(0, cliente.getId(), indirizzoId, new Timestamp(System.currentTimeMillis()),
-					totaleFinale, "IN_ELABORAZIONE", metodoPagamento, notaCliente);
+					totaleFinale, "IN ELABORAZIONE", metodoPagamento, notaCliente);
 			ordineDAO.insert(nuovoOrdine);
 
 			// --- DETTAGLI ORDINE E AGGIORNAMENTO STOCK ---
