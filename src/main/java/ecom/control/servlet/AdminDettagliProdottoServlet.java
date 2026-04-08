@@ -83,7 +83,7 @@ public class AdminDettagliProdottoServlet extends HttpServlet {
 			// SE E' UNA MODIFICA A UN PRODOTTO ESISTENTE
 			else {
 				int prodotto_id = Integer.parseInt(prodottoId);
-				Prodotto prodotto = prodottoDAO.findById(prodotto_id);
+				Prodotto prodotto = prodottoDAO.findById_Admin(prodotto_id);
 
 				if (prodotto == null) {
 //					request.getSession().setAttribute("errore", "Prodotto non trovato");
@@ -175,7 +175,7 @@ public class AdminDettagliProdottoServlet extends HttpServlet {
             
         } else {
             // MODIFICA
-            prodotto = prodottoDAO.findById(prodottoId);
+            prodotto = prodottoDAO.findById_Admin(prodottoId);
             if (prodotto == null) {
 //                request.getSession().setAttribute("errore", "Prodotto non trovato");
                 response.sendRedirect(request.getContextPath() + "/admin/prodotti");
