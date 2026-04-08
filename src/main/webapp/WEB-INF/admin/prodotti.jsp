@@ -114,7 +114,12 @@
 			</div>
 
 			<section class="dashboard-section">
-				<h2>Catalogo Prodotti</h2>
+				<div class="section-title-wrapper">
+					<h2>Catalogo Prodotti</h2>
+					<a href="${pageContext.request.contextPath}/admin/prodotto?id=new"
+						class="btn-add"> <i class="fas fa-plus"></i> Nuovo Prodotto
+					</a>
+				</div>
 				<div class="admin-table-wrapper">
 					<table class="admin-table">
 						<thead>

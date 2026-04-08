@@ -43,9 +43,49 @@ public class ProdottoDAO implements GenericDAO<Prodotto, Integer> {
 		}
 	}
 
+	public int insertAndReturnId(Prodotto p) throws SQLException {
+		String query = "INSERT INTO Prodotto (categoria_id, nome, descrizione, prezzo, stock, attivo) VALUES (?, ?, ?, ?, ?, ?)";
+		int generatedId = 0;
+
+		// Il secondo parametro dice a JDBC di farsi restituire l'ID generato
+		try (PreparedStatement ps = ds.getConnection().prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+			ps.setInt(1, p.getCategoriaId());
+			ps.setString(2, p.getNome());
+			ps.setString(3, p.getDescrizione());
+			ps.setDouble(4, p.getPrezzo());
+			ps.setInt(5, p.getStock());
+			ps.setBoolean(6, true); // Di default è attivo
+
+			ps.executeUpdate();
+
+			// Recupera l'ID appena generato
+			try (ResultSet rs = ps.getGeneratedKeys()) {
+				if (rs.next()) {
+					generatedId = rs.getInt(1);
+				}
+			}
+		}
+		return generatedId;
+	}
+
 	@Override
 	public Prodotto findById(Integer id) throws SQLException {
 		String query = "SELECT * FROM Prodotto WHERE id = ? AND attivo = TRUE";
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+			ps.setInt(1, id);
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					return new Prodotto(rs.getInt("id"), rs.getInt("categoria_id"), rs.getString("nome"),
+							rs.getString("descrizione"), rs.getDouble("prezzo"), rs.getInt("stock"),
+							rs.getBoolean("attivo"));
+				}
+			}
+		}
+		return null;
+	}
+
+	public Prodotto findById_Admin(Integer id) throws SQLException {
+		String query = "SELECT * FROM Prodotto WHERE id = ?";
 		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
 			ps.setInt(1, id);
 			try (ResultSet rs = ps.executeQuery()) {
@@ -116,19 +156,18 @@ public class ProdottoDAO implements GenericDAO<Prodotto, Integer> {
 
 			try (ResultSet rs = ps.executeQuery()) {
 				while (rs.next()) {
-					prodotti.add(new Prodotto(rs.getInt("id"), rs.getInt("categoria_id"),
-							rs.getString("nome"), rs.getString("descrizione"), rs.getDouble("prezzo"),
-							rs.getInt("stock"), rs.getBoolean("attivo")));
+					prodotti.add(new Prodotto(rs.getInt("id"), rs.getInt("categoria_id"), rs.getString("nome"),
+							rs.getString("descrizione"), rs.getDouble("prezzo"), rs.getInt("stock"),
+							rs.getBoolean("attivo")));
 				}
 			}
 		}
 		return prodotti;
 	}
 
-	
 	/**
-	 * Trova tutti i prodotti, ordinati dal più recente in base ad un range di stock con
-	 * logica di paginazione
+	 * Trova tutti i prodotti, ordinati dal più recente in base ad un range di stock
+	 * con logica di paginazione
 	 */
 	public List<Prodotto> findByStockRange(int min, int max, int pagina, int pageSize) throws SQLException {
 		List<Prodotto> prodotti = new ArrayList<>();
@@ -143,18 +182,18 @@ public class ProdottoDAO implements GenericDAO<Prodotto, Integer> {
 
 			try (ResultSet rs = ps.executeQuery()) {
 				while (rs.next()) {
-					prodotti.add(new Prodotto(rs.getInt("id"), rs.getInt("categoria_id"),
-							rs.getString("nome"), rs.getString("descrizione"), rs.getDouble("prezzo"),
-							rs.getInt("stock"), rs.getBoolean("attivo")));
+					prodotti.add(new Prodotto(rs.getInt("id"), rs.getInt("categoria_id"), rs.getString("nome"),
+							rs.getString("descrizione"), rs.getDouble("prezzo"), rs.getInt("stock"),
+							rs.getBoolean("attivo")));
 				}
 			}
 		}
 		return prodotti;
 	}
-	
+
 	/**
-	 * Trova tutti i prodotti, ordinati dal più recente in base ad un range di stock minimo con
-	 * logica di paginazione
+	 * Trova tutti i prodotti, ordinati dal più recente in base ad un range di stock
+	 * minimo con logica di paginazione
 	 */
 	public List<Prodotto> findByStockMinimo(int min, int pagina, int pageSize) throws SQLException {
 		List<Prodotto> prodotti = new ArrayList<>();
@@ -168,18 +207,18 @@ public class ProdottoDAO implements GenericDAO<Prodotto, Integer> {
 
 			try (ResultSet rs = ps.executeQuery()) {
 				while (rs.next()) {
-					prodotti.add(new Prodotto(rs.getInt("id"), rs.getInt("categoria_id"),
-							rs.getString("nome"), rs.getString("descrizione"), rs.getDouble("prezzo"),
-							rs.getInt("stock"), rs.getBoolean("attivo")));
+					prodotti.add(new Prodotto(rs.getInt("id"), rs.getInt("categoria_id"), rs.getString("nome"),
+							rs.getString("descrizione"), rs.getDouble("prezzo"), rs.getInt("stock"),
+							rs.getBoolean("attivo")));
 				}
 			}
 		}
 		return prodotti;
 	}
-	
+
 	/**
-	 * Trova tutti i prodotti, ordinati dal più recente in base ad un range di stock massimo con
-	 * logica di paginazione
+	 * Trova tutti i prodotti, ordinati dal più recente in base ad un range di stock
+	 * massimo con logica di paginazione
 	 */
 	public List<Prodotto> findByStockMassimo(int max, int pagina, int pageSize) throws SQLException {
 		List<Prodotto> prodotti = new ArrayList<>();
@@ -193,15 +232,15 @@ public class ProdottoDAO implements GenericDAO<Prodotto, Integer> {
 
 			try (ResultSet rs = ps.executeQuery()) {
 				while (rs.next()) {
-					prodotti.add(new Prodotto(rs.getInt("id"), rs.getInt("categoria_id"),
-							rs.getString("nome"), rs.getString("descrizione"), rs.getDouble("prezzo"),
-							rs.getInt("stock"), rs.getBoolean("attivo")));
+					prodotti.add(new Prodotto(rs.getInt("id"), rs.getInt("categoria_id"), rs.getString("nome"),
+							rs.getString("descrizione"), rs.getDouble("prezzo"), rs.getInt("stock"),
+							rs.getBoolean("attivo")));
 				}
 			}
 		}
 		return prodotti;
 	}
-	
+
 	@Override
 	public List<Prodotto> findAll() throws SQLException {
 		List<Prodotto> prodotti = new ArrayList<>();
@@ -276,14 +315,15 @@ public class ProdottoDAO implements GenericDAO<Prodotto, Integer> {
 
 	@Override
 	public void update(Prodotto p) throws SQLException {
-		String query = "UPDATE Prodotto SET categoria_id=?, nome=?, descrizione=?, prezzo=?, stock=? WHERE id=?";
+		String query = "UPDATE Prodotto SET categoria_id=?, nome=?, descrizione=?, prezzo=?, stock=?, attivo = ? WHERE id=?";
 		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
 			ps.setInt(1, p.getCategoriaId());
 			ps.setString(2, p.getNome());
 			ps.setString(3, p.getDescrizione());
 			ps.setDouble(4, p.getPrezzo());
 			ps.setInt(5, p.getStock());
-			ps.setInt(6, p.getId());
+			ps.setBoolean(6, p.isAttivo());
+			ps.setInt(7, p.getId());
 			ps.executeUpdate();
 		}
 	}
@@ -333,7 +373,7 @@ public class ProdottoDAO implements GenericDAO<Prodotto, Integer> {
 
 		return 0;
 	}
-	
+
 	// conteggio prodotti per stato per gestire la paginazione
 	public int countProdottiByStatus(int stato) {
 		String sql = "SELECT COUNT(*) FROM prodotto WHERE attivo = ?";
@@ -351,7 +391,7 @@ public class ProdottoDAO implements GenericDAO<Prodotto, Integer> {
 
 		return 0;
 	}
-	
+
 	// conteggio prodotti per range di stock per gestire la paginazione
 	public int countProdottiByStockRange(int min, int max) {
 		String sql = "SELECT COUNT(*) FROM prodotto WHERE attivo = TRUE and stock >= ? and stock <= ?";
@@ -370,7 +410,7 @@ public class ProdottoDAO implements GenericDAO<Prodotto, Integer> {
 
 		return 0;
 	}
-	
+
 	// conteggio prodotti per range di stock minimo per gestire la paginazione
 	public int countProdottiByStockMin(int min) {
 		String sql = "SELECT COUNT(*) FROM prodotto WHERE attivo = TRUE and stock >= ?";
@@ -388,7 +428,7 @@ public class ProdottoDAO implements GenericDAO<Prodotto, Integer> {
 
 		return 0;
 	}
-	
+
 	// conteggio prodotti per range di stock massimo per gestire la paginazione
 	public int countProdottiByStockMax(int max) {
 		String sql = "SELECT COUNT(*) FROM prodotto WHERE attivo = TRUE and stock <= ?";

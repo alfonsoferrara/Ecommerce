@@ -104,4 +104,43 @@ public class ImmagineDAO implements GenericDAO<Immagine, Integer> {
 			ps.executeUpdate();
 		}
 	}
+	
+	public void impostaImmaginePrincipale(int immagineId, int prodottoId) throws SQLException {
+	    // Query 1: Imposta TUTTE le immagini di quel prodotto a false
+	    String queryReset = "UPDATE Immagine SET is_principal = FALSE WHERE prodotto_id = ?";
+	    
+	    // Query 2: Imposta SOLO l'immagine selezionata a true
+	    String querySet = "UPDATE Immagine SET is_principal = TRUE WHERE id = ?";
+	    
+	    Connection con = null;
+	    PreparedStatement psReset = null;
+	    PreparedStatement psSet = null;
+	    
+	    try {
+	        con = ds.getConnection();
+	        // disabilitare l'autocommit per eseguire entrambe o nessuna
+	        con.setAutoCommit(false); 
+	        
+	        // Eseguo il reset
+	        psReset = con.prepareStatement(queryReset);
+	        psReset.setInt(1, prodottoId);
+	        psReset.executeUpdate();
+	        
+	        // Eseguo il set
+	        psSet = con.prepareStatement(querySet);
+	        psSet.setInt(1, immagineId);
+	        psSet.executeUpdate();
+	        
+	        con.commit(); // Confermo la transazione
+	        
+	    } catch (SQLException e) {
+	        if (con != null) con.rollback(); // In caso di errore, annullo tutto
+	        throw e;
+	    } finally {
+	        if (con != null) con.setAutoCommit(true);
+	        if (psReset != null) psReset.close();
+	        if (psSet != null) psSet.close();
+	        if (con != null) con.close();
+	    }
+	}
 }

@@ -22,7 +22,7 @@
     <div class="footer-links-section">
         <div class="link-column">
             <h5>L'Azienda</h5>
-            <a href="#">Chi siamo</a>
+            <a href="${pageContext.request.contextPath}/about">Chi siamo</a>
             <a href="#">Lavora con noi</a>
             <a href="#">Sostenibilità</a>
         </div>

@@ -77,7 +77,7 @@
 							<c:set var="imgUrl" value="${immaginiPrincipali[prodotto.id]}" />
 							<c:choose>
 								<c:when test="${not empty imgUrl}">
-									<img src="${pageContext.request.contextPath}${imgUrl}"
+									<img src="${pageContext.request.contextPath}/${imgUrl}"
 										alt="${prodotto.nome}" class="product-image"
 										onerror="this.src='${pageContext.request.contextPath}/images/default.jpg'">
 								</c:when>

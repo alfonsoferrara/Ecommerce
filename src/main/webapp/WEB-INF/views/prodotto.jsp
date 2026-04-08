@@ -25,7 +25,7 @@
 			<c:choose>
 				<c:when test="${not empty immagini}">
 					<c:forEach var="immagine" items="${immagini}">
-						<img src="${pageContext.request.contextPath}${immagine.url}"
+						<img src="${pageContext.request.contextPath}/${immagine.url}"
 							alt="${prodotto.nome}" onerror="this.style.display='none'">
 					</c:forEach>
 				</c:when>

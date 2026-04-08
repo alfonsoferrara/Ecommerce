@@ -115,4 +115,78 @@ public class CaratteristicheProdottoDAO implements GenericDAO<CaratteristichePro
 			ps.executeUpdate();
 		}
 	}
+	
+	//metodi per gestire l'aggiornamento o creazione di prodotti lato admin
+	public void updateCaratteristica(int prodottoId, String nomeAttributo, String nuovoValore) throws SQLException {
+	    String sql = "UPDATE Caratteristiche_Prodotto cp " +
+	                 "INNER JOIN Attributo a ON cp.attributo_id = a.id " +
+	                 "SET cp.valoreAttr = ? " +
+	                 "WHERE cp.prodotto_id = ? AND a.nome = ?";
+	    
+	    try (Connection conn = ds.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(sql)) {
+	        stmt.setString(1, nuovoValore);
+	        stmt.setInt(2, prodottoId);
+	        stmt.setString(3, nomeAttributo);
+	        stmt.executeUpdate();
+	    }
+	}
+
+	public void insertOrUpdate(int prodottoId, String nomeAttributo, String valore) throws SQLException {
+	    // Prima verifica se l'attributo esiste
+	    int attributoId = getOrCreateAttributo(nomeAttributo);
+	    
+	    String sql = "INSERT INTO Caratteristiche_Prodotto (prodotto_id, attributo_id, valoreAttr) " +
+	                 "VALUES (?, ?, ?) " +
+	                 "ON DUPLICATE KEY UPDATE valoreAttr = ?";
+	    
+	    try (Connection conn = ds.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(sql)) {
+	        stmt.setInt(1, prodottoId);
+	        stmt.setInt(2, attributoId);
+	        stmt.setString(3, valore);
+	        stmt.setString(4, valore);
+	        stmt.executeUpdate();
+	    }
+	}
+
+	private int getOrCreateAttributo(String nomeAttributo) throws SQLException {
+	    // Cerca l'attributo
+	    String selectSql = "SELECT id FROM Attributo WHERE nome = ?";
+	    try (Connection conn = ds.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(selectSql)) {
+	        stmt.setString(1, nomeAttributo);
+	        ResultSet rs = stmt.executeQuery();
+	        if (rs.next()) {
+	            return rs.getInt("id");
+	        }
+	    }
+	    
+	    // Se non esiste, crealo
+	    String insertSql = "INSERT INTO Attributo (nome) VALUES (?)";
+	    try (Connection conn = ds.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS)) {
+	        stmt.setString(1, nomeAttributo);
+	        stmt.executeUpdate();
+	        ResultSet rs = stmt.getGeneratedKeys();
+	        if (rs.next()) {
+	            return rs.getInt(1);
+	        }
+	    }
+	    
+	    throw new SQLException("Impossibile creare l'attributo: " + nomeAttributo);
+	}
+
+	public void deleteCaratteristica(int prodottoId, String nomeAttributo) throws SQLException {
+	    String sql = "DELETE cp FROM Caratteristiche_Prodotto cp " +
+	                 "INNER JOIN Attributo a ON cp.attributo_id = a.id " +
+	                 "WHERE cp.prodotto_id = ? AND a.nome = ?";
+	    
+	    try (Connection conn = ds.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(sql)) {
+	        stmt.setInt(1, prodottoId);
+	        stmt.setString(2, nomeAttributo);
+	        stmt.executeUpdate();
+	    }
+	}
 }

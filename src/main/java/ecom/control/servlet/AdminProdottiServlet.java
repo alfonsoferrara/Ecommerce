@@ -22,7 +22,7 @@ import ecom.model.dao.OrdineDAO;
 import ecom.model.dao.ProdottoDAO;
 
 @WebServlet("/admin/prodotti")
-public class AdminProdotti extends HttpServlet {
+public class AdminProdottiServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private ProdottoDAO prodottoDAO;
 	private CategoriaDAO categoriaDAO;

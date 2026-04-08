@@ -33,7 +33,7 @@
                     <div class="product-card">
                         <c:choose>
                             <c:when test="${not empty immaginiPrincipali[prodotto.id]}">
-									<img src="${pageContext.request.contextPath}${immaginiPrincipali[prodotto.id]}"
+									<img src="${pageContext.request.contextPath}/${immaginiPrincipali[prodotto.id]}"
 										alt="${prodotto.nome}" class="product-image"
 										onerror="this.src='${pageContext.request.contextPath}/images/default.jpg'">
 								</c:when>
