@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c"%>
 
 <!DOCTYPE html>
@@ -6,14 +7,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${prodotto.nome} | CarryCrew</title>
-<link rel="icon" type="image/png" sizes="16x16" href="${pageContext.request.contextPath}/images/favicon-16x16.png">
+<title>${prodotto.nome}|CarryCrew</title>
+<link rel="icon" type="image/png" sizes="16x16"
+	href="${pageContext.request.contextPath}/images/favicon-16x16.png">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/styles/style.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/styles/style.css">
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/styles/prodotto.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/styles/prodotto.css">
 </head>
 <body>
 
@@ -61,14 +66,20 @@
 					type="hidden" name="prodottoId" value="${prodotto.id}"> <input
 					type="number" name="quantita" value="1" min="1" max="99"
 					class="quantity-input" title="Quantità">
-
-				<button type="submit" class="btn-add-cart">Aggiungi al
-					carrello</button>
+				<c:if test="${prodotto.stock > 0}">
+					<button type="submit" class="btn-add-cart">Aggiungi al
+						carrello</button>
+				</c:if>
+				<c:if test="${prodotto.stock <= 0}">
+					<button type="" class="btn-add-cart" style="pointer-events: none; opacity: 0.5;" disabled>Prodotto esaurito</button>
+				</c:if>
 			</form>
-			<p id="aggiunta_al_carrello" style="display: none">Prodotto aggiunto al carrello!</p>
+			<p id="aggiunta_al_carrello" style="display: none">Prodotto
+				aggiunto al carrello!</p>
 
-			<a href="${pageContext.request.contextPath}/carrello" class="link-cart"> 
-				<i class="fas fa-shopping-cart"></i> Vai al carrello
+			<a href="${pageContext.request.contextPath}/carrello"
+				class="link-cart"> <i class="fas fa-shopping-cart"></i> Vai al
+				carrello
 			</a>
 
 			<c:if test="${not empty prodotto.descrizione}">

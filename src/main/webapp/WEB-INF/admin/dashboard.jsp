@@ -105,24 +105,15 @@
 								<th>ID Prodotto</th>
 								<th>Nome Prodotto</th>
 								<th>Prezzo</th>
-								<th>Data Esaurimento (Ultimo Acq.)</th>
 							</tr>
 						</thead>
 						<tbody>
 							<c:forEach items="${prodotti}" var="item">
 								<tr>
-									<td>#${item.prodotto.id}</td>
-									<td><strong>${item.prodotto.nome}</strong></td>
-									<td><fmt:formatNumber value="${item.prodotto.prezzo}"
+									<td>#${item.id}</td>
+									<td><strong>${item.nome}</strong></td>
+									<td><fmt:formatNumber value="${item.prezzo}"
 											type="currency" currencySymbol="€" maxFractionDigits="2" /></td>
-									<td><c:choose>
-											<c:when test="${empty item.ultimoAcquisto}">
-												<span style="color: #666;">N/D</span>
-											</c:when>
-											<c:otherwise>
-                                                ${item.ultimoAcquisto}
-                                            </c:otherwise>
-										</c:choose></td>
 								</tr>
 							</c:forEach>
 

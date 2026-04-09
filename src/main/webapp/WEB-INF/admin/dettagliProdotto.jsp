@@ -94,7 +94,7 @@
 							<div class="form-group">
 								<label>Prezzo (€)</label> <input type="number" step="0.01"
 									name="prezzo" value="${prodotto.prezzo}" class="form-input"
-									required>
+									required min="0.00">
 							</div>
 
 							<div class="form-group">
@@ -111,7 +111,7 @@
 							<div class="form-group">
 								<label>Stock Disponibile</label> <input type="number"
 									name="stock" value="${prodotto.stock}" class="form-input"
-									required>
+									required min="0">
 							</div>
 						</div>
 
