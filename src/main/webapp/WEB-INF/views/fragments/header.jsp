@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <header>
 	<div class="top-bar">Spedizione gratuita sopra i 50€</div>
 
@@ -14,11 +14,11 @@
 		<nav class="nav-menu">
 			<ul>
 				<li><a href="${pageContext.request.contextPath}/">Home</a></li>
-				<li><a href="${pageContext.request.contextPath}/categoria?id=1">Trolley
-						Rigidi</a></li>
-				<li><a href="${pageContext.request.contextPath}/categoria?id=2">Trolley
-						In Tessuto</a></li>
-				<li><a href="${pageContext.request.contextPath}/categoria?id=3">Borsoni</a></li>
+				<c:forEach var="categoria" items="${categorie}">
+					<li><a
+						href="${pageContext.request.contextPath}/categoria?id=${categoria.id}">
+							${categoria.nome} </a></li>
+				</c:forEach>
 			</ul>
 		</nav>
 

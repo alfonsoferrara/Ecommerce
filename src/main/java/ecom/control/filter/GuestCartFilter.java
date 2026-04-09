@@ -1,13 +1,17 @@
 package ecom.control.filter;
 
 import ecom.model.bean.Carrello;
+import ecom.model.bean.Categoria;
 import ecom.model.dao.CarrelloDAO;
+import ecom.model.dao.CategoriaDAO;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+
+import java.util.List;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.UUID;
@@ -16,12 +20,14 @@ import java.util.UUID;
 public class GuestCartFilter implements Filter {
 
     private CarrelloDAO carrelloDAO;
+    private CategoriaDAO categoriaDAO;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         // Recupero il DataSource dal ServletContext (impostato nel MainContextListener)
         DataSource ds = (DataSource) filterConfig.getServletContext().getAttribute("DataSource");
         this.carrelloDAO = new CarrelloDAO(ds);
+        this.categoriaDAO = new CategoriaDAO(ds);
     }
 
     @Override
@@ -33,11 +39,20 @@ public class GuestCartFilter implements Filter {
 
         // Escludo le risorse statiche per non appesantire il DB
         String uri = req.getRequestURI();
-        if (uri.matches(".*(styles|images|scripts)$")) {
+        if (uri.matches(".*(styles|scripts)$")) {
             chain.doFilter(request, response);
             return;
         }
 
+        //RECUPERO CATEGORIE PER L'HEADER DINAMICO
+        try {
+			List<Categoria> categorie = categoriaDAO.findAll();
+			req.setAttribute("categorie", categorie);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+        
+        //LOGICA CARRELLO
         String cartId = null;
         Cookie[] cookies = req.getCookies();
 

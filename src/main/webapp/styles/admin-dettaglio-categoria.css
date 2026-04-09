@@ -1,0 +1,133 @@
+.category-detail-container {
+	background-color: #0a0a0a;
+	border: 1px solid #222;
+	border-radius: 6px;
+	padding: 30px;
+	margin-bottom: 40px;
+	max-width: 900px;
+	/* Più stretto del prodotto essendo un form semplice */
+}
+
+/* --- Header --- */
+.category-header {
+	border-bottom: 2px solid #222;
+	padding-bottom: 20px;
+	margin-bottom: 30px;
+}
+
+.category-header h1 {
+	font-size: 1.8rem;
+	font-weight: 900;
+	color: #fff;
+	text-transform: uppercase;
+}
+
+/* --- Form Stile --- */
+.form-group {
+	margin-bottom: 25px;
+}
+
+.form-group label {
+	display: block;
+	font-size: 0.85rem;
+	font-weight: 700;
+	color: #aaa;
+	margin-bottom: 8px;
+	text-transform: uppercase;
+}
+
+.form-input {
+	width: 100%;
+	padding: 12px 15px;
+	background-color: #000;
+	border: 1px solid #333;
+	color: #fff;
+	font-size: 1rem;
+	border-radius: 4px;
+	transition: border-color 0.3s;
+}
+
+.form-input:focus {
+	outline: none;
+	border-color: #fff;
+}
+
+textarea.form-input {
+	min-height: 150px;
+	resize: vertical;
+}
+
+/* --- Pulsanti --- */
+.btn-primary {
+	background-color: #fff;
+	color: #000;
+	border: none;
+	padding: 12px 30px;
+	font-weight: 800;
+	border-radius: 4px;
+	cursor: pointer;
+	text-transform: uppercase;
+	transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+	background-color: #ccc;
+}
+
+.btn-secondary {
+	background-color: #333;
+	color: #fff;
+	border: none;
+	padding: 12px 30px;
+	font-weight: 700;
+	border-radius: 4px;
+	cursor: pointer;
+	text-decoration: none;
+	font-size: 0.95rem;
+	text-transform: uppercase;
+	display: inline-flex;
+	align-items: center;
+	transition: background-color 0.3s;
+}
+
+.btn-secondary:hover {
+	background-color: #444;
+}
+
+.btn-elimina {
+	background-color: rgb(212, 28, 28);
+	color: #fff;
+	border: none;
+	padding: 12px 30px;
+	font-weight: 700;
+	border-radius: 4px;
+	cursor: pointer;
+	text-decoration: none;
+	font-size: 0.95rem;
+	text-transform: uppercase;
+	display: inline-flex;
+	align-items: center;
+	transition: background-color 0.3s;
+}
+
+.btn-elimina:hover {
+	background-color: rgb(240, 0, 0);
+}
+/* Messaggi */
+.alert-success {
+	background-color: rgba(46, 204, 113, 0.1);
+	border-left: 4px solid #2ecc71;
+	color: #2ecc71;
+	padding: 15px;
+	margin-bottom: 30px;
+	font-weight: 600;
+}
+
+.alert-error {
+	background-color: rgba(231, 76, 60, 0.1);
+	border-left: 4px solid #e74c3c;
+	color: #e74c3c;
+	padding: 15px;
+	margin-bottom: 30px;
+	font-weight: 600;
+}
