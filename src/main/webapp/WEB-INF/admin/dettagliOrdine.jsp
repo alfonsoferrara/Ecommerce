@@ -117,7 +117,7 @@
 						<tbody>
 							<c:forEach items="${dettagli}" var="entry">
 								<tr>
-									<td>#${entry.value.id}</td>
+									<td><a href="${pageContext.request.contextPath}/admin/prodotto?id=${entry.value.id}">#${entry.value.id}</a></td>
 									<td><strong>${entry.value.nome}</strong></td>
 									<td>${entry.key.quantita}</td>
 									<td><fmt:formatNumber value="${entry.key.prezzoUnitario}"

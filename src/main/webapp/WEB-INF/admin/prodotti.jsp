@@ -108,7 +108,7 @@
 					</div>
 					<div class="filter-group">
 						<button type="button" class="btn-filter"
-							onclick="window.location.href='${pageContext.request.contextPath}/admin/prodotti'">Resetta</button>
+							onclick="window.location.href='${pageContext.request.contextPath}/admin/prodotti'">Reset</button>
 					</div>
 				</form>
 			</div>

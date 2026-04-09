@@ -7,7 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gestione Categorie | CarryCrew Admin</title>
+<title>Gestione Clienti | CarryCrew Admin</title>
 
 <link rel="icon" type="image/png" sizes="16x16"
 	href="${pageContext.request.contextPath}/images/favicon-16x16.png">
@@ -21,7 +21,7 @@
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/styles/admin-topbar.css">
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/styles/admin-categorie.css">
+	href="${pageContext.request.contextPath}/styles/admin-clienti.css">
 </head>
 <body>
 
@@ -33,37 +33,38 @@
 
 		<div class="dashboard-content">
 
-			<c:if test="${not empty errorePagCategoria}">
+			<c:if test="${not empty erroreClienti}">
 				<div class="alert-error">
-					<i class="fas fa-exclamation-triangle"></i> ${errorePagCategoria}
-				</div>
-			</c:if>
-			<c:if test="${not empty messaggio}">
-				<div class="alert-success">
-					<i class="fas fa-exclamation-triangle"></i> ${messaggio}
-				</div>
-			</c:if>
-			<c:if test="${not empty operazioneRiuscita}">
-				<div class="alert-success">
-					<i class="fas fa-exclamation-triangle"></i> ${operazioneRiuscita}
+					<i class="fas fa-exclamation-triangle"></i> ${erroreClienti}
 				</div>
 			</c:if>
 
 			<div class="filter-panel">
-				<h3>Opzioni di Visualizzazione</h3>
-				<form action="${pageContext.request.contextPath}/admin/categorie"
+				<h3>Ricerca e Ordinamento</h3>
+				<form action="${pageContext.request.contextPath}/admin/clienti"
 					method="GET" class="filter-form">
 
 					<div class="filter-group">
-						<label for="ordinamentoSelect">Ordina Categorie per:</label> <select
+						<label for="ordinamentoSelect">Ordina/Cerca per:</label> <select
 							name="ordinamento" id="ordinamentoSelect">
 							<option value="recenti"
-								${param.ordinamento == 'recenti' ? 'selected' : ''}>Ordine
-								di Creazione (Più recenti prima)</option>
-							<option value="alfabetico"
-								${param.ordinamento == 'alfabetico' ? 'selected' : ''}>Ordine
-								Alfabetico (A-Z)</option>
+								${param.ordinamento == 'recenti' ? 'selected' : ''}>Ultimi
+								iscritti (Recenti)</option>
+							<option value="alfabeticoNome"
+								${param.ordinamento == 'alfabeticoNome' ? 'selected' : ''}>Ordine
+								Alfabetico (Nome A-Z)</option>
+							<option value="alfabeticoCognome"
+								${param.ordinamento == 'alfabeticoCognome' ? 'selected' : ''}>Ordine
+								Alfabetico (Cognome A-Z)</option>
+							<option value="findById"
+								${param.ordinamento == 'findById' ? 'selected' : ''}>Ricerca
+								per ID Cliente</option>
 						</select>
+					</div>
+
+					<div class="filter-group filter-hidden" id="group-cliente-id">
+						<label>ID Cliente</label> <input type="number" name="id_cliente"
+							value="${param.id_cliente}" placeholder="Es. 10">
 					</div>
 
 					<div class="filter-group">
@@ -71,7 +72,7 @@
 					</div>
 					<div class="filter-group">
 						<button type="button" class="btn-filter"
-							onclick="window.location.href='${pageContext.request.contextPath}/admin/categorie'">Resetta</button>
+							onclick="window.location.href='${pageContext.request.contextPath}/admin/clienti'">Reset</button>
 					</div>
 				</form>
 			</div>
@@ -79,9 +80,10 @@
 			<section class="dashboard-section">
 
 				<div class="section-title-wrapper">
-					<h2>Elenco Categorie</h2>
-					<a href="${pageContext.request.contextPath}/admin/categoria?id=new"
-						class="btn-add"> <i class="fas fa-plus"></i> Nuova Categoria
+					<h2>Elenco Clienti Registrati</h2>
+					<a href="${pageContext.request.contextPath}/admin/cliente?id=new"
+						class="btn-add"> <i class="fas fa-user-plus"></i> Nuovo
+						Cliente
 					</a>
 				</div>
 
@@ -90,44 +92,29 @@
 						<thead>
 							<tr>
 								<th>ID</th>
-								<th>Nome Categoria</th>
-								<th>Descrizione</th>
-								<th style="text-align: center;">Prodotti Contenuti</th>
+								<th>Nome</th>
+								<th>Cognome</th>
+								<th>Indirizzo Email</th>
 								<th>Azioni</th>
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach items="${categorieAdmin}" var="cat">
+							<c:forEach items="${clienti}" var="cliente">
 								<tr>
-									<td><strong>#${cat.id}</strong></td>
-									<td><strong>${cat.nome}</strong></td>
-
-									<td class="desc-cell">
-										<div class="text-truncate-2" title="${cat.descrizione}">
-											${cat.descrizione}</div>
-									</td>
-
-									<td style="text-align: center;"><c:set var="countByName"
-											value="${numeroProdotti[cat.nome]}" /> <c:choose>
-											<c:when test="${not empty countByName}">
-												<span class="badge-count">${countByName}</span>
-											</c:when>
-											<c:otherwise>
-												<span class="badge-count"
-													style="background-color: transparent; border-color: #333; color: #888;">0</span>
-											</c:otherwise>
-										</c:choose></td>
-
+									<td><strong>#${cliente.id}</strong></td>
+									<td>${cliente.nome}</td>
+									<td><strong>${cliente.cognome}</strong></td>
+									<td style="color: #aaa;">${cliente.email}</td>
 									<td><a
-										href="${pageContext.request.contextPath}/admin/categoria?id=${cat.id}"
-										class="btn-action">Gestisci</a></td>
+										href="${pageContext.request.contextPath}/admin/cliente?id=${cliente.id}"
+										class="btn-action">Vedi Dettagli</a></td>
 								</tr>
 							</c:forEach>
-							<c:if test="${empty categorieAdmin}">
+							<c:if test="${empty clienti}">
 								<tr>
 									<td colspan="5"
-										style="text-align: center; color: #666; padding: 30px;">Nessuna
-										categoria trovata nel sistema.</td>
+										style="text-align: center; color: #666; padding: 30px;">Nessun
+										cliente trovato con questi criteri di ricerca.</td>
 								</tr>
 							</c:if>
 						</tbody>
@@ -135,7 +122,8 @@
 				</div>
 
 				<c:if test="${pagineTotali > 1}">
-					<c:set var="queryFiltri" value="&ordinamento=${param.ordinamento}" />
+					<c:set var="queryFiltri"
+						value="&ordinamento=${param.ordinamento}&id_cliente=${param.id_cliente}" />
 
 					<div class="pagination-container">
 						<c:if test="${paginaCorrente > 1}">
@@ -168,7 +156,7 @@
 	<script
 		src="${pageContext.request.contextPath}/scripts/admin-dashboard.js"></script>
 	<script
-		src="${pageContext.request.contextPath}/scripts/admin-categorie.js"></script>
+		src="${pageContext.request.contextPath}/scripts/admin-clienti.js"></script>
 
 </body>
 </html>

@@ -14,7 +14,7 @@
 		<nav class="nav-menu">
 			<ul>
 				<li><a href="${pageContext.request.contextPath}/">Home</a></li>
-				<c:forEach var="categoria" items="${categorie}">
+				<c:forEach var="categoria" items="${categorieNavBar}">
 					<li><a
 						href="${pageContext.request.contextPath}/categoria?id=${categoria.id}">
 							${categoria.nome} </a></li>

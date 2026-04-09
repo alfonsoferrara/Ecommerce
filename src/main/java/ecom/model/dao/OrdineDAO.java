@@ -91,6 +91,23 @@ public class OrdineDAO implements GenericDAO<Ordine, Integer> {
 		}
 		return ordini;
 	}
+	
+	public List<Ordine> findByClienteId_noPaginazione(int clienteId) throws SQLException {
+		List<Ordine> ordini = new ArrayList<>();
+		String query = "SELECT * FROM Ordine WHERE cliente_id = ? ORDER BY data DESC";
+		
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+			ps.setInt(1, clienteId);
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					ordini.add(new Ordine(rs.getInt("id"), rs.getInt("cliente_id"), rs.getInt("indirizzo_id"),
+							rs.getTimestamp("data"), rs.getDouble("totale"), rs.getString("stato"),
+							rs.getString("metodo_pagamento"), rs.getString("nota_cliente")));
+				}
+			}
+		}
+		return ordini;
+	}
 
 	/**
 	 * Trova gli ultimi N ordini di un cliente, ordinati dal più recente, usato in

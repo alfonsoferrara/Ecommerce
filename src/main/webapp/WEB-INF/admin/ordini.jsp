@@ -123,7 +123,7 @@
 					</div>
 					<div class="filter-group">
 						<button type="button" class="btn-filter"
-							onclick="window.location.href='${pageContext.request.contextPath}/admin/ordini'">Resetta</button>
+							onclick="window.location.href='${pageContext.request.contextPath}/admin/ordini'">Reset</button>
 					</div>
 				</form>
 			</div>

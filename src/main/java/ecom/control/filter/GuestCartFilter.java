@@ -46,8 +46,8 @@ public class GuestCartFilter implements Filter {
 
         //RECUPERO CATEGORIE PER L'HEADER DINAMICO
         try {
-			List<Categoria> categorie = categoriaDAO.findAll();
-			req.setAttribute("categorie", categorie);
+			List<Categoria> categorieNavBar = categoriaDAO.findAll();
+			req.setAttribute("categorieNavBar", categorieNavBar);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

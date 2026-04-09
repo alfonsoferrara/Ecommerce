@@ -10,7 +10,6 @@
         <li><a href="${pageContext.request.contextPath}/admin/categorie"><i class="fas fa-tags"></i> Categorie</a></li>
         <li><a href="${pageContext.request.contextPath}/admin/clienti"><i class="fas fa-users"></i> Clienti</a></li>
         <li><a href="${pageContext.request.contextPath}/admin/attributi"><i class="fas fa-sliders-h"></i> Attributi</a></li>
-        <li><a href="${pageContext.request.contextPath}/admin/metodi-pagamento"><i class="fas fa-credit-card"></i> Metodi Pagamento</a></li>
         <li><a href="${pageContext.request.contextPath}/admin/team"><i class="fas fa-user-shield"></i> Team</a></li>
     </ul>
 </aside>

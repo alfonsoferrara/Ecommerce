@@ -7,24 +7,24 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.sql.DataSource;
 
-import ecom.model.bean.Categoria;
-import ecom.model.dao.CategoriaDAO;
+import ecom.model.bean.Cliente;
+import ecom.model.dao.ClienteDAO;
 
-@WebServlet("/admin/categorie")
-public class AdminCategorieServlet extends HttpServlet {
+@WebServlet("/admin/clienti")
+public class AdminClientiServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private CategoriaDAO categoriaDAO;
+	private ClienteDAO clienteDAO;
 	private int pageSize = 12;
 
 	@Override
 	public void init() throws ServletException {
 		DataSource ds = (DataSource) getServletContext().getAttribute("DataSource");
-		this.categoriaDAO = new CategoriaDAO(ds);
+		this.clienteDAO = new ClienteDAO(ds);
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -46,43 +46,52 @@ public class AdminCategorieServlet extends HttpServlet {
 			ordinamento = "recenti";
 		}
 
-		List<Categoria> categorie = null;
-		int totaleCategorie = 0; // per paginazione
+		List<Cliente> clienti = null;
+		int totaleClienti = 0; // per paginazione
 		try {
 			if (ordinamento.equalsIgnoreCase("recenti")) {
-				categorie = categoriaDAO.findAllPaginazione(pagina, pageSize);
-			} else if (ordinamento.equalsIgnoreCase("alfabetico")) {
-				categorie = categoriaDAO.findAlfabetico(pagina, pageSize);
+				clienti = clienteDAO.findAllPaginazione(pagina, pageSize);
+				totaleClienti = clienteDAO.countAll();
+			} else if (ordinamento.equalsIgnoreCase("alfabeticoNome")) {
+				clienti = clienteDAO.findAlfabeticoNome(pagina, pageSize);
+				totaleClienti = clienteDAO.countAll();
+			} else if (ordinamento.equalsIgnoreCase("alfabeticoCognome")) {
+				clienti = clienteDAO.findAlfabeticoCognome(pagina, pageSize);
+				totaleClienti = clienteDAO.countAll();
+			} else if (ordinamento.equalsIgnoreCase("findById")) {
+				int clienteId = Integer.parseInt(request.getParameter("id_cliente"));
+				Cliente cliente = clienteDAO.findById(clienteId);
+				clienti = new ArrayList<>(); // nuova lista per gestire questo caso particolare
+				if (cliente != null) {
+					clienti.add(cliente);
+					totaleClienti = 1;
+				}
 			} else {
-				// default
-				categorie = categoriaDAO.findAllPaginazione(pagina, pageSize);
+				// di default recenti
+				clienti = clienteDAO.findAllPaginazione(pagina, pageSize);
+				totaleClienti = clienteDAO.countAll();
 			}
 
-			// è lo stesso perche non filtro ma cambio solo l'ordinamento
-			totaleCategorie = categoriaDAO.countCategorie();
+			int pagineTotali = (int) Math.ceil((double) totaleClienti / pageSize);
 
-			Map<String, Integer> numeroProdottiCategoria = categoriaDAO.getNumeroProdottiPerCategoria();
-			int pagineTotali = (int) Math.ceil((double) totaleCategorie / pageSize);
-
-			request.setAttribute("categorieAdmin", categorie);
-			request.setAttribute("totaleCategorie", totaleCategorie);
+			request.setAttribute("clienti", clienti);
+			request.setAttribute("totaleClienti", totaleClienti);
 			request.setAttribute("pagineTotali", pagineTotali);
 			request.setAttribute("paginaCorrente", pagina);
-			request.setAttribute("numeroProdotti", numeroProdottiCategoria);
 
-			request.getRequestDispatcher("/WEB-INF/admin/categorie.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/admin/clienti.jsp").forward(request, response);
 
 		} catch (SQLException | NumberFormatException | NullPointerException e) {
 			e.printStackTrace();
-			request.setAttribute("errorePagCategoria", "Si è verificato un errore nel caricamento delle categorie");
-			request.getRequestDispatcher("/WEB-INF/admin/categorie.jsp").forward(request, response);
+			request.setAttribute("erroreClienti", "Si è verificato un errore nel caricamento dei clienti");
+			request.getRequestDispatcher("/WEB-INF/admin/clienti.jsp").forward(request, response);
 			return;
 		}
-
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
 	}
 
 }
