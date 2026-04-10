@@ -76,6 +76,7 @@ public class LoginAdminServlet extends HttpServlet {
 				if (admin != null) {
 					session.setAttribute("utenteLoggato", admin);
 					session.setAttribute("ruolo", "admin");
+					session.setAttribute("adminCorrente", admin);
 					response.sendRedirect(request.getContextPath() + "/admin/dashboard");
 					return;
 				} else {

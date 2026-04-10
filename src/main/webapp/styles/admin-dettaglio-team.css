@@ -1,0 +1,160 @@
+/* ================= ADMIN DETTAGLIO TEAM ================= */
+.team-detail-container {
+	background-color: #0a0a0a;
+	border: 1px solid #222;
+	border-radius: 6px;
+	padding: 30px;
+	margin-bottom: 40px;
+	max-width: 800px; /* Layout compatto per form brevi */
+}
+
+/* --- Header --- */
+.team-header {
+	border-bottom: 2px solid #222;
+	padding-bottom: 20px;
+	margin-bottom: 30px;
+}
+
+.team-header h1 {
+	font-size: 1.8rem;
+	font-weight: 900;
+	color: #fff;
+	text-transform: uppercase;
+}
+
+/* --- Form --- */
+.form-group {
+	margin-bottom: 25px;
+	display: flex;
+	flex-direction: column;
+}
+
+.form-group label {
+	font-size: 0.85rem;
+	font-weight: 700;
+	color: #aaa;
+	margin-bottom: 8px;
+	text-transform: uppercase;
+}
+
+.form-input {
+	width: 100%;
+	padding: 12px 15px;
+	background-color: #000;
+	border: 1px solid #333;
+	color: #fff;
+	font-size: 1rem;
+	border-radius: 4px;
+	transition: border-color 0.3s;
+}
+
+.form-input:focus {
+	outline: none;
+	border-color: #fff;
+}
+
+.error-text {
+	color: #e74c3c;
+	font-size: 0.85rem;
+	font-weight: 700;
+	margin-top: 6px;
+	display: none; /* Gestito da JS */
+}
+
+.info-text {
+	color: #888;
+	font-size: 0.85rem;
+	margin-top: 5px;
+	font-style: italic;
+}
+
+/* --- Pulsanti --- */
+.action-buttons {
+	display: flex;
+	gap: 15px;
+	justify-content: flex-end;
+	align-items: center;
+	margin-top: 40px;
+	border-top: 1px solid #222;
+	padding-top: 25px;
+}
+
+.btn-primary {
+	background-color: #fff;
+	color: #000;
+	border: none;
+	padding: 12px 30px;
+	font-weight: 800;
+	border-radius: 4px;
+	cursor: pointer;
+	text-transform: uppercase;
+	transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+	background-color: #ccc;
+}
+
+.btn-secondary {
+	background-color: transparent;
+	color: #fff;
+	border: 1px solid #555;
+	padding: 11px 30px;
+	font-weight: 700;
+	border-radius: 4px;
+	cursor: pointer;
+	text-decoration: none;
+	text-transform: uppercase;
+	transition: background-color 0.3s;
+}
+
+.btn-secondary:hover {
+	background-color: #333;
+	border-color: #fff;
+}
+
+.btn-danger {
+	background-color: rgba(231, 76, 60, 0.1);
+	color: #e74c3c;
+	border: 1px solid #e74c3c;
+	padding: 11px 20px;
+	font-weight: 700;
+	border-radius: 4px;
+	cursor: pointer;
+	text-transform: uppercase;
+	transition: all 0.3s;
+	margin-right: auto; /* Allinea a sinistra */
+}
+
+.btn-danger:hover {
+	background-color: #e74c3c;
+	color: #fff;
+}
+
+.disabled-info {
+	margin-right: auto;
+	color: #666;
+	font-size: 0.85rem;
+	font-style: italic;
+	display: flex;
+	align-items: center;
+	gap: 5px;
+}
+
+.alert-error {
+	background-color: rgba(231, 76, 60, 0.1);
+	border-left: 4px solid #e74c3c;
+	color: #e74c3c;
+	padding: 15px;
+	margin-bottom: 20px;
+	font-weight: 600;
+}
+
+.alert-success {
+	background-color: rgba(46, 204, 113, 0.1);
+	border-left: 4px solid #2ecc71;
+	color: #2ecc71;
+	padding: 15px;
+	margin-bottom: 20px;
+	font-weight: 600;
+}

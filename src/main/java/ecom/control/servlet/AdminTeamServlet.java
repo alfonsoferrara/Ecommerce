@@ -12,19 +12,19 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import ecom.model.bean.Cliente;
-import ecom.model.dao.ClienteDAO;
+import ecom.model.bean.Admin;
+import ecom.model.dao.AdminDAO;
 
 @WebServlet("/admin/team")
 public class AdminTeamServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private ClienteDAO clienteDAO;
+	private AdminDAO adminDAO;
 	private int pageSize = 12;
 
 	@Override
 	public void init() throws ServletException {
 		DataSource ds = (DataSource) getServletContext().getAttribute("DataSource");
-		this.clienteDAO = new ClienteDAO(ds);
+		this.adminDAO = new AdminDAO(ds);
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -34,7 +34,7 @@ public class AdminTeamServlet extends HttpServlet {
 			request.setAttribute("operazioneRiuscita", messaggio);
 			request.getSession().removeAttribute("messaggio"); // Pulizia della sessione
 		}
-		
+
 		String errore = (String) request.getSession().getAttribute("errore");
 		if (errore != null) {
 			request.setAttribute("errore", errore);
@@ -52,45 +52,42 @@ public class AdminTeamServlet extends HttpServlet {
 			ordinamento = "recenti";
 		}
 
-		List<Cliente> clienti = null;
-		int totaleClienti = 0; // per paginazione
+		List<Admin> adminList = null;
+		int totaleAdmin = 0; // per paginazione
 		try {
 			if (ordinamento.equalsIgnoreCase("recenti")) {
-				clienti = clienteDAO.findAllPaginazione(pagina, pageSize);
-				totaleClienti = clienteDAO.countAll();
-			} else if (ordinamento.equalsIgnoreCase("alfabeticoNome")) {
-				clienti = clienteDAO.findAlfabeticoNome(pagina, pageSize);
-				totaleClienti = clienteDAO.countAll();
-			} else if (ordinamento.equalsIgnoreCase("alfabeticoCognome")) {
-				clienti = clienteDAO.findAlfabeticoCognome(pagina, pageSize);
-				totaleClienti = clienteDAO.countAll();
+				adminList = adminDAO.findAllPaginazione(pagina, pageSize);
+				totaleAdmin = adminDAO.countAdmin();
+			} else if (ordinamento.equalsIgnoreCase("alfabetico")) {
+				adminList = adminDAO.findAlfabeticoEmail(pagina, pageSize);
+				totaleAdmin = adminDAO.countAdmin();
 			} else if (ordinamento.equalsIgnoreCase("findById")) {
-				int clienteId = Integer.parseInt(request.getParameter("id_cliente"));
-				Cliente cliente = clienteDAO.findById(clienteId);
-				clienti = new ArrayList<>(); // nuova lista per gestire questo caso particolare
-				if (cliente != null) {
-					clienti.add(cliente);
-					totaleClienti = 1;
+				int adminID = Integer.parseInt(request.getParameter("id_admin"));
+				Admin admin = adminDAO.findById(adminID);
+				adminList = new ArrayList<>(); // nuova lista per gestire questo caso particolare
+				if (admin != null) {
+					adminList.add(admin);
+					totaleAdmin = 1;
 				}
 			} else {
 				// di default recenti
-				clienti = clienteDAO.findAllPaginazione(pagina, pageSize);
-				totaleClienti = clienteDAO.countAll();
+				adminList = adminDAO.findAllPaginazione(pagina, pageSize);
+				totaleAdmin = adminDAO.countAdmin();
 			}
 
-			int pagineTotali = (int) Math.ceil((double) totaleClienti / pageSize);
+			int pagineTotali = (int) Math.ceil((double) totaleAdmin / pageSize);
 
-			request.setAttribute("clienti", clienti);
-			request.setAttribute("totaleClienti", totaleClienti);
+			request.setAttribute("adminList", adminList);
+			request.setAttribute("totaleAdmin", totaleAdmin);
 			request.setAttribute("pagineTotali", pagineTotali);
 			request.setAttribute("paginaCorrente", pagina);
 
-			request.getRequestDispatcher("/WEB-INF/admin/clienti.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/admin/team.jsp").forward(request, response);
 
 		} catch (SQLException | NumberFormatException | NullPointerException e) {
 			e.printStackTrace();
-			request.setAttribute("erroreClienti", "Si è verificato un errore nel caricamento dei clienti");
-			request.getRequestDispatcher("/WEB-INF/admin/clienti.jsp").forward(request, response);
+			request.setAttribute("erroreTeam", "Si è verificato un errore nel caricamento del team");
+			request.getRequestDispatcher("/WEB-INF/admin/team.jsp").forward(request, response);
 			return;
 		}
 	}

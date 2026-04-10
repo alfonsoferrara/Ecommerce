@@ -1,13 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c"%>
+<%@ taglib uri="jakarta.tags.fmt" prefix="fmt"%>
 
 <!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gestione Attributi | CarryCrew Admin</title>
+<title>Gestione Team | CarryCrew Admin</title>
 
 <link rel="icon" type="image/png" sizes="16x16"
 	href="${pageContext.request.contextPath}/images/favicon-16x16.png">
@@ -21,7 +22,7 @@
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/styles/admin-topbar.css">
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/styles/admin-attributi.css">
+	href="${pageContext.request.contextPath}/styles/admin-team.css">
 </head>
 <body>
 
@@ -33,9 +34,9 @@
 
 		<div class="dashboard-content">
 
-			<c:if test="${not empty erroreAttributi}">
+			<c:if test="${not empty erroreTeam}">
 				<div class="alert-error">
-					<i class="fas fa-exclamation-triangle"></i> ${erroreAttributi}
+					<i class="fas fa-exclamation-triangle"></i> ${erroreTeam}
 				</div>
 			</c:if>
 			<c:if test="${not empty operazioneRiuscita}">
@@ -50,8 +51,8 @@
 			</c:if>
 
 			<div class="filter-panel">
-				<h3>Ricerca e Ordinamento</h3>
-				<form action="${pageContext.request.contextPath}/admin/attributi"
+				<h3>Ricerca e Ordinamento Team</h3>
+				<form action="${pageContext.request.contextPath}/admin/team"
 					method="GET" class="filter-form">
 
 					<div class="filter-group">
@@ -59,40 +60,39 @@
 							name="ordinamento" id="ordinamentoSelect">
 							<option value="recenti"
 								${param.ordinamento == 'recenti' ? 'selected' : ''}>Ordine
-								di Creazione (Più recenti prima)</option>
+								di Creazione (Più recenti)</option>
 							<option value="alfabetico"
 								${param.ordinamento == 'alfabetico' ? 'selected' : ''}>Ordine
-								Alfabetico (A-Z)</option>
+								Alfabetico (Email A-Z)</option>
 							<option value="findById"
 								${param.ordinamento == 'findById' ? 'selected' : ''}>Ricerca
-								per ID Attributo</option>
+								per ID Membro</option>
 						</select>
 					</div>
 
-					<div class="filter-group filter-hidden" id="group-attributo-id">
-						<label>ID Attributo</label> <input type="number"
-							name="id_attributo" value="${param.id_attributo}"
-							placeholder="Es. 5">
+					<div class="filter-group filter-hidden" id="group-admin-id">
+						<label>ID Admin</label> <input type="number" name="id_admin"
+							value="${param.id_admin}" placeholder="Es. 1">
 					</div>
 
 					<div class="filter-group">
 						<button type="submit" class="btn-filter">Applica Filtro</button>
 					</div>
-
 					<div class="filter-group">
 						<button type="button" class="btn-filter"
-							onclick="window.location.href='${pageContext.request.contextPath}/admin/attributi'">Reset</button>
+							onclick="window.location.href='${pageContext.request.contextPath}/admin/team'">Reset</button>
 					</div>
-
 				</form>
 			</div>
 
 			<section class="dashboard-section">
 
 				<div class="section-title-wrapper">
-					<h2>Elenco Attributi (Specifiche Prodotti)</h2>
-					<a href="${pageContext.request.contextPath}/admin/attributo?id=new"
-						class="btn-add"> <i class="fas fa-plus"></i> Nuovo Attributo
+					<h2>Elenco Membri del Team</h2>
+					<a
+						href="${pageContext.request.contextPath}/admin/membroteam?id=new"
+						class="btn-add"> <i class="fas fa-user-shield"></i> Nuovo
+						Membro
 					</a>
 				</div>
 
@@ -100,27 +100,31 @@
 					<table class="admin-table">
 						<thead>
 							<tr>
-								<th style="width: 15%;">ID</th>
-								<th style="width: 60%;">Nome Attributo</th>
-								<th style="width: 25%;">Azioni</th>
+								<th>ID</th>
+								<th>Indirizzo Email</th>
+								<th>Data di Creazione</th>
+								<th>Azioni</th>
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach items="${attributAdmin}" var="attr">
+							<c:forEach items="${adminList}" var="admin">
 								<tr>
-									<td><strong>#${attr.id}</strong></td>
-									<td><strong>${attr.nome}</strong></td>
+									<td><strong>#${admin.id}</strong></td>
+									<td><strong>${admin.email}</strong></td>
+									<td style="color: #aaa;"><fmt:formatDate
+											value="${admin.dataCreazione}" pattern="dd/MM/yyyy HH:mm" />
+									</td>
 									<td><a
-										href="${pageContext.request.contextPath}/admin/attributo?id=${attr.id}"
+										href="${pageContext.request.contextPath}/admin/membroteam?id=${admin.id}"
 										class="btn-action">Gestisci</a></td>
 								</tr>
 							</c:forEach>
 
-							<c:if test="${empty attributAdmin}">
+							<c:if test="${empty adminList}">
 								<tr>
-									<td colspan="3"
+									<td colspan="4"
 										style="text-align: center; color: #666; padding: 30px;">
-										Nessun attributo trovato con questi criteri.</td>
+										Nessun membro del team trovato.</td>
 								</tr>
 							</c:if>
 						</tbody>
@@ -129,7 +133,7 @@
 
 				<c:if test="${pagineTotali > 1}">
 					<c:set var="queryFiltri"
-						value="&ordinamento=${param.ordinamento}&id_attributo=${param.id_attributo}" />
+						value="&ordinamento=${param.ordinamento}&id_admin=${param.id_admin}" />
 
 					<div class="pagination-container">
 						<c:if test="${paginaCorrente > 1}">
@@ -161,8 +165,7 @@
 
 	<script
 		src="${pageContext.request.contextPath}/scripts/admin-dashboard.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/scripts/admin-attributi.js"></script>
+	<script src="${pageContext.request.contextPath}/scripts/admin-team.js"></script>
 
 </body>
 </html>
