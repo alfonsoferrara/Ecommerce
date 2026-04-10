@@ -35,6 +35,72 @@
 
 		<div class="dashboard-content">
 
+			<c:if test="${not empty errore}">
+				<div class="alert-error"
+					style="background-color: rgba(231, 76, 60, 0.1); border-left: 4px solid #e74c3c; color: #e74c3c; padding: 15px; margin-bottom: 20px;">
+					<i class="fas fa-exclamation-triangle"></i> ${errore}
+				</div>
+			</c:if>
+
+			<div class="kpi-date-filter">
+				<form action="${pageContext.request.contextPath}/admin/dashboard"
+					method="GET" class="kpi-date-form">
+					<label>Filtra Incassi:</label> <input type="date" name="dataInizio"
+						value="${param.dataInizio}" title="Data Inizio"> <input
+						type="date" name="dataFine" value="${param.dataFine}"
+						title="Data Fine">
+					<button type="submit" class="btn-kpi-filter">Aggiorna</button>
+					<a href="${pageContext.request.contextPath}/admin/dashboard"
+						class="btn-kpi-reset">Reset</a>
+				</form>
+			</div>
+
+			<div class="kpi-grid">
+
+				<div class="kpi-box">
+					<div class="kpi-icon revenue">
+						<i class="fas fa-euro-sign"></i>
+					</div>
+					<div class="kpi-details">
+						<h4>
+							Totale Incassato
+							<c:if test="${empty param.dataFine and empty param.dataInizio}">
+								<span style="font-size: 0.9rem;">(Mese corrente)</span>
+							</c:if>
+						</h4>
+						<span class="kpi-value"> <fmt:formatNumber
+								value="${totaleVendite}" type="currency" currencySymbol="€"
+								maxFractionDigits="2" />
+						</span>
+					</div>
+				</div>
+
+				<div class="kpi-box">
+					<div class="kpi-icon pending">
+						<i class="fas fa-box-open"></i>
+					</div>
+					<div class="kpi-details">
+						<h4>Ordini da Evadere</h4>
+						<span class="kpi-value"><a
+							href="${pageContext.request.contextPath}/admin/ordini?ordinamento=stato&stato_ordine=In+elaborazione"
+							style="color: white;">${ordiniDaEvadere}</a></span>
+					</div>
+				</div>
+
+				<div class="kpi-box">
+					<div class="kpi-icon stock">
+						<i class="fas fa-exclamation-circle"></i>
+					</div>
+					<div class="kpi-details">
+						<h4>Stock Critico (<= 5)</h4>
+						<span class="kpi-value"><a
+							href="${pageContext.request.contextPath}/admin/prodotti?ordinamento=stock&massimo=5"
+							style="color: white;">${prodottiInEsaurimento}</a> <span
+							style="font-size: 0.9rem; font-weight: normal; color: #888;">prod.</span></span>
+					</div>
+				</div>
+
+			</div>
 			<section class="dashboard-section">
 				<h2>Ultimi 5 Ordini</h2>
 				<div class="admin-table-wrapper">
@@ -74,20 +140,10 @@
 										href="${pageContext.request.contextPath}/admin/dettagliOrdine?id=${ordine.id}"
 										class="btn-action">Vedi Dettagli</a></td>
 								</tr>
-								<!-- Somma solo se lo stato NON è ANNULLATO -->
 								<c:if test="${ordine.stato != 'ANNULLATO'}">
 									<c:set var="sommaTotale" value="${sommaTotale + ordine.totale}" />
 								</c:if>
 							</c:forEach>
-
-							<%-- 							<c:if test="${not empty ordini}">
-								<tr class="total-row">
-									<td colspan="4" style="text-align: right;">TOTALE
-										INCASSATO (Ultimi ordini):</td>
-									<td><fmt:formatNumber value="${sommaTotale}"
-											type="currency" currencySymbol="€" maxFractionDigits="2" /></td>
-								</tr>
-							</c:if> --%>
 
 							<c:if test="${empty ordiniTab}">
 								<tr>
@@ -136,8 +192,8 @@
 
 							<c:if test="${empty prodottiTerminati}">
 								<tr>
-									<td colspan="5" style="text-align: center; color: #2ecc71;">Ottimo! Nessun
-										prodotto è esaurito al momento.</td>
+									<td colspan="5" style="text-align: center; color: #2ecc71;">Ottimo!
+										Nessun prodotto è esaurito al momento.</td>
 								</tr>
 							</c:if>
 						</tbody>
