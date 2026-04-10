@@ -90,7 +90,8 @@
 							<button type="submit" name="azione" value="elimina"
 								class="btn-secondary btn-elimina"
 								onclick="return confirm('Sei sicuro di voler eliminare questa categoria?');">
-								Elimina Categoria</button>
+								<i class="fas fa-trash"></i> Elimina Categoria
+							</button>
 						</c:if>
 
 						<a href="${pageContext.request.contextPath}/admin/categorie"

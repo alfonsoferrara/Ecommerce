@@ -1,38 +1,34 @@
-.customer-detail-container {
+/* ================= ADMIN DETTAGLIO ATTRIBUTO ================= */
+.attribute-detail-container {
 	background-color: #0a0a0a;
 	border: 1px solid #222;
 	border-radius: 6px;
 	padding: 30px;
 	margin-bottom: 40px;
+	max-width: 900px; /* Layout compatto per form brevi */
 }
 
 /* --- Header --- */
-.customer-header {
+.attribute-header {
 	border-bottom: 2px solid #222;
 	padding-bottom: 20px;
 	margin-bottom: 30px;
 }
 
-.customer-header h1 {
+.attribute-header h1 {
 	font-size: 1.8rem;
 	font-weight: 900;
 	color: #fff;
 	text-transform: uppercase;
 }
 
-/* --- Form Griglia Anagrafica --- */
-.form-grid {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 20px;
-}
-
+/* --- Form --- */
 .form-group {
-	display: flex;
-	flex-direction: column;
+	margin-bottom: 25px;
 }
 
 .form-group label {
+	display: block;
 	font-size: 0.85rem;
 	font-weight: 700;
 	color: #aaa;
@@ -56,27 +52,22 @@
 	border-color: #fff;
 }
 
-/* Testo d'errore nascosto di default per la validazione JS */
 .error-text {
-	background-color: rgba(231, 76, 60, 0.1);
-	border-left: 3px solid #e74c3c;
 	color: #e74c3c;
-	padding: 8px 12px;
 	font-size: 0.85rem;
 	font-weight: 700;
-	margin-top: 10px;
-	display: none;
-	border-radius: 2px;
+	margin-top: 6px;
+	display: none; /* Gestito da JS */
 }
 
-/* --- Sezioni Storico (Ordini/Indirizzi) --- */
-.history-section {
-	margin-top: 50px;
+/* --- Sezione Storico (Prodotti Associati) --- */
+.associated-products-section {
+	margin-top: 40px;
 	border-top: 1px solid #222;
 	padding-top: 30px;
 }
 
-.history-section h3 {
+.associated-products-section h3 {
 	font-size: 1.2rem;
 	font-weight: 800;
 	color: #fff;
@@ -129,7 +120,7 @@
 	border-color: #fff;
 }
 
-.btn-elimina {
+.btn-danger {
 	background-color: rgba(231, 76, 60, 0.1);
 	color: #e74c3c;
 	border: 1px solid #e74c3c;
@@ -142,7 +133,7 @@
 	margin-right: auto; /* Allinea a sinistra */
 }
 
-.btn-elimina:hover {
+.btn-danger:hover {
 	background-color: #e74c3c;
 	color: #fff;
 }

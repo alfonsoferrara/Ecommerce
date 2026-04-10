@@ -60,7 +60,7 @@
 						<i class="fas fa-user"></i> Dati Cliente
 					</h3>
 					<div class="info-row">
-						<strong>ID Cliente:</strong> <span>${cliente.id}</span>
+						<strong>ID Cliente:</strong> <span><a href="${pageContext.request.contextPath}/admin/cliente?id=${cliente.id}">${cliente.id}</a></span>
 					</div>
 					<div class="info-row">
 						<strong>Nome:</strong> <span>${cliente.nome}

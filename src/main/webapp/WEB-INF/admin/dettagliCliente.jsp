@@ -200,7 +200,8 @@
 							<button type="submit" name="azione" value="elimina"
 								class="btn-secondary btn-elimina"
 								onclick="return confirm('Sei sicuro di voler eliminare questo cliente?');">
-								Elimina Cliente</button>
+								<i class="fas fa-trash"></i> Elimina Cliente
+							</button>
 						</c:if>
 
 						<a href="${pageContext.request.contextPath}/admin/clienti"

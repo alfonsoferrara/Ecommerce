@@ -57,7 +57,7 @@ textarea.form-input {
 	resize: vertical;
 }
 
-/* --- Pulsanti (allineati allo stile cliente) --- */
+/* --- Pulsanti (allineati allo stile attributo) --- */
 .action-buttons {
 	display: flex;
 	gap: 15px;
@@ -85,44 +85,39 @@ textarea.form-input {
 }
 
 .btn-secondary {
-	background-color: #333;
+	background-color: transparent;
 	color: #fff;
-	border: none;
-	padding: 12px 30px;
+	border: 1px solid #555;
+	padding: 11px 30px;
 	font-weight: 700;
 	border-radius: 4px;
 	cursor: pointer;
 	text-decoration: none;
-	font-size: 0.95rem;
 	text-transform: uppercase;
-	display: inline-flex;
-	align-items: center;
 	transition: background-color 0.3s;
 }
 
 .btn-secondary:hover {
 	background-color: #333;
+	border-color: #fff;
 }
 
 .btn-elimina {
-	background-color: rgb(212, 28, 28);
-	color: #fff;
-	border: none;
-	padding: 12px 30px;
+	background-color: rgba(231, 76, 60, 0.1);
+	color: #e74c3c;
+	border: 1px solid #e74c3c;
+	padding: 11px 20px;
 	font-weight: 700;
 	border-radius: 4px;
 	cursor: pointer;
-	text-decoration: none;
-	font-size: 0.95rem;
 	text-transform: uppercase;
-	display: inline-flex;
-	align-items: center;
-	transition: background-color 0.3s;
-	margin-right: auto; /* Spinge il tasto elimina tutto a sinistra */
+	transition: all 0.3s;
+	margin-right: auto; /* Allinea a sinistra */
 }
 
 .btn-elimina:hover {
-	background-color: rgb(240, 0, 0);
+	background-color: #e74c3c;
+	color: #fff;
 }
 
 /* Messaggi */
