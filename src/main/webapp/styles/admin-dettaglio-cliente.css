@@ -1,34 +1,38 @@
-.category-detail-container {
+.customer-detail-container {
 	background-color: #0a0a0a;
 	border: 1px solid #222;
 	border-radius: 6px;
 	padding: 30px;
 	margin-bottom: 40px;
-	max-width: 900px;
-	/* Più stretto del prodotto essendo un form semplice */
 }
 
 /* --- Header --- */
-.category-header {
+.customer-header {
 	border-bottom: 2px solid #222;
 	padding-bottom: 20px;
 	margin-bottom: 30px;
 }
 
-.category-header h1 {
+.customer-header h1 {
 	font-size: 1.8rem;
 	font-weight: 900;
 	color: #fff;
 	text-transform: uppercase;
 }
 
-/* --- Form Stile --- */
+/* --- Form Griglia Anagrafica --- */
+.form-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 20px;
+}
+
 .form-group {
-	margin-bottom: 25px;
+	display: flex;
+	flex-direction: column;
 }
 
 .form-group label {
-	display: block;
 	font-size: 0.85rem;
 	font-weight: 700;
 	color: #aaa;
@@ -52,12 +56,35 @@
 	border-color: #fff;
 }
 
-textarea.form-input {
-	min-height: 150px;
-	resize: vertical;
+/* Testo d'errore nascosto di default per la validazione JS */
+.error-text {
+	background-color: rgba(231, 76, 60, 0.1);
+	border-left: 3px solid #e74c3c;
+	color: #e74c3c;
+	padding: 8px 12px;
+	font-size: 0.85rem;
+	font-weight: 700;
+	margin-top: 10px;
+	display: none;
+	border-radius: 2px;
 }
 
-/* --- Pulsanti (allineati allo stile cliente) --- */
+/* --- Sezioni Storico (Ordini/Indirizzi) --- */
+.history-section {
+	margin-top: 50px;
+	border-top: 1px solid #222;
+	padding-top: 30px;
+}
+
+.history-section h3 {
+	font-size: 1.2rem;
+	font-weight: 800;
+	color: #fff;
+	margin-bottom: 20px;
+	text-transform: uppercase;
+}
+
+/* --- Pulsanti --- */
 .action-buttons {
 	display: flex;
 	gap: 15px;
@@ -85,23 +112,21 @@ textarea.form-input {
 }
 
 .btn-secondary {
-	background-color: #333;
+	background-color: transparent;
 	color: #fff;
-	border: none;
-	padding: 12px 30px;
+	border: 1px solid #555;
+	padding: 11px 30px;
 	font-weight: 700;
 	border-radius: 4px;
 	cursor: pointer;
 	text-decoration: none;
-	font-size: 0.95rem;
 	text-transform: uppercase;
-	display: inline-flex;
-	align-items: center;
 	transition: background-color 0.3s;
 }
 
 .btn-secondary:hover {
 	background-color: #333;
+	border-color: #fff;
 }
 
 .btn-elimina {

@@ -67,6 +67,71 @@ public class ClienteDAO implements GenericDAO<Cliente, Integer> {
 		}
 	}
 
+//	public int insertAndReturnId(Cliente c) throws SQLException {
+//		String hashedPassword = BCrypt.hashpw(c.getPassword(), BCrypt.gensalt());
+//
+//		String queryUtente = "INSERT INTO Utente (email, password) VALUES (?, ?)";
+//		String queryCliente = "INSERT INTO Cliente (utente_id, nome, cognome, telefono) VALUES (?, ?, ?, ?)";
+//
+//		Connection con = null;
+//		int clienteId = 0;
+//
+//		try {
+//			con = ds.getConnection();
+//			con.setAutoCommit(false); // Inizio Transazione
+//
+//			// Primo Inserimento Utente
+//			int utenteId = 0;
+//			try (PreparedStatement psU = con.prepareStatement(queryUtente, Statement.RETURN_GENERATED_KEYS)) {
+//				psU.setString(1, c.getEmail());
+//				psU.setString(2, hashedPassword);
+//				psU.executeUpdate();
+//
+//				try (ResultSet rs = psU.getGeneratedKeys()) {
+//					if (rs.next()) {
+//						utenteId = rs.getInt(1);
+//					} else {
+//						throw new SQLException("Creazione utente fallita, nessun ID ottenuto.");
+//					}
+//				}
+//			}
+//
+//			c.setId(utenteId); // Aggiorno l'ID nel bean Cliente
+//
+//			// Secondo Inserimento Cliente
+//			try (PreparedStatement psC = con.prepareStatement(queryCliente, Statement.RETURN_GENERATED_KEYS)) {
+//				psC.setInt(1, utenteId);
+//				psC.setString(2, c.getNome());
+//				psC.setString(3, c.getCognome());
+//				psC.setString(4, c.getTelefono());
+//				psC.executeUpdate();
+//
+//				// Recupero l'ID del cliente appena inserito
+//				try (ResultSet rs = psC.getGeneratedKeys()) {
+//					if (rs.next()) {
+//						clienteId = rs.getInt(1);
+//					} else {
+//						throw new SQLException("Creazione cliente fallita, nessun ID ottenuto.");
+//					}
+//				}
+//			}
+//
+//			con.commit(); // Conferma Transazione
+//			return clienteId;
+//
+//		} catch (SQLException e) {
+//			if (con != null) {
+//				con.rollback(); // Se fallisce, annulla tutto!
+//			}
+//			throw e;
+//		} finally {
+//			if (con != null) {
+//				con.setAutoCommit(true);
+//				con.close();
+//			}
+//		}
+//	}
+
 	public int insertAndReturnId(Cliente c) throws SQLException {
 		String hashedPassword = BCrypt.hashpw(c.getPassword(), BCrypt.gensalt());
 
@@ -74,7 +139,6 @@ public class ClienteDAO implements GenericDAO<Cliente, Integer> {
 		String queryCliente = "INSERT INTO Cliente (utente_id, nome, cognome, telefono) VALUES (?, ?, ?, ?)";
 
 		Connection con = null;
-		int clienteId = 0;
 
 		try {
 			con = ds.getConnection();
@@ -98,26 +162,19 @@ public class ClienteDAO implements GenericDAO<Cliente, Integer> {
 
 			c.setId(utenteId); // Aggiorno l'ID nel bean Cliente
 
-			// Secondo Inserimento Cliente
-			try (PreparedStatement psC = con.prepareStatement(queryCliente, Statement.RETURN_GENERATED_KEYS)) {
+			// Secondo Inserimento Cliente (RIMOSSO Statement.RETURN_GENERATED_KEYS)
+			try (PreparedStatement psC = con.prepareStatement(queryCliente)) {
 				psC.setInt(1, utenteId);
 				psC.setString(2, c.getNome());
 				psC.setString(3, c.getCognome());
-				psC.setString(4, c.getTelefono());
+				psC.setString(4, c.getTelefono()); // Telefono non c'era nel form JSP, assicurati non sia null!
 				psC.executeUpdate();
-
-				// Recupero l'ID del cliente appena inserito
-				try (ResultSet rs = psC.getGeneratedKeys()) {
-					if (rs.next()) {
-						clienteId = rs.getInt(1);
-					} else {
-						throw new SQLException("Creazione cliente fallita, nessun ID ottenuto.");
-					}
-				}
 			}
 
 			con.commit(); // Conferma Transazione
-			return clienteId;
+
+			// Ritorno direttamente utenteId, che è anche l'ID del cliente
+			return utenteId;
 
 		} catch (SQLException e) {
 			if (con != null) {

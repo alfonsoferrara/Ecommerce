@@ -38,6 +38,16 @@
 					<i class="fas fa-exclamation-triangle"></i> ${erroreClienti}
 				</div>
 			</c:if>
+			<c:if test="${not empty operazioneRiuscita}">
+				<div class="alert-success">
+					<i class="fas fa-exclamation-triangle"></i> ${operazioneRiuscita}
+				</div>
+			</c:if>
+			<c:if test="${not empty errore}">
+				<div class="alert-error">
+					<i class="fas fa-exclamation-triangle"></i> ${errore}
+				</div>
+			</c:if>
 
 			<div class="filter-panel">
 				<h3>Ricerca e Ordinamento</h3>

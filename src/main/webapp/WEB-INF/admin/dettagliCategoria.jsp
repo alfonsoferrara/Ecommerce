@@ -69,7 +69,8 @@
 							id="nome" name="nome" value="<c:out value='${categoria.nome}' />"
 							class="form-input"
 							placeholder="Inserisci il nome della categoria...">
-						<div id="nomeVuoto" class="alert-error" style="display: none; margin-top:10px">
+						<div id="nomeVuoto" class="alert-error"
+							style="display: none; margin-top: 10px">
 							<i class="fas fa-exclamation-triangle"></i> Il nome della
 							categoria non può essere vuoto.
 						</div>
@@ -82,16 +83,19 @@
 								value='${categoria.descrizione}' /></textarea>
 					</div>
 
-					<div
-						style="display: flex; gap: 15px; justify-content: flex-end; border-top: 1px solid #222; padding-top: 30px; margin-top: 30px;">
+					<!-- ACTION BUTTONS - allineato allo stile cliente -->
+					<div class="action-buttons">
+
+						<c:if test="${categoria.id != 0}">
+							<button type="submit" name="azione" value="elimina"
+								class="btn-secondary btn-elimina"
+								onclick="return confirm('Sei sicuro di voler eliminare questa categoria?');">
+								Elimina Categoria</button>
+						</c:if>
 
 						<a href="${pageContext.request.contextPath}/admin/categorie"
-							class="btn-secondary"> Annulla </a>
+							class="btn-secondary">Annulla</a>
 
-						<button type="submit" name="azione" value="elimina"
-							class="btn-secondary btn-elimina"
-							onclick="return confirm('Sei sicuro di voler eliminare questa categoria?');">
-							Elimina Categoria</button>
 						<button type="submit" class="btn-primary">
 							<c:choose>
 								<c:when test="${categoria.id == 0}">Crea Categoria</c:when>

@@ -34,6 +34,12 @@ public class AdminClientiServlet extends HttpServlet {
 			request.setAttribute("operazioneRiuscita", messaggio);
 			request.getSession().removeAttribute("messaggio"); // Pulizia della sessione
 		}
+		
+		String errore = (String) request.getSession().getAttribute("errore");
+		if (errore != null) {
+			request.setAttribute("errore", errore);
+			request.getSession().removeAttribute("errore"); // Pulizia della sessione
+		}
 
 		String pag = request.getParameter("pagina");
 		int pagina = 1; // pagina di default se non specifiata
