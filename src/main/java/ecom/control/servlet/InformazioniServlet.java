@@ -79,6 +79,7 @@ public class InformazioniServlet extends HttpServlet {
             // Aggiorna la password solo se è stata inserita
             if (password != null && !password.trim().isEmpty()) {
                 cliente.setPassword(password);
+                clienteDAO.changePassword(cliente.getId(), password);
             }
 
             clienteDAO.update(cliente);

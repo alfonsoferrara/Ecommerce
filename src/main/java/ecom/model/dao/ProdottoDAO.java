@@ -1,6 +1,7 @@
 package ecom.model.dao;
 
 import ecom.model.bean.Prodotto;
+import ecom.model.bean.ProdottoConUltimoAcquisto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 
 import javax.sql.DataSource;
 
@@ -284,23 +286,35 @@ public class ProdottoDAO implements GenericDAO<Prodotto, Integer> {
 	 * Trova gli ultimi 10 prodotti terminati, dal piu recente (Pagina dashboard
 	 * admin)
 	 */
-	public List<Prodotto> find10Terminati() throws SQLException {
-		int limit = 10;
-		List<Prodotto> prodotti = new ArrayList<>();
-		String query = "SELECT * FROM Prodotto WHERE stock = 0 ORDER BY RAND() LIMIT ?";
+	public List<ProdottoConUltimoAcquisto> find10Terminati() throws SQLException {
+	    int limit = 10;
+	    List<ProdottoConUltimoAcquisto> prodotti = new ArrayList<>();
+	    String query = "SELECT p.id AS prodotto_id, p.nome, p.stock, p.categoria_id, p.descrizione, p.prezzo, p.attivo, NULL AS ultimo_acquisto \r\n"
+	            + "FROM prodotto p \r\n" + "WHERE p.stock = 0 \r\n"
+	            + "AND NOT EXISTS (SELECT 1 FROM dettagli_ordine d WHERE d.prodotto_id = p.id)\r\n" + "UNION\r\n"
+	            + "SELECT p.id AS prodotto_id, p.nome, p.stock, p.categoria_id, p.descrizione, p.prezzo, p.attivo, MAX(o.data) AS ultimo_acquisto \r\n"
+	            + "FROM dettagli_ordine d \r\n" + "JOIN ordine o ON d.ordine_id = o.id \r\n"
+	            + "JOIN prodotto p ON d.prodotto_id = p.id \r\n" + "WHERE p.stock = 0 \r\n"
+	            + "GROUP BY p.id, p.nome, p.stock, p.categoria_id, p.descrizione, p.prezzo, p.attivo \r\n"
+	            + "ORDER BY ultimo_acquisto DESC \r\n" + "LIMIT ?";
 
-		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
-			ps.setInt(1, limit);
+	    try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+	        ps.setInt(1, limit);
 
-			try (ResultSet rs = ps.executeQuery()) {
-				while (rs.next()) {
-					prodotti.add(new Prodotto(rs.getInt("id"), rs.getInt("categoria_id"), rs.getString("nome"),
-							rs.getString("descrizione"), rs.getDouble("prezzo"), rs.getInt("stock"),
-							rs.getBoolean("attivo")));
-				}
-			}
-		}
-		return prodotti;
+	        try (ResultSet rs = ps.executeQuery()) {
+	            while (rs.next()) {
+	                Prodotto prodotto = new Prodotto(rs.getInt("prodotto_id"), rs.getInt("categoria_id"),
+	                        rs.getString("nome"), rs.getString("descrizione"), rs.getDouble("prezzo"),
+	                        rs.getInt("stock"), rs.getBoolean("attivo"));
+
+	                java.sql.Date ultimoAcquistoDate = rs.getDate("ultimo_acquisto");
+	                LocalDate ultimoAcquisto = ultimoAcquistoDate != null ? ultimoAcquistoDate.toLocalDate() : null;
+
+	                prodotti.add(new ProdottoConUltimoAcquisto(prodotto, ultimoAcquisto));
+	            }
+	        }
+	    }
+	    return prodotti;
 	}
 
 	@Override

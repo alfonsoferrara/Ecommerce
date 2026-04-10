@@ -141,8 +141,8 @@ public class AdminDettagliCliente extends HttpServlet {
 			cliente = new Cliente();
 			aggiornaDatiBaseCliente(request, cliente);
 
-			// Il DAO deve fare la INSERT e restituire il nuovo ID autogenerato dal
-			// Database!
+			// Il DAO fa la INSERT, esegue l'hash della password (se presente) e restituisce
+			// l'ID
 			try {
 				cliente_id = clienteDAO.insertAndReturnId(cliente);
 			} catch (SQLException e) {
@@ -163,9 +163,19 @@ public class AdminDettagliCliente extends HttpServlet {
 				response.sendRedirect(request.getContextPath() + "/admin/clienti");
 				return;
 			}
+
 			aggiornaDatiBaseCliente(request, cliente);
+
 			try {
+				// Aggiorna i dati anagrafici e l'email
 				clienteDAO.update(cliente);
+
+				// GESTIONE CAMBIO PASSWORD
+				String nuovaPassword = request.getParameter("password");
+				if (nuovaPassword != null && !nuovaPassword.trim().isEmpty()) {
+					clienteDAO.changePassword(cliente_id, nuovaPassword);
+				}
+
 			} catch (SQLException e) {
 				String errorMessage = e.getMessage();
 				if (errorMessage != null && errorMessage.contains("mail")) {

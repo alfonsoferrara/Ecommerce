@@ -35,13 +35,40 @@ public class AdminDashboardServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		try {
-			// recupero ultimi 10 ordini
-			List<Ordine> ordini = ordineDAO.findLastXOrders(1, 10);
-			//mostra 10 prodotti terminati, in ordine casuale
-			List<Prodotto> prodotti = prodottoDAO.find10Terminati();
-			
-			request.setAttribute("ordini", ordini);
-			request.setAttribute("prodotti", prodotti);
+			// BOX TOTALE DEGLI ORDINI RANGE DATA
+			double totaleVendite = 0;
+			String dataInizio = request.getParameter("dataInizio");
+			String dataFine = request.getParameter("dataFine");
+			if (dataInizio != null && !dataInizio.isEmpty() && dataFine != null && !dataFine.isEmpty()) {
+				totaleVendite = ordineDAO.countTotaleByDateRange(dataInizio, dataFine);
+			} else if (dataInizio != null && !dataInizio.isEmpty()) {
+				// dataFine è vuota
+				totaleVendite = ordineDAO.countTotaleByDataInizio(dataInizio);
+			} else if (dataFine != null && !dataFine.isEmpty()) {
+				// dataInizio è vuota
+				totaleVendite = ordineDAO.countTotaleByDataFine(dataFine);
+			} else {
+				// default - mese corrente
+				totaleVendite = ordineDAO.countTotaleByMeseCorrente();
+			}
+			request.setAttribute("totaleVendite", totaleVendite);
+
+			// BOX ORDINI DA EVADERE
+			int ordiniDaEvadere = ordineDAO.countByStatus("IN ELABORAZIONE");
+			request.setAttribute("ordiniDaEvadere", ordiniDaEvadere);
+
+			//BOX PRODOTTI IN ESAURIMENTO
+			int prodottiInEsaurimento = prodottoDAO.countProdottiByStockMin(5);
+			request.setAttribute("prodottiInEsaurimento", prodottiInEsaurimento);
+
+			// RECUPERO ULTIMI 5 ORDINI
+			List<Ordine> ordiniTab = ordineDAO.findLastXOrders(1, 5);
+			request.setAttribute("ordiniTab", ordiniTab);
+
+			// MOSTRA 5 PRODOTTI TERMINATI IN ORDINE CASUALE
+			List<ProdottoConUltimoAcquisto> prodotti = prodottoDAO.find10Terminati();
+			request.setAttribute("prodottiTerminati", prodotti);
+
 			request.getRequestDispatcher("/WEB-INF/admin/dashboard.jsp").forward(request, response);
 
 		} catch (SQLException | NumberFormatException | NullPointerException e) {

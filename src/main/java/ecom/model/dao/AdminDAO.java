@@ -186,6 +186,17 @@ public class AdminDAO implements GenericDAO<Admin, Integer> {
 		}
 	}
 
+	// Metodo separato per cambiare password
+	public void changePassword(int userId, String newPassword) throws SQLException {
+		String hashedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+		String query = "UPDATE Utente SET password=? WHERE id=?";
+
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+			ps.setString(1, hashedPassword);
+			ps.setInt(2, userId);
+			ps.executeUpdate();
+		}
+	}
 	@Override
 	public void delete(Integer id) throws SQLException {
 		String query = "DELETE FROM Utente WHERE id=?";

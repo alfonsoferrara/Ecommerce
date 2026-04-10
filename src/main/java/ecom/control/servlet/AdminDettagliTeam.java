@@ -182,6 +182,12 @@ public class AdminDettagliTeam extends HttpServlet {
 			aggiornaDatiBaseAdmin(request, admin);
 			try {
 				adminDAO.update(admin);
+
+				// GESTIONE CAMBIO PASSWORD
+				String nuovaPassword = request.getParameter("password");
+				if (nuovaPassword != null && !nuovaPassword.trim().isEmpty()) {
+					adminDAO.changePassword(admin_id, nuovaPassword);
+				}
 			} catch (SQLException e) {
 				String errorMessage = e.getMessage();
 				if (errorMessage != null && errorMessage.contains("mail")) {

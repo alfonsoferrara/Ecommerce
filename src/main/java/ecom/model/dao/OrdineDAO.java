@@ -91,11 +91,11 @@ public class OrdineDAO implements GenericDAO<Ordine, Integer> {
 		}
 		return ordini;
 	}
-	
+
 	public List<Ordine> findByClienteId_noPaginazione(int clienteId) throws SQLException {
 		List<Ordine> ordini = new ArrayList<>();
 		String query = "SELECT * FROM Ordine WHERE cliente_id = ? ORDER BY data DESC";
-		
+
 		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
 			ps.setInt(1, clienteId);
 			try (ResultSet rs = ps.executeQuery()) {
@@ -349,125 +349,198 @@ public class OrdineDAO implements GenericDAO<Ordine, Integer> {
 
 		return 0;
 	}
-	
+
 	/**
 	 * Conta gli ordini per metodo di pagamento
 	 */
 	public int countByMetodoDiPagamento(String metodoDiPagamento) throws SQLException {
-	    String query = "SELECT COUNT(*) FROM Ordine WHERE metodo_pagamento = ?";
-	    
-	    try (Connection con = ds.getConnection(); 
-	         PreparedStatement ps = con.prepareStatement(query)) {
-	        ps.setString(1, metodoDiPagamento);
-	        
-	        try (ResultSet rs = ps.executeQuery()) {
-	            if (rs.next()) {
-	                return rs.getInt(1);
-	            }
-	            return 0;
-	        }
-	    }
+		String query = "SELECT COUNT(*) FROM Ordine WHERE metodo_pagamento = ?";
+
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+			ps.setString(1, metodoDiPagamento);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					return rs.getInt(1);
+				}
+				return 0;
+			}
+		}
 	}
 
 	/**
 	 * Conta gli ordini per stato
 	 */
 	public int countByStatus(String stato) throws SQLException {
-	    String query = "SELECT COUNT(*) FROM Ordine WHERE stato = ?";
-	    
-	    try (Connection con = ds.getConnection(); 
-	         PreparedStatement ps = con.prepareStatement(query)) {
-	        ps.setString(1, stato);
-	        
-	        try (ResultSet rs = ps.executeQuery()) {
-	            if (rs.next()) {
-	                return rs.getInt(1);
-	            }
-	            return 0;
-	        }
-	    }
+		String query = "SELECT COUNT(*) FROM Ordine WHERE stato = ?";
+
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+			ps.setString(1, stato);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					return rs.getInt(1);
+				}
+				return 0;
+			}
+		}
 	}
 
 	/**
 	 * Conta gli ordini in un range di date
 	 */
 	public int countByDateRange(String dataInizio, String dataFine) throws SQLException {
-	    String query = "SELECT COUNT(*) FROM Ordine WHERE data BETWEEN ? AND ?";
-	    
-	    java.sql.Date startDate = java.sql.Date.valueOf(dataInizio);
-	    java.sql.Date endDate = java.sql.Date.valueOf(dataFine);
-	    
-	    try (Connection con = ds.getConnection(); 
-	         PreparedStatement ps = con.prepareStatement(query)) {
-	        ps.setDate(1, startDate);
-	        ps.setDate(2, endDate);
-	        
-	        try (ResultSet rs = ps.executeQuery()) {
-	            if (rs.next()) {
-	                return rs.getInt(1);
-	            }
-	            return 0;
-	        }
-	    }
+		String query = "SELECT COUNT(*) FROM Ordine WHERE data BETWEEN ? AND ?";
+
+		java.sql.Date startDate = java.sql.Date.valueOf(dataInizio);
+		java.sql.Date endDate = java.sql.Date.valueOf(dataFine);
+
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+			ps.setDate(1, startDate);
+			ps.setDate(2, endDate);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					return rs.getInt(1);
+				}
+				return 0;
+			}
+		}
 	}
 
 	/**
 	 * Conta gli ordini da una certa data di inizio in poi
 	 */
 	public int countByDataInizio(String dataInizio) throws SQLException {
-	    String query = "SELECT COUNT(*) FROM Ordine WHERE data >= ?";
-	    
-	    java.sql.Date startDate = java.sql.Date.valueOf(dataInizio);
-	    
-	    try (Connection con = ds.getConnection(); 
-	         PreparedStatement ps = con.prepareStatement(query)) {
-	        ps.setDate(1, startDate);
-	        
-	        try (ResultSet rs = ps.executeQuery()) {
-	            if (rs.next()) {
-	                return rs.getInt(1);
-	            }
-	            return 0;
-	        }
-	    }
+		String query = "SELECT COUNT(*) FROM Ordine WHERE data >= ?";
+
+		java.sql.Date startDate = java.sql.Date.valueOf(dataInizio);
+
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+			ps.setDate(1, startDate);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					return rs.getInt(1);
+				}
+				return 0;
+			}
+		}
 	}
 
 	/**
 	 * Conta gli ordini fino a una certa data di fine
 	 */
 	public int countByDataFine(String dataFine) throws SQLException {
-	    String query = "SELECT COUNT(*) FROM Ordine WHERE data <= ?";
-	    
-	    java.sql.Date endDate = java.sql.Date.valueOf(dataFine);
-	    
-	    try (Connection con = ds.getConnection(); 
-	         PreparedStatement ps = con.prepareStatement(query)) {
-	        ps.setDate(1, endDate);
-	        
-	        try (ResultSet rs = ps.executeQuery()) {
-	            if (rs.next()) {
-	                return rs.getInt(1);
-	            }
-	            return 0;
-	        }
-	    }
+		String query = "SELECT COUNT(*) FROM Ordine WHERE data <= ?";
+
+		java.sql.Date endDate = java.sql.Date.valueOf(dataFine);
+
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+			ps.setDate(1, endDate);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					return rs.getInt(1);
+				}
+				return 0;
+			}
+		}
 	}
 
 	/**
 	 * Conta tutti gli ordini (per il caso "recenti")
 	 */
 	public int countAll() throws SQLException {
-	    String query = "SELECT COUNT(*) FROM Ordine";
-	    
-	    try (Connection con = ds.getConnection(); 
-	         PreparedStatement ps = con.prepareStatement(query)) {
-	        try (ResultSet rs = ps.executeQuery()) {
-	            if (rs.next()) {
-	                return rs.getInt(1);
-	            }
-	            return 0;
-	        }
-	    }
+		String query = "SELECT COUNT(*) FROM Ordine";
+
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					return rs.getInt(1);
+				}
+				return 0;
+			}
+		}
 	}
 
+	/**
+	 * Somma il totale degli ordini in un range di date
+	 */
+	public double countTotaleByDateRange(String dataInizio, String dataFine) throws SQLException {
+		String query = "SELECT SUM(totale) FROM Ordine WHERE data BETWEEN ? AND ?";
+
+		java.sql.Date startDate = java.sql.Date.valueOf(dataInizio);
+		java.sql.Date endDate = java.sql.Date.valueOf(dataFine);
+
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+			ps.setDate(1, startDate);
+			ps.setDate(2, endDate);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					return rs.getDouble(1) != 0 ? rs.getDouble(1) : 0.0;
+				}
+				return 0.0;
+			}
+		}
+	}
+
+	/**
+	 * Somma il totale degli ordini da una certa data di inizio in poi
+	 */
+	public double countTotaleByDataInizio(String dataInizio) throws SQLException {
+		String query = "SELECT SUM(totale) FROM Ordine WHERE data >= ?";
+
+		java.sql.Date startDate = java.sql.Date.valueOf(dataInizio);
+
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+			ps.setDate(1, startDate);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					return rs.getDouble(1) != 0 ? rs.getDouble(1) : 0.0;
+				}
+				return 0.0;
+			}
+		}
+	}
+
+	/**
+	 * Somma il totale degli ordini fino a una certa data di fine
+	 */
+	public double countTotaleByDataFine(String dataFine) throws SQLException {
+		String query = "SELECT SUM(totale) FROM Ordine WHERE data <= ?";
+
+		java.sql.Date endDate = java.sql.Date.valueOf(dataFine);
+
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+			ps.setDate(1, endDate);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					return rs.getDouble(1) != 0 ? rs.getDouble(1) : 0.0;
+				}
+				return 0.0;
+			}
+		}
+	}
+
+	/**
+	 * Somma il totale degli ordini del mese corrente
+	 */
+	public double countTotaleByMeseCorrente() throws SQLException {
+		String query = "SELECT COALESCE(SUM(totale), 0) FROM Ordine " + "WHERE YEAR(data) = YEAR(CURRENT_DATE) "
+				+ "AND MONTH(data) = MONTH(CURRENT_DATE)";
+
+		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
+
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					return rs.getDouble(1);
+				}
+				return 0.0;
+			}
+		}
+	}
 }

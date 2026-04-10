@@ -22,6 +22,8 @@
 	href="${pageContext.request.contextPath}/styles/admin-sidebar.css">
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/styles/admin-topbar.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/styles/admin-ordini.css">
 </head>
 <body>
 
@@ -34,7 +36,7 @@
 		<div class="dashboard-content">
 
 			<section class="dashboard-section">
-				<h2>Ultimi 10 Ordini</h2>
+				<h2>Ultimi 5 Ordini</h2>
 				<div class="admin-table-wrapper">
 					<table class="admin-table">
 						<thead>
@@ -42,14 +44,14 @@
 								<th>ID Ordine</th>
 								<th>Data</th>
 								<th>Stato</th>
-								<th>Metodo di Pagamento</th>
 								<th>Totale</th>
+								<th>Azioni</th>
 							</tr>
 						</thead>
 						<tbody>
 							<c:set var="sommaTotale" value="0" />
 
-							<c:forEach items="${ordini}" var="ordine">
+							<c:forEach items="${ordiniTab}" var="ordine">
 								<tr>
 									<td>#${ordine.id}</td>
 									<td><fmt:formatDate value="${ordine.data}"
@@ -66,9 +68,11 @@
 												<span class="status-badge status-elaborazione">${ordine.stato}</span>
 											</c:otherwise>
 										</c:choose></td>
-									<td>${ordine.metodoPagamento}</td>
 									<td><fmt:formatNumber value="${ordine.totale}"
 											type="currency" currencySymbol="€" maxFractionDigits="2" /></td>
+									<td><a
+										href="${pageContext.request.contextPath}/admin/dettagliOrdine?id=${ordine.id}"
+										class="btn-action">Vedi Dettagli</a></td>
 								</tr>
 								<!-- Somma solo se lo stato NON è ANNULLATO -->
 								<c:if test="${ordine.stato != 'ANNULLATO'}">
@@ -76,16 +80,16 @@
 								</c:if>
 							</c:forEach>
 
-							<c:if test="${not empty ordini}">
+							<%-- 							<c:if test="${not empty ordini}">
 								<tr class="total-row">
 									<td colspan="4" style="text-align: right;">TOTALE
 										INCASSATO (Ultimi ordini):</td>
 									<td><fmt:formatNumber value="${sommaTotale}"
 											type="currency" currencySymbol="€" maxFractionDigits="2" /></td>
 								</tr>
-							</c:if>
+							</c:if> --%>
 
-							<c:if test="${empty ordini}">
+							<c:if test="${empty ordiniTab}">
 								<tr>
 									<td colspan="5" style="text-align: center; color: #666;">Nessun
 										ordine recente trovato.</td>
@@ -105,22 +109,35 @@
 								<th>ID Prodotto</th>
 								<th>Nome Prodotto</th>
 								<th>Prezzo</th>
+								<th>Data Esaurimento (Ultimo Acq.)</th>
+								<th>Azioni</th>
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach items="${prodotti}" var="item">
+							<c:forEach items="${prodottiTerminati}" var="item">
 								<tr>
-									<td>#${item.id}</td>
-									<td><strong>${item.nome}</strong></td>
-									<td><fmt:formatNumber value="${item.prezzo}"
+									<td>#${item.prodotto.id}</td>
+									<td><strong>${item.prodotto.nome}</strong></td>
+									<td><fmt:formatNumber value="${item.prodotto.prezzo}"
 											type="currency" currencySymbol="€" maxFractionDigits="2" /></td>
+									<td><c:choose>
+											<c:when test="${empty item.ultimoAcquisto}">
+												<span style="color: #666;">N/D</span>
+											</c:when>
+											<c:otherwise>
+                                                ${item.ultimoAcquisto}
+                                            </c:otherwise>
+										</c:choose></td>
+									<td><a
+										href="${pageContext.request.contextPath}/admin/prodotto?id=${item.prodotto.id}"
+										class="btn-action">Vedi Dettagli</a></td>
 								</tr>
 							</c:forEach>
 
-							<c:if test="${empty prodotti}">
+							<c:if test="${empty prodottiTerminati}">
 								<tr>
-									<td colspan="4" style="text-align: center; color: #2ecc71;">Ottimo!
-										Nessun prodotto è esaurito al momento.</td>
+									<td colspan="5" style="text-align: center; color: #2ecc71;">Ottimo! Nessun
+										prodotto è esaurito al momento.</td>
 								</tr>
 							</c:if>
 						</tbody>
