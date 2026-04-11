@@ -29,6 +29,12 @@ public class AdminAttributiServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		String messaggio = (String) request.getSession().getAttribute("messaggio");
+		if (messaggio != null) {
+			request.setAttribute("operazioneRiuscita", messaggio);
+			request.getSession().removeAttribute("messaggio"); // Pulizia della sessione
+		}
+		
 		String pag = request.getParameter("pagina");
 		int pagina = 1; // pagina di default se non specifiata
 		if (pag != null && !pag.isEmpty()) {

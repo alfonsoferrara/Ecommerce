@@ -95,7 +95,7 @@ public class AdminDettagliAttributo extends HttpServlet {
 					attributoDAO.delete(attributo_id);
 				} catch (SQLException e) {
 					e.printStackTrace();
-					request.getSession().setAttribute("errore", "Errore durante l'eliminazione dell'attributo");
+					request.getSession().setAttribute("errore", "L'attributo non può essere eliminato poiché vi sono prodotti che lo usano");
 					response.sendRedirect(request.getContextPath() + "/admin/attributo?id=" + attributo_id);
 					return;
 				}

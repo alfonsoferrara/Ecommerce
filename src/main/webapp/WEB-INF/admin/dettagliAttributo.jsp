@@ -41,11 +41,7 @@
 					<i class="fas fa-check-circle"></i> ${operazioneRiuscita}
 				</div>
 			</c:if>
-			<c:if test="${not empty errore}">
-				<div class="alert-error">
-					<i class="fas fa-exclamation-triangle"></i> ${errore}
-				</div>
-			</c:if>
+			
 			<c:if test="${not empty errore}">
 				<div class="alert-error">
 					<i class="fas fa-exclamation-triangle"></i> ${errore}
@@ -58,8 +54,7 @@
 					action="${pageContext.request.contextPath}/admin/attributo"
 					method="POST">
 
-					<input type="hidden" name="id" value="${attributo.id}"> <input
-						type="hidden" name="azione" id="azioneInput" value="">
+					<input type="hidden" name="id" value="${attributo.id}">
 
 					<div class="attribute-header">
 						<h1>
@@ -77,7 +72,8 @@
 							placeholder="Inserisci il nome...">
 						<div id="nomeVuoto" class="alert-error"
 							style="display: none; margin-top: 10px">
-							<i class="fas fa-exclamation-triangle"></i> Il nome dell'attributo non può essere vuoto.
+							<i class="fas fa-exclamation-triangle"></i> Il nome
+							dell'attributo non può essere vuoto.
 						</div>
 					</div>
 
@@ -126,7 +122,8 @@
 					<div class="action-buttons">
 
 						<c:if test="${attributo.id != 0}">
-							<button type="button" id="btnElimina" class="btn-danger">
+							<button type="submit" id="btnElimina" class="btn-danger"
+								name="azione" value="elimina">
 								<i class="fas fa-trash"></i> Elimina Attributo
 							</button>
 						</c:if>

@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // --- Gestione Eliminazione ---
     if (btnElimina) {
         btnElimina.addEventListener("click", function() {
-            if (confirm("Sei sicuro di voler eliminare questo attributo? Se è associato a dei prodotti, l'operazione potrebbe essere bloccata.")) {
+            if (confirm("Sei sicuro di voler eliminare questo attributo?")) {
                 inputAzione.value = "elimina";
                 attrForm.submit();
             }

@@ -33,9 +33,39 @@
 			</h1>
 		</div>
 
-		<c:if test="${not empty sessionScope.errore}">
+		<c:if test="${not empty sessionScope.erroreCarrelloVuoto}">
 			<div class="alert-error">
-				<i class="fas fa-exclamation-triangle"></i> ${sessionScope.errore}
+				<i class="fas fa-exclamation-triangle"></i> ${sessionScope.erroreCarrelloVuoto}
+			</div>
+			<c:remove var="errore" scope="session" />
+		</c:if>
+		<c:if test="${not empty sessionScope.erroreMetodoPagamento}">
+			<div class="alert-error">
+				<i class="fas fa-exclamation-triangle"></i> ${sessionScope.erroreMetodoPagamento}
+			</div>
+			<c:remove var="errore" scope="session" />
+		</c:if>
+		<c:if test="${not empty sessionScope.erroreIndirizzoInesistente}">
+			<div class="alert-error">
+				<i class="fas fa-exclamation-triangle"></i> ${sessionScope.erroreIndirizzoInesistente}
+			</div>
+			<c:remove var="errore" scope="session" />
+		</c:if>
+		<c:if test="${not empty sessionScope.erroreIndirizzoNonValdio}">
+			<div class="alert-error">
+				<i class="fas fa-exclamation-triangle"></i> ${sessionScope.erroreIndirizzoNonValdio}
+			</div>
+			<c:remove var="errore" scope="session" />
+		</c:if>
+		<c:if test="${not empty sessionScope.erroreValidazioneIndirizzo}">
+			<div class="alert-error">
+				<i class="fas fa-exclamation-triangle"></i> ${sessionScope.erroreValidazioneIndirizzo}
+			</div>
+			<c:remove var="errore" scope="session" />
+		</c:if>
+		<c:if test="${not empty sessionScope.ordineSucesso}">
+			<div class="alert-success">
+				<i class="fas fa-exclamation-triangle"></i> ${sessionScope.ordineSucesso}
 			</div>
 			<c:remove var="errore" scope="session" />
 		</c:if>

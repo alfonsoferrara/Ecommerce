@@ -42,7 +42,7 @@ public class CheckoutServlet extends HttpServlet {
 			// Verifica carrello non vuoto
 			List<VoceCarrello> voci = voceDAO.findByCarrello(cartId);
 			if (voci == null || voci.isEmpty()) {
-				request.getSession().setAttribute("errore", "Il carrello è vuoto.");
+				request.getSession().setAttribute("erroreCarrelloVuoto", "Il carrello è vuoto.");
 				response.sendRedirect(request.getContextPath() + "/carrello");
 				return;
 			}
@@ -106,7 +106,7 @@ public class CheckoutServlet extends HttpServlet {
 			}
 
 			if (metodoPagamento == null || metodoPagamento.trim().isEmpty()) {
-				request.getSession().setAttribute("errore", "Seleziona un metodo di pagamento.");
+				request.getSession().setAttribute("erroreMetodoPagamento", "Seleziona un metodo di pagamento.");
 				response.sendRedirect(request.getContextPath() + "/checkout");
 				return;
 			}
@@ -118,7 +118,7 @@ public class CheckoutServlet extends HttpServlet {
 				// Caso 1: Usa indirizzo esistente
 				String indirizzoIdStr = request.getParameter("indirizzoId");
 				if (indirizzoIdStr == null || indirizzoIdStr.trim().isEmpty()) {
-					request.getSession().setAttribute("errore", "Seleziona un indirizzo esistente.");
+					request.getSession().setAttribute("erroreIndirizzoInesistente", "Seleziona un indirizzo esistente.");
 					response.sendRedirect(request.getContextPath() + "/checkout");
 					return;
 				}
@@ -127,7 +127,7 @@ public class CheckoutServlet extends HttpServlet {
 				// Verifica che l'indirizzo appartenga realmente al cliente
 				Indirizzo indirizzo = indirizzoDAO.findById(indirizzoId);
 				if (indirizzo == null || indirizzo.getClienteId() != cliente.getId()) {
-					request.getSession().setAttribute("errore", "Indirizzo non valido.");
+					request.getSession().setAttribute("erroreIndirizzoNonValido", "Indirizzo non valido.");
 					response.sendRedirect(request.getContextPath() + "/checkout");
 					return;
 				}
@@ -143,7 +143,7 @@ public class CheckoutServlet extends HttpServlet {
 				// Validazione campi nuovo indirizzo
 				String erroreValidazione = validaIndirizzo(via, civico, citta, provincia, cap);
 				if (erroreValidazione != null) {
-					request.getSession().setAttribute("errore", erroreValidazione);
+					request.getSession().setAttribute("erroreValidazioneIndirizzo", erroreValidazione);
 					response.sendRedirect(request.getContextPath() + "/checkout");
 					return;
 				}
@@ -197,7 +197,7 @@ public class CheckoutServlet extends HttpServlet {
 
 
 			// Dopo aver creato l'ordine
-			request.getSession().setAttribute("messaggio", "Ordine effettuato con successo!");
+			request.getSession().setAttribute("ordineSuccesso", "Ordine effettuato con successo!");
 			response.sendRedirect(request.getContextPath() + "/riepilogo?id=" + nuovoOrdine.getId());
 			
 			// Per cancellare cache ed evitare che un utente possa effettuare di nuovo lo
