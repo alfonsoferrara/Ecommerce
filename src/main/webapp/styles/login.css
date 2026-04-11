@@ -156,3 +156,12 @@ body {
 	margin-top: 5px;
 	display: none; /* Nascosto di default, mostrato tramite JS */
 }
+
+.alert-success {
+	background-color: rgba(46, 204, 113, 0.1);
+	border-left: 4px solid #2ecc71;
+	color: #2ecc71;
+	padding: 15px;
+	margin-bottom: 30px;
+	font-weight: 600;
+}

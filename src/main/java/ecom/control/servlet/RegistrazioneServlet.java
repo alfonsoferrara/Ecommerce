@@ -82,7 +82,7 @@ public class RegistrazioneServlet extends HttpServlet {
 			// Salvo nel DB (transazione su Utente e Cliente)
 			clienteDAO.insert(nuovoCliente);
 
-			request.getSession().setAttribute("messaggio", "Registrazione completata! Ora puoi accedere.");
+			request.getSession().setAttribute("registrazioneSuccesso", "Registrazione completata! Ora puoi accedere.");
 
 			response.sendRedirect(request.getContextPath() + "/login");
 

@@ -345,7 +345,7 @@ public class ProdottoDAO implements GenericDAO<Prodotto, Integer> {
 
 	// conteggio prodotti per gestire la paginazione in categoria
 	public int countProdottiByCategoriaId(int categoria_id) {
-		String sql = "SELECT COUNT(*) FROM prodotto WHERE categoria_id = ?";
+		String sql = "SELECT COUNT(*) FROM prodotto WHERE categoria_id = ? AND attivo = 1";
 
 		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(sql);) {
 			ps.setInt(1, categoria_id);

@@ -68,7 +68,7 @@ public class OrdineRiepilogoServlet extends HttpServlet {
 			double subtotale = 0.0;
 
 			for (DettagliOrdine dettaglio : dettagli) {
-				Prodotto p = prodottoDAO.findById(dettaglio.getProdottoId());
+				Prodotto p = prodottoDAO.findById_Admin(dettaglio.getProdottoId());
 				if (p != null) {
 					dettagliMap.put(dettaglio, p);
 					subtotale += dettaglio.getPrezzoUnitario() * dettaglio.getQuantita();

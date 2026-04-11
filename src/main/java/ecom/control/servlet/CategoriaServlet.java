@@ -80,7 +80,7 @@ public class CategoriaServlet extends HttpServlet {
 						immaginiPrincipali.put(prodotto.getId(), imgPrincipale.getUrl());
 					} else {
 						// Immagine di default se non esiste
-						immaginiPrincipali.put(prodotto.getId(), "/images/default.jpg");
+						immaginiPrincipali.put(prodotto.getId(), "images/default.jpg");
 					}
 				}
 

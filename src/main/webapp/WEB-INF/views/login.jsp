@@ -34,6 +34,11 @@
 					<i class="fas fa-exclamation-circle"></i> ${errore}
 				</div>
 			</c:if>
+			<c:if test="${not empty registrazioneSuccesso}">
+				<div class="alert-success">
+					<i class="fas fa-exclamation-circle"></i> ${registrazioneSuccesso}
+				</div>
+			</c:if>
 
 			<form action="${pageContext.request.contextPath}/login" method="POST"
 				id="loginForm" novalidate>
