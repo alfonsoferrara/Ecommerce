@@ -58,7 +58,7 @@ public class AdminDashboardServlet extends HttpServlet {
 			request.setAttribute("ordiniDaEvadere", ordiniDaEvadere);
 
 			//BOX PRODOTTI IN ESAURIMENTO
-			int prodottiInEsaurimento = prodottoDAO.countProdottiByStockMin(5);
+			int prodottiInEsaurimento = prodottoDAO.countProdottiByStockMax(5);
 			request.setAttribute("prodottiInEsaurimento", prodottiInEsaurimento);
 
 			// RECUPERO ULTIMI 5 ORDINI

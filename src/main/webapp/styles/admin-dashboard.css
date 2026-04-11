@@ -118,11 +118,11 @@ body {
 	border-top: 2px solid #333;
 }
 
-/* ================= KPI BOXES (NOVITA') ================= */
+/* ================= KPI BOXES ================= */
 .kpi-date-filter {
 	display: flex;
-	justify-content: flex-end;
-	margin-bottom: 15px;
+/* 	justify-content: flex-end;
+ */	margin-bottom: 15px;
 }
 
 .kpi-date-form {

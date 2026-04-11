@@ -60,22 +60,33 @@
 				</div>
 			</c:if>
 
-			<form action="${pageContext.request.contextPath}/carrello"
-				method="POST" class="add-to-cart-form">
+			<!-- FORM MODIFICATO CON AJAX - action aggiunta -->
+			<form id="addToCartForm"
+				action="${pageContext.request.contextPath}/carrello" method="POST"
+				class="add-to-cart-form">
 				<input type="hidden" name="action" value="add"> <input
 					type="hidden" name="prodottoId" value="${prodotto.id}"> <input
-					type="number" name="quantita" value="1" min="1" max="99"
+					type="number" name="quantita" id="quantitaInput" value="1" min="1"
+					max="${prodotto.stock > 99 ? 99 : prodotto.stock}"
 					class="quantity-input" title="Quantità">
+
 				<c:if test="${prodotto.stock > 0}">
-					<button type="submit" class="btn-add-cart">Aggiungi al
-						carrello</button>
+					<button type="submit" id="btnAddToCart" class="btn-add-cart">
+						<span class="btn-text">Aggiungi al carrello</span> <span
+							class="btn-spinner" style="display: none;"> <i
+							class="fas fa-spinner fa-spin"></i>
+						</span>
+					</button>
 				</c:if>
 				<c:if test="${prodotto.stock <= 0}">
-					<button type="" class="btn-add-cart" style="pointer-events: none; opacity: 0.5;" disabled>Prodotto esaurito</button>
+					<button type="button" class="btn-add-cart" disabled
+						style="pointer-events: none; opacity: 0.5;">Prodotto
+						esaurito</button>
 				</c:if>
 			</form>
-			<p id="aggiunta_al_carrello" style="display: none">Prodotto
-				aggiunto al carrello!</p>
+
+			<!-- Messaggi AJAX -->
+			<div id="cartMessage" style="display: none;" class="cart-message"></div>
 
 			<a href="${pageContext.request.contextPath}/carrello"
 				class="link-cart"> <i class="fas fa-shopping-cart"></i> Vai al
@@ -96,6 +107,7 @@
 	<jsp:include page="fragments/footer.jsp" />
 
 	<script src="${pageContext.request.contextPath}/scripts/main.js"></script>
+	<script src="${pageContext.request.contextPath}/scripts/cart-ajax.js"></script>
 
 </body>
 </html>
