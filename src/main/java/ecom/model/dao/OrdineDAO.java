@@ -468,7 +468,7 @@ public class OrdineDAO implements GenericDAO<Ordine, Integer> {
 	 * Somma il totale degli ordini in un range di date
 	 */
 	public double countTotaleByDateRange(String dataInizio, String dataFine) throws SQLException {
-		String query = "SELECT SUM(totale) FROM Ordine WHERE data BETWEEN ? AND ?";
+		String query = "SELECT SUM(totale) FROM Ordine WHERE data BETWEEN ? AND ? AND stato != 'ANNULLATO'";
 
 		java.sql.Date startDate = java.sql.Date.valueOf(dataInizio);
 		java.sql.Date endDate = java.sql.Date.valueOf(dataFine);
@@ -490,7 +490,7 @@ public class OrdineDAO implements GenericDAO<Ordine, Integer> {
 	 * Somma il totale degli ordini da una certa data di inizio in poi
 	 */
 	public double countTotaleByDataInizio(String dataInizio) throws SQLException {
-		String query = "SELECT SUM(totale) FROM Ordine WHERE data >= ?";
+		String query = "SELECT SUM(totale) FROM Ordine WHERE data >= ? AND stato != 'ANNULLATO'";
 
 		java.sql.Date startDate = java.sql.Date.valueOf(dataInizio);
 
@@ -510,7 +510,7 @@ public class OrdineDAO implements GenericDAO<Ordine, Integer> {
 	 * Somma il totale degli ordini fino a una certa data di fine
 	 */
 	public double countTotaleByDataFine(String dataFine) throws SQLException {
-		String query = "SELECT SUM(totale) FROM Ordine WHERE data <= ?";
+		String query = "SELECT SUM(totale) FROM Ordine WHERE data <= ? AND stato != 'ANNULLATO'";
 
 		java.sql.Date endDate = java.sql.Date.valueOf(dataFine);
 
@@ -531,7 +531,7 @@ public class OrdineDAO implements GenericDAO<Ordine, Integer> {
 	 */
 	public double countTotaleByMeseCorrente() throws SQLException {
 		String query = "SELECT COALESCE(SUM(totale), 0) FROM Ordine " + "WHERE YEAR(data) = YEAR(CURRENT_DATE) "
-				+ "AND MONTH(data) = MONTH(CURRENT_DATE)";
+				+ "AND MONTH(data) = MONTH(CURRENT_DATE) AND stato != 'ANNULLATO'";
 
 		try (Connection con = ds.getConnection(); PreparedStatement ps = con.prepareStatement(query)) {
 
