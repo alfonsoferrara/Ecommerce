@@ -227,8 +227,8 @@ public class AdminDettagliProdottoServlet extends HttpServlet {
 
 	private void gestisciUploadImmagini(HttpServletRequest request, int prodottoId)
 			throws IOException, ServletException {
-		String applicationPath = request.getServletContext().getRealPath("");
-		String uploadFilePath = applicationPath + File.separator + "images";
+		//String applicationPath = request.getServletContext().getRealPath("");
+		String uploadFilePath ="C:" + File.separator + "fotoTsw";
 
 		File uploadFolder = new File(uploadFilePath);
 		if (!uploadFolder.exists()) {
@@ -312,8 +312,9 @@ public class AdminDettagliProdottoServlet extends HttpServlet {
 
 		if (immagine != null && immagine.getProdottoId() == prodottoId) {
 			// Elimina il file fisico
-			String applicationPath = request.getServletContext().getRealPath("");
-			String filePath = applicationPath + File.separator + immagine.getUrl();
+//			String applicationPath = request.getServletContext().getRealPath("");
+//			String filePath = applicationPath + File.separator + immagine.getUrl();
+			String filePath = "C:" + File.separator + "fotoTsw" + File.separator + immagine.getUrl().replace("images/", "");
 			File fileDaEliminare = new File(filePath);
 			if (fileDaEliminare.exists()) {
 				fileDaEliminare.delete();

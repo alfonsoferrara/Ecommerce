@@ -33,9 +33,9 @@
 			</h1>
 		</div>
 
-		<c:if test="${not empty sessionScope.erroreCarrelloVuoto}">
+		<c:if test="${not empty sessionScope.erroreCarrelloVuotoCheckout}">
 			<div class="alert-error">
-				<i class="fas fa-exclamation-triangle"></i> ${sessionScope.erroreCarrelloVuoto}
+				<i class="fas fa-exclamation-triangle"></i> ${sessionScope.erroreCarrelloVuotoCheckout}
 			</div>
 			<c:remove var="errore" scope="session" />
 		</c:if>
